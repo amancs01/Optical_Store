@@ -1,0 +1,128 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/Button";
+import { StateMessage } from "@/components/ui/StateMessage";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { formatCurrency } from "@/lib/utils";
+import { trackOrder } from "@/services/orderService";
+import type { Order, OrderItem } from "@/types/order";
+
+const timelineSteps = [
+  { status: "pending", label: "Order Placed" },
+  { status: "confirmed", label: "Confirmed" },
+  { status: "processing", label: "Processing" },
+  { status: "shipped", label: "Shipped" },
+  { status: "delivered", label: "Delivered" },
+];
+
+function formatOrderStatus(status: string) {
+  const labels: Record<string, string> = {
+    pending: "Pending",
+    confirmed: "Confirmed",
+    processing: "Processing",
+    shipped: "Shipped",
+    delivered: "Delivered",
+    cancelled: "Cancelled",
+  };
+
+  return labels[status] || status;
+}
+
+function getCurrentStepIndex(order_status: string) {
+  return timelineSteps.findIndex((step) => step.status === order_status);
+}
+
+export default function TrackOrderPage() {
+  const [query, setQuery] = useState("");
+  const [order, setOrder] = useState<(Order & { order_items?: OrderItem[] }) | null>(null);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    setLoading(true);
+    setMessage("");
+    setOrder(null);
+    try {
+      const result = await trackOrder(query.trim());
+      if (!result) setMessage("No matching order found.");
+      setOrder(result);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Could not track order.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+      <h1 className="text-4xl font-black">Track order</h1>
+      <form onSubmit={submit} className="mt-6 flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4 sm:flex-row">
+        <input value={query} onChange={(e) => setQuery(e.target.value)} required placeholder="Order number or phone number" className="min-h-11 flex-1 rounded-md border border-slate-200 px-3" />
+        <Button disabled={loading || !isSupabaseConfigured}>{loading ? "Checking..." : "Track"}</Button>
+      </form>
+      {!isSupabaseConfigured ? <div className="mt-6"><StateMessage title="Supabase is not configured" message="Add Supabase variables before tracking orders." /></div> : null}
+      {message ? <div className="mt-6"><StateMessage title="Order status" message={message} /></div> : null}
+      {order ? (
+        <div className="mt-6 rounded-md border border-slate-200 bg-white p-5">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-sm text-slate-500">Order number</p>
+              <h2 className="mt-1 text-2xl font-black">{order.order_number}</h2>
+              <div className={`mt-3 inline-flex items-center rounded-full border px-3 py-1 text-sm font-bold ${order.order_status === "cancelled" ? "border-rose-200 bg-rose-50 text-rose-800" : "border-teal-200 bg-teal-50 text-teal-800"}`}>
+                Current status: {formatOrderStatus(order.order_status)}
+              </div>
+            </div>
+            <div className="sm:text-right">
+              <p className="text-sm text-slate-500">Total</p>
+              <p className="mt-1 text-xl font-black">{formatCurrency(order.total_amount)}</p>
+              {order.created_at ? (
+                <p className="mt-2 text-sm text-slate-500">
+                  Ordered on {new Date(order.created_at).toLocaleDateString("en-NP", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+              ) : null}
+            </div>
+          </div>
+          {order.order_status === "cancelled" ? (
+            <div className="mt-6 rounded-md border border-rose-200 bg-rose-50 p-4 text-sm font-bold text-rose-800">
+              This order has been cancelled.
+            </div>
+          ) : (
+            <div className="mt-6 grid gap-3 sm:grid-cols-5">
+              {timelineSteps.map((step, index) => {
+                const currentIndex = getCurrentStepIndex(order.order_status);
+                const isCompleted = currentIndex > index;
+                const isCurrent = currentIndex === index;
+                const stateClass = isCurrent
+                  ? "border-teal-700 bg-teal-700 text-white shadow-md"
+                  : isCompleted
+                    ? "border-teal-300 bg-teal-50 text-teal-900"
+                    : "border-slate-200 bg-slate-50 text-slate-500";
+
+                return (
+                  <div key={step.status} className={`rounded-md border p-4 ${stateClass}`}>
+                    <div className="flex items-center gap-2">
+                      <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-black ${isCurrent ? "bg-white text-teal-700" : isCompleted ? "bg-teal-700 text-white" : "bg-slate-200 text-slate-500"}`}>
+                        {index + 1}
+                      </span>
+                      <p className="text-sm font-black">{step.label}</p>
+                    </div>
+                    <p className="mt-2 text-xs font-semibold">
+                      {isCurrent ? "Current step" : isCompleted ? "Completed" : "Upcoming"}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <p className="mt-5 text-sm text-slate-600">Delivery address: {order.delivery_address}</p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
