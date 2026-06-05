@@ -210,6 +210,30 @@ export default async function HomePage() {
         </section>
       </FadeIn>
 
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mb-7 text-center">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Customer reviews</p>
+          <h2 className="mt-1 text-2xl font-bold">What our customers say</h2>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[
+            { quote: "Found the perfect pair of Ray-Bans here. Staff helped me choose the right frame for my face. Highly recommend.", name: "Priya S.", location: "Kathmandu" },
+            { quote: "Ordered online and got delivery the next day. Great quality frames at a fair price. Will order again.", name: "Rajan T.", location: "Lalitpur" },
+            { quote: "Booked an eye checkup and got my prescription lenses same week. Smooth experience from start to finish.", name: "Anita M.", location: "Bhaktapur" },
+          ].map(({ quote, name, location }) => (
+            <div key={name} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-2xl font-black text-emerald-200">&quot;</p>
+              <p className="mt-1 text-sm leading-6 text-slate-600">{quote}</p>
+              <div className="mt-4 border-t border-slate-100 pt-4">
+                <p className="text-[11px] font-bold text-emerald-700">★★★★★</p>
+                <p className="mt-1 text-sm font-semibold text-slate-950">{name}</p>
+                <p className="text-xs text-slate-500">{location}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <FadeIn delay={0}>
         <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="grid gap-3 md:grid-cols-3">
