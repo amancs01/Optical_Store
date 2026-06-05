@@ -10,7 +10,7 @@ import { createBooking } from "@/services/bookingService";
 export default function BookEyeCheckupPage() {
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<Partial<Record<"name" | "phone" | "booking_date", string>>>({});
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<"name" | "phone" | "booking_date" | "booking_time", string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -22,13 +22,16 @@ export default function BookEyeCheckupPage() {
     const name = String(form.get("name") || "").trim();
     const phone = String(form.get("phone") || "").trim();
     const bookingDate = String(form.get("booking_date") || "");
-    const validationErrors: Partial<Record<"name" | "phone" | "booking_date", string>> = {};
+    const bookingTime = String(form.get("booking_time") || "");
+    const validationErrors: Partial<Record<"name" | "phone" | "booking_date" | "booking_time", string>> = {};
 
     if (!name) validationErrors.name = "Enter your full name.";
     if (!phone) validationErrors.phone = "Enter a phone number we can call.";
+    if (!bookingDate) validationErrors.booking_date = "Choose a preferred date.";
     if (bookingDate && bookingDate < getTodayDate()) {
       validationErrors.booking_date = "Choose today or a future date.";
     }
+    if (!bookingTime) validationErrors.booking_time = "Choose a preferred time slot.";
 
     setFieldErrors(validationErrors);
     if (Object.keys(validationErrors).length) {
@@ -43,7 +46,7 @@ export default function BookEyeCheckupPage() {
         phone,
         branch: String(form.get("branch") || ""),
         booking_date: bookingDate,
-        booking_time: String(form.get("booking_time") || ""),
+        booking_time: bookingTime,
         message: String(form.get("message") || ""),
       });
       currentForm.reset();
@@ -80,7 +83,7 @@ function FormPage({
   title: string;
   success: boolean;
   errorMessage: string;
-  fieldErrors: Partial<Record<"name" | "phone" | "booking_date", string>>;
+  fieldErrors: Partial<Record<"name" | "phone" | "booking_date" | "booking_time", string>>;
   submit: (e: React.FormEvent<HTMLFormElement>) => void;
   isSubmitting: boolean;
   disabled: boolean;
@@ -111,13 +114,35 @@ function FormPage({
         <Field name="name" label="Full name" required error={fieldErrors.name} />
         <Field name="phone" label="Phone" required error={fieldErrors.phone} />
         <Field name="branch" label="Branch" defaultValue="Kathmandu" />
-        <div className="grid gap-4 md:grid-cols-2"><Field name="booking_date" label="Date" type="date" min={getTodayDate()} error={fieldErrors.booking_date} /><Field name="booking_time" label="Time" type="time" /></div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field name="booking_date" label="Date" type="date" min={getTodayDate()} required error={fieldErrors.booking_date} />
+          <label className="grid gap-2 text-sm font-semibold text-slate-700">
+            Time
+            <select name="booking_time" required aria-invalid={Boolean(fieldErrors.booking_time)} className="rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+              <option value="">Choose a time</option>
+              {TIME_SLOTS.map((time) => <option key={time} value={time}>{time}</option>)}
+            </select>
+            {fieldErrors.booking_time ? <span className="text-xs font-semibold text-rose-700">{fieldErrors.booking_time}</span> : null}
+          </label>
+        </div>
         <label className="grid gap-2 text-sm font-semibold text-slate-700">Message<textarea name="message" rows={4} className="rounded-md border border-slate-200 px-3 py-2 font-normal" /></label>
         <Button disabled={isSubmitting || disabled}>{isSubmitting ? "Submitting..." : "Submit booking"}</Button>
       </form>
     </div>
   );
 }
+
+const TIME_SLOTS = [
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
+  "6:00 PM",
+];
 
 function getTodayDate() {
   const today = new Date();

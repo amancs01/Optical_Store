@@ -12,20 +12,25 @@ import type { Product } from "@/types/product";
 export function ProductForm({ product }: { product?: Product }) {
   const router = useRouter();
   const [status, setStatus] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<Partial<Record<"name" | "category" | "price" | "stock_quantity", string>>>({});
+  const [nameValue, setNameValue] = useState(product?.name || "");
+  const [slugValue, setSlugValue] = useState(product?.slug || "");
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<"name" | "slug" | "category" | "price" | "stock_quantity", string>>>({});
   const [saving, setSaving] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("");
     const form = new FormData(event.currentTarget);
-    const name = String(form.get("name") || "").trim();
+    const name = nameValue.trim();
+    const slug = slugValue.trim() || slugify(name);
     const category = String(form.get("category") || "");
     const price = Number(form.get("price") || 0);
     const stockQuantity = Number(form.get("stock_quantity") || 0);
-    const validationErrors: Partial<Record<"name" | "category" | "price" | "stock_quantity", string>> = {};
+    const validationErrors: Partial<Record<"name" | "slug" | "category" | "price" | "stock_quantity", string>> = {};
 
     if (!name) validationErrors.name = "Enter a product name.";
+    if (!slug) validationErrors.slug = "Enter a product slug.";
+    if (slug && slug !== slugify(slug)) validationErrors.slug = "Use a URL-safe slug without slashes or spaces.";
     if (!category) validationErrors.category = "Choose a product category.";
     if (!Number.isFinite(price) || price <= 0) validationErrors.price = "Enter a price greater than 0.";
     if (!Number.isFinite(stockQuantity) || stockQuantity < 0) validationErrors.stock_quantity = "Stock cannot be negative.";
@@ -47,7 +52,7 @@ export function ProductForm({ product }: { product?: Product }) {
 
       const payload = {
         name,
-        slug: String(form.get("slug") || slugify(name)),
+        slug,
         description: String(form.get("description") || ""),
         brand: String(form.get("brand") || ""),
         category,
@@ -79,8 +84,27 @@ export function ProductForm({ product }: { product?: Product }) {
     <form onSubmit={onSubmit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5">
       {status ? <p className="rounded-md bg-rose-50 p-3 text-sm text-rose-700">{status}</p> : null}
       <div className="grid gap-4 md:grid-cols-2">
-        <Field name="name" label="Product name" defaultValue={product?.name} required error={fieldErrors.name} />
-        <Field name="slug" label="Slug" defaultValue={product?.slug} />
+        <Field
+          name="name"
+          label="Product name"
+          value={nameValue}
+          onChange={(event) => {
+            const nextName = event.target.value;
+            setNameValue(nextName);
+            if (!product) setSlugValue(slugify(nextName));
+          }}
+          required
+          error={fieldErrors.name}
+        />
+        <Field
+          name="slug"
+          label="Slug"
+          value={slugValue}
+          onChange={(event) => setSlugValue(slugify(event.target.value))}
+          readOnly={!product}
+          error={fieldErrors.slug}
+          helper={product ? "Edit only when you intentionally need to change the public product URL." : "Generated from the product name."}
+        />
         <Field name="brand" label="Brand" defaultValue={product?.brand || ""} />
         <Select name="category" label="Category" options={CATEGORIES} defaultValue={product?.category || ""} error={fieldErrors.category} />
         <Select name="gender" label="Gender" options={GENDERS} defaultValue={product?.gender || ""} />
@@ -114,12 +138,13 @@ export function ProductForm({ product }: { product?: Product }) {
   );
 }
 
-function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string; name: string; error?: string }) {
-  const { label, error, ...inputProps } = props;
+function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string; name: string; error?: string; helper?: string }) {
+  const { label, error, helper, ...inputProps } = props;
   return (
     <label className="grid gap-2 text-sm font-semibold text-slate-700">
       {label}
       <input className="rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100" aria-invalid={Boolean(error)} {...inputProps} />
+      {helper ? <span className="text-xs font-medium text-slate-500">{helper}</span> : null}
       {error ? <span className="text-xs font-semibold text-rose-700">{error}</span> : null}
     </label>
   );

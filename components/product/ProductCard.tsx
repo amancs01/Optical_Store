@@ -6,12 +6,14 @@ import type { Product } from "@/types/product";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
 
 export function ProductCard({ product }: { product: Product }) {
+  const availability = getAvailabilityLabel(product.stock_quantity);
+
   return (
-    <article className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
-      <Link href={`/products/${product.slug}`} className="block bg-slate-100">
-        <div className="relative aspect-[4/3]">
+    <article className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md motion-reduce:hover:translate-y-0">
+      <Link href={`/products/${product.slug}`} className="group block bg-slate-100">
+        <div className="relative aspect-square">
           {product.image_url ? (
-            <Image src={product.image_url} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+            <Image src={product.image_url} alt={product.name} fill className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" sizes="(max-width: 768px) 100vw, 33vw" />
           ) : (
             <ProductImageFallback name={product.name} />
           )}
@@ -31,12 +33,18 @@ export function ProductCard({ product }: { product: Product }) {
               <p className="text-xs text-slate-500 line-through">{formatCurrency(product.price)}</p>
             ) : null}
           </div>
-          <p className="text-xs font-medium text-slate-500">{product.stock_quantity} in stock</p>
+          <p className={`rounded-full px-2.5 py-1 text-xs font-bold ${availability.className}`}>{availability.label}</p>
         </div>
         <AddToCartButton product={product} />
       </div>
     </article>
   );
+}
+
+function getAvailabilityLabel(stock: number) {
+  if (stock <= 0) return { label: "Out of stock", className: "bg-rose-50 text-rose-700" };
+  if (stock <= 3) return { label: "Limited stock", className: "bg-amber-50 text-amber-700" };
+  return { label: "Available", className: "bg-emerald-50 text-emerald-700" };
 }
 
 export function ProductImageFallback({ name }: { name: string }) {

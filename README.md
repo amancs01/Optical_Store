@@ -1,6 +1,6 @@
 # Titan Opticals
 
-Market-ready MVP eyewear e-commerce website for Titan Opticals, located at Kichapokhari, New Road, opposite NMB Bank. The app includes customer shopping pages, localStorage cart, Cash on Delivery checkout, order tracking, eye-checkup booking, contact messages, and a protected Supabase-powered admin dashboard.
+Premium eyewear e-commerce website for Titan Opticals, located at Kichapokhari, New Road, opposite NMB Bank. The app includes polished customer shopping pages, localStorage cart, Cash on Delivery checkout, order tracking, eye-checkup booking, contact messages, customer accounts, and a protected Supabase-powered admin dashboard.
 
 ## Tech Stack
 
@@ -70,7 +70,7 @@ The project is Vercel-deployable as a standard Next.js App Router application. N
 
 ## Admin Access
 
-Admin routes require a signed-in Supabase Auth user. Unauthenticated visitors are redirected to `/admin/login`.
+Admin routes require a signed-in Supabase Auth user. Unauthenticated visitors are redirected to `/admin/login`. The admin login route is intentionally hidden from public navigation and footer links, but remains directly accessible to staff.
 
 To create an admin:
 
@@ -111,26 +111,26 @@ Admin routes:
 
 ## Included Features
 
-- Home page with hero, categories, featured products, checkup CTA, and trust section
-- Product listing with search and filters
-- Product detail pages with similar products
+- Premium home page with hero, trust badges, categories, featured products, checkup CTA, delivery support, and store visit CTA
+- Product listing with search, filters, sorting, skeleton loading, and branded empty state
+- Product detail pages with breadcrumb, premium image/fallback treatment, availability, trust notes, WhatsApp help, and similar products
 - localStorage cart
-- Cash on Delivery checkout that creates orders and order items
+- Mobile-friendly cart quantity controls and immediate cart count updates
+- Cash on Delivery checkout with validation, order confirmation details, and order item summary
 - Order tracking by order number or phone
-- Eye-checkup booking form
-- Contact page and message form
+- Eye-checkup booking form with date and time-slot validation
+- Contact page, Google Maps link, social links, and message form
 - Static policy pages
 - Supabase Auth admin login/logout
 - Optional customer login/register and My Orders pages
+- Floating WhatsApp support button on customer-facing pages
+- Improved SEO metadata, sitemap, and robots configuration
 - Admin dashboard metrics
-- Admin product add/edit/delete with Storage image upload
-- Admin order, booking, and message management
+- Admin product add/edit/delete with confirmation, safer slug handling, and Storage image upload
+- Admin order detail visibility, booking management, and message management
+
+WhatsApp is the primary customer support channel for launch. The Gmail address in configuration is the client-provided business email; a professional domain email is recommended after domain purchase.
 
 ## Phase 2
 
-- Online payments
-- SMS or WhatsApp automation
-- Coupon system
-- Customer reviews
-- Prescription upload workflow
-- Advanced inventory reporting
+- See `PHASE_2_FEATURES.md` for deferred upgrades such as online payments, automation, reviews, wishlist, product galleries, professional email, coupons, invoices, advanced inventory, SEO content, analytics, and server-side pagination.

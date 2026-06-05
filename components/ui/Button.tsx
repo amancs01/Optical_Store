@@ -17,6 +17,7 @@ export function Button({ className, variant = "primary", ...props }: ButtonProps
     <button
       className={cn(
         "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60",
+        "hover:-translate-y-0.5 hover:shadow-md disabled:hover:translate-y-0 disabled:hover:shadow-none motion-reduce:hover:translate-y-0",
         styles[variant],
         className,
       )}
@@ -41,6 +42,7 @@ export function LinkButton({
       href={href}
       className={cn(
         "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold transition",
+        "hover:-translate-y-0.5 hover:shadow-md motion-reduce:hover:translate-y-0",
         styles[variant],
         className,
       )}

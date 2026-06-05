@@ -9,9 +9,11 @@ export function WhatsAppButton() {
 
   if (pathname?.startsWith("/admin")) return null;
 
+  const message = encodeURIComponent("Hello Titan Opticals, I need help choosing eyewear.");
+
   return (
     <a
-      href={`https://wa.me/977${SITE_CONFIG.whatsapp}`}
+      href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${message}`}
       className="fixed bottom-4 right-4 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-950/20 transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200 sm:bottom-6 sm:right-6"
       aria-label="Chat with Titan Opticals on WhatsApp"
       target="_blank"

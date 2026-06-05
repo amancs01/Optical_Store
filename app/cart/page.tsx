@@ -12,14 +12,18 @@ export default function CartPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-      <h1 className="text-4xl font-black">Cart</h1>
+      <div>
+        <p className="text-sm font-bold uppercase text-teal-700">Titan Opticals</p>
+        <h1 className="mt-1 text-4xl font-black">Your cart</h1>
+      </div>
       {!hydrated ? (
         <div className="mt-8 rounded-md border border-slate-200 bg-white p-8 text-center text-slate-600">
           Loading cart...
         </div>
       ) : !items.length ? (
         <div className="mt-8 rounded-md border border-slate-200 bg-white p-8 text-center">
-          <p className="text-slate-600">Your cart is empty.</p>
+          <p className="text-xl font-black text-slate-950">Your cart is waiting for the perfect frame.</p>
+          <p className="mt-2 text-sm text-slate-600">Browse Titan Opticals eyewear and add your favorite frame when you are ready.</p>
           <LinkButton href="/products" className="mt-4">Continue shopping</LinkButton>
         </div>
       ) : (
@@ -57,7 +61,13 @@ export default function CartPage() {
           <aside className="h-fit rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
             <h2 className="mb-4 text-xl font-black">Order summary</h2>
             <div className="flex justify-between text-sm"><span>Subtotal</span><strong>{formatCurrency(subtotal)}</strong></div>
-            <div className="mt-3 flex justify-between text-sm"><span>Delivery</span><strong>{formatCurrency(0)}</strong></div>
+            <div className="mt-3 flex justify-between gap-3 text-sm">
+              <div>
+                <span>Delivery</span>
+                <p className="text-xs text-slate-500">Inside Kathmandu Valley</p>
+              </div>
+              <strong className="text-emerald-700">Free</strong>
+            </div>
             <div className="mt-4 border-t border-slate-200 pt-4 flex justify-between text-lg"><span>Total</span><strong>{formatCurrency(subtotal)}</strong></div>
             <LinkButton href="/checkout" className="mt-5 w-full">Checkout</LinkButton>
             <LinkButton href="/products" variant="secondary" className="mt-3 w-full">Continue shopping</LinkButton>

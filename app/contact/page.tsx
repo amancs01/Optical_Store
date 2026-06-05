@@ -13,7 +13,6 @@ export default function ContactPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<"name" | "message", string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${SITE_CONFIG.address}, Kathmandu`)}`;
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,7 +53,7 @@ export default function ContactPage() {
     <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
       <div>
         <p className="text-sm font-bold uppercase text-teal-700">{SITE_CONFIG.name}</p>
-        <h1 className="mt-2 text-4xl font-black">Contact Titan Opticals</h1>
+        <h1 className="mt-2 animate-fade-up text-4xl font-black">Contact Titan Opticals</h1>
         <p className="mt-4 text-slate-600">
           Visit us at New Road for eyewear, sunglasses, contact lenses, and eye-care support.
         </p>
@@ -62,7 +61,10 @@ export default function ContactPage() {
           <p><strong className="text-slate-950">Address:</strong> {SITE_CONFIG.address}</p>
           <p><strong className="text-slate-950">Phone:</strong> <a href={`tel:${SITE_CONFIG.phone}`}>{SITE_CONFIG.phoneDisplay}</a></p>
           <p><strong className="text-slate-950">WhatsApp:</strong> <a href={`https://wa.me/977${SITE_CONFIG.whatsapp}`}>{SITE_CONFIG.whatsapp}</a></p>
-          <p><strong className="text-slate-950">Email:</strong> <a href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a></p>
+          <div>
+            <p><strong className="text-slate-950">Email:</strong> <a href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a></p>
+            <p className="text-xs text-slate-500">{SITE_CONFIG.emailNote}</p>
+          </div>
           <p><strong className="text-slate-950">Opening hours:</strong> {SITE_CONFIG.openingHours}</p>
         </div>
         <div className="mt-6 flex flex-wrap gap-3 text-sm font-bold text-teal-700">
@@ -75,13 +77,26 @@ export default function ContactPage() {
           <h2 className="mt-3 text-lg font-black text-slate-950">Find us in New Road</h2>
           <p className="mt-2 text-sm text-slate-600">{SITE_CONFIG.address}</p>
           <a
-            href={mapsUrl}
+            href={SITE_CONFIG.googleMapsUrl}
             target="_blank"
             rel="noreferrer"
             className="mt-4 inline-flex min-h-11 items-center justify-center rounded-md bg-emerald-700 px-4 text-sm font-semibold text-white transition hover:bg-emerald-800"
           >
             Open in Google Maps
           </a>
+          <div className="mt-4 overflow-hidden rounded-md border border-emerald-200">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.4!2d85.3131!3d27.7041!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb190a74574ce7%3A0x1ef89a4a58e69614!2sTitan%20Opticals!5e0!3m2!1sen!2snp!4v1"
+              width="100%"
+              height="220"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Titan Opticals location"
+              className="w-full"
+            />
+          </div>
         </div>
       </div>
       <form onSubmit={submit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5">

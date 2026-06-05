@@ -23,32 +23,34 @@ export function Footer() {
         <div>
           <h3 className="font-semibold">Store</h3>
           <div className="mt-3 grid gap-2 text-sm text-slate-300">
-            <Link href="/products">Products</Link>
-            <Link href="/book-eye-checkup">Book eye checkup</Link>
-            <Link href="/track-order">Track order</Link>
+            <Link href="/products" className="transition hover:text-white">Products</Link>
+            <Link href="/about" className="transition hover:text-white">About</Link>
+            <Link href="/book-eye-checkup" className="transition hover:text-white">Book eye checkup</Link>
+            <Link href="/track-order" className="transition hover:text-white">Track order</Link>
           </div>
         </div>
         <div>
           <h3 className="font-semibold">Policies</h3>
           <div className="mt-3 grid gap-2 text-sm text-slate-300">
-            <Link href="/shipping-policy">Shipping policy</Link>
-            <Link href="/return-policy">Return policy</Link>
-            <Link href="/privacy-policy">Privacy policy</Link>
-            <Link href="/terms">Terms</Link>
+            <Link href="/shipping-policy" className="transition hover:text-white">Shipping policy</Link>
+            <Link href="/return-policy" className="transition hover:text-white">Return policy</Link>
+            <Link href="/privacy-policy" className="transition hover:text-white">Privacy policy</Link>
+            <Link href="/terms" className="transition hover:text-white">Terms</Link>
           </div>
         </div>
         <div>
           <h3 className="font-semibold">Contact</h3>
           <div className="mt-3 grid gap-2 text-sm text-slate-300">
             <p>{SITE_CONFIG.address}</p>
-            <a href={`tel:${SITE_CONFIG.phone}`}>{SITE_CONFIG.phoneDisplay}</a>
-            <a href={`https://wa.me/977${SITE_CONFIG.whatsapp}`}>WhatsApp: {SITE_CONFIG.whatsapp}</a>
-            <a href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a>
+            <a href={`tel:${SITE_CONFIG.phone}`} className="transition hover:text-white">{SITE_CONFIG.phoneDisplay}</a>
+            <a href={`https://wa.me/977${SITE_CONFIG.whatsapp}`} className="transition hover:text-white">WhatsApp: {SITE_CONFIG.whatsapp}</a>
+            <a href={`mailto:${SITE_CONFIG.email}`} className="transition hover:text-white">{SITE_CONFIG.email}</a>
+            <p className="text-xs text-slate-400">{SITE_CONFIG.emailNote}</p>
             <p>{SITE_CONFIG.openingHours}</p>
           </div>
           <div className="mt-4 flex flex-wrap gap-3 text-sm font-semibold text-teal-200">
             {socialLinks.map(([label, href]) => (
-              <a key={label} href={href} target="_blank" rel="noreferrer">
+              <a key={label} href={href} target="_blank" rel="noreferrer" className="transition hover:text-white">
                 {label}
               </a>
             ))}

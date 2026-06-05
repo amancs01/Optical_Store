@@ -12,7 +12,7 @@ export default function AboutPage() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <p className="text-sm font-bold uppercase text-teal-700">About us</p>
-      <h1 className="mt-2 text-4xl font-black">{SITE_CONFIG.name}</h1>
+      <h1 className="mt-2 animate-fade-up text-4xl font-black">{SITE_CONFIG.name}</h1>
       <div className="mt-6 space-y-5 leading-8 text-slate-600">
         <p>
           Titan Opticals is an optical store located at {SITE_CONFIG.address}. The store serves customers looking for

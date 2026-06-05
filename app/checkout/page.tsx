@@ -22,6 +22,9 @@ type Confirmation = {
   orderNumber: string;
   customer: CheckoutFields;
   paymentMethod: string;
+  paymentStatus: string;
+  orderStatus: string;
+  orderDate: string;
   total: number;
   items: CartItem[];
   savedToAccount: boolean;
@@ -68,6 +71,9 @@ export default function CheckoutPage() {
         orderNumber: order.order_number,
         customer,
         paymentMethod: order.payment_method || "Cash on Delivery",
+        paymentStatus: order.payment_status || "pending",
+        orderStatus: order.order_status || "pending",
+        orderDate: order.created_at,
         total: order.total_amount,
         items: orderedItems,
         savedToAccount: Boolean(order.user_id),
@@ -86,9 +92,20 @@ export default function CheckoutPage() {
 
   return (
     <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_340px] lg:px-8">
-      <form onSubmit={submit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5">
-        <h1 className="text-3xl font-black">Checkout</h1>
+      <div className="rounded-md border border-slate-200 bg-white p-4 lg:hidden">
+        <p className="text-sm font-bold text-slate-950">
+          {items.length} item{items.length !== 1 ? "s" : ""} · {formatCurrency(subtotal)}
+        </p>
+        <p className="mt-0.5 text-xs text-slate-500">Cash on Delivery · Free Valley delivery</p>
+      </div>
+      <form onSubmit={submit} className="grid gap-5 rounded-md border border-slate-200 bg-white p-5 lg:order-1">
+        <div>
+          <p className="text-sm font-bold uppercase text-teal-700">Secure manual order</p>
+          <h1 className="mt-1 animate-fade-up font-serif text-3xl font-black">Checkout</h1>
+        </div>
         {error ? <p className="rounded-md bg-rose-50 p-3 text-sm text-rose-700">{error}</p> : null}
+        <section className="grid gap-4">
+          <h2 className="text-lg font-black">Delivery Details</h2>
         <div className="grid gap-4 md:grid-cols-2">
           <Field name="customer_name" label="Full name" required error={fieldErrors.customer_name} />
           <Field name="customer_phone" label="Phone" required error={fieldErrors.customer_phone} />
@@ -101,11 +118,16 @@ export default function CheckoutPage() {
           {fieldErrors.delivery_address ? <span className="text-xs font-semibold text-rose-700">{fieldErrors.delivery_address}</span> : null}
         </label>
         <label className="grid gap-2 text-sm font-semibold text-slate-700">Notes<textarea name="notes" rows={3} className="rounded-md border border-slate-200 px-3 py-2 font-normal" /></label>
-        <div className="rounded-md bg-slate-50 p-4 text-sm font-semibold">Payment method: Cash on Delivery</div>
+        </section>
+        <section className="rounded-md border border-emerald-100 bg-emerald-50/70 p-4">
+          <h2 className="text-lg font-black text-slate-950">Payment Method</h2>
+          <p className="mt-2 text-sm font-semibold text-slate-700">Cash on Delivery</p>
+          <p className="mt-1 text-sm text-slate-600">Titan Opticals may call or WhatsApp you to confirm availability, delivery details, and any prescription lens requirements before dispatch.</p>
+        </section>
         <Button disabled={saving}>{saving ? "Placing order..." : "Place order"}</Button>
       </form>
-      <aside className="h-fit rounded-md border border-slate-200 bg-white p-5">
-        <h2 className="font-black">Order summary</h2>
+      <aside className="order-first h-fit rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24 lg:order-2">
+        <h2 className="font-black">Order Summary</h2>
         <div className="mt-4 grid gap-3">
           {items.map((item) => (
             <div key={item.productId} className="flex justify-between gap-3 text-sm">
@@ -114,7 +136,17 @@ export default function CheckoutPage() {
             </div>
           ))}
         </div>
-        <div className="mt-4 border-t border-slate-200 pt-4 flex justify-between"><span>Total</span><strong>{formatCurrency(subtotal)}</strong></div>
+        <div className="mt-4 border-t border-slate-200 pt-4">
+          <div className="flex justify-between text-sm"><span>Subtotal</span><strong>{formatCurrency(subtotal)}</strong></div>
+          <div className="mt-3 flex justify-between gap-3 text-sm">
+            <div>
+              <span>Delivery</span>
+              <p className="text-xs text-slate-500">Inside Kathmandu Valley</p>
+            </div>
+            <strong className="text-emerald-700">Free</strong>
+          </div>
+          <div className="mt-4 flex justify-between text-lg"><span>Total</span><strong>{formatCurrency(subtotal)}</strong></div>
+        </div>
       </aside>
     </div>
   );
@@ -125,6 +157,9 @@ function validateCheckout(customer: CheckoutFields) {
 
   if (!customer.customer_name) errors.customer_name = "Enter your full name.";
   if (!customer.customer_phone) errors.customer_phone = "Enter a phone number we can call.";
+  if (customer.customer_phone && !/^\+?[0-9\s-]{7,15}$/.test(customer.customer_phone)) {
+    errors.customer_phone = "Enter a valid phone number.";
+  }
   if (!customer.city) errors.city = "Enter your delivery city.";
   if (!customer.delivery_address) errors.delivery_address = "Enter your delivery address.";
 
@@ -139,12 +174,26 @@ function OrderConfirmation({ confirmation }: { confirmation: Confirmation }) {
         <h1 className="mt-2 font-serif text-3xl font-black text-slate-950">Thank you for your order.</h1>
         <p className="mt-2 text-slate-600">Please review the details below. You can use the order number to track your delivery.</p>
 
+        <div className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 p-4">
+          <p className="text-sm font-black text-emerald-800">What happens next</p>
+          <ul className="mt-2 grid gap-1.5 text-sm text-emerald-900">
+            <li>1. Titan Opticals will call or WhatsApp you within a few hours to confirm your order and delivery details.</li>
+            <li>2. Your order will be prepared and dispatched. Delivery inside Kathmandu Valley is typically 1-3 days.</li>
+            <li>3. Pay cash to the delivery person when your order arrives.</li>
+          </ul>
+        </div>
+
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <Detail label="Order number" value={confirmation.orderNumber} />
+          <Detail label="Order date" value={new Date(confirmation.orderDate).toLocaleString("en-NP", { dateStyle: "medium", timeStyle: "short" })} />
           <Detail label="Payment method" value={confirmation.paymentMethod} />
+          <Detail label="Payment status" value={formatStatus(confirmation.paymentStatus)} />
+          <Detail label="Order status" value={formatStatus(confirmation.orderStatus)} />
           <Detail label="Customer name" value={confirmation.customer.customer_name} />
           <Detail label="Phone number" value={confirmation.customer.customer_phone} />
-          <Detail label="Delivery address" value={`${confirmation.customer.delivery_address}, ${confirmation.customer.city}`} />
+          {confirmation.customer.customer_email ? <Detail label="Email" value={confirmation.customer.customer_email} /> : null}
+          <Detail label="Delivery address" value={confirmation.customer.delivery_address} />
+          <Detail label="City" value={confirmation.customer.city} />
           <Detail label="Total amount" value={formatCurrency(confirmation.total)} />
         </div>
 
@@ -152,9 +201,11 @@ function OrderConfirmation({ confirmation }: { confirmation: Confirmation }) {
           <div className="border-b border-slate-200 bg-slate-50 px-4 py-3 font-bold">Ordered items</div>
           <div className="divide-y divide-slate-200">
             {confirmation.items.map((item) => (
-              <div key={item.productId} className="flex items-center justify-between gap-4 px-4 py-3 text-sm">
+              <div key={item.productId} className="grid gap-2 px-4 py-3 text-sm sm:grid-cols-[1fr_auto_auto_auto] sm:items-center">
                 <span className="font-semibold text-slate-800">{item.name}</span>
                 <span className="text-slate-600">Qty {item.quantity}</span>
+                <span className="text-slate-600">{formatCurrency(item.price)} each</span>
+                <span className="font-bold text-slate-950">{formatCurrency(item.price * item.quantity)}</span>
               </div>
             ))}
           </div>
@@ -162,11 +213,16 @@ function OrderConfirmation({ confirmation }: { confirmation: Confirmation }) {
 
         <div className="mt-6 flex flex-wrap gap-3">
           <LinkButton href="/track-order">Track order</LinkButton>
+          <LinkButton href="/products" variant="secondary">Continue Shopping</LinkButton>
           {confirmation.savedToAccount ? <LinkButton href="/account/orders" variant="secondary">View my orders</LinkButton> : null}
         </div>
       </div>
     </div>
   );
+}
+
+function formatStatus(value: string) {
+  return value.replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 function Detail({ label, value }: { label: string; value: string }) {

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarCheck, Glasses, ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { ArrowRight, CalendarCheck, Eye, Glasses, ShieldCheck, Sun, Truck } from "lucide-react";
 import { LinkButton } from "@/components/ui/Button";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -9,6 +9,30 @@ import { getFeaturedProducts } from "@/services/productService";
 import { formatCurrency, getSalePrice } from "@/lib/utils";
 import { pageMetadata } from "@/lib/seo";
 import type { Product } from "@/types/product";
+
+const categories = [
+  {
+    title: "Eyeglasses",
+    text: "Quality frames for daily use, screen time, and prescription needs.",
+    icon: Glasses,
+    color: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    iconBg: "bg-emerald-100",
+  },
+  {
+    title: "Sunglasses",
+    text: "UV-protection styles selected for bright Kathmandu days.",
+    icon: Sun,
+    color: "bg-amber-50 text-amber-800 border-amber-200",
+    iconBg: "bg-amber-100",
+  },
+  {
+    title: "Contact Lenses",
+    text: "Comfortable lens options with practical store guidance.",
+    icon: Eye,
+    color: "bg-sky-50 text-sky-800 border-sky-200",
+    iconBg: "bg-sky-100",
+  },
+];
 
 export const metadata = pageMetadata({
   title: "Premium Eyewear in New Road, Kathmandu",
@@ -31,7 +55,7 @@ export default async function HomePage() {
   return (
     <div className="bg-white">
       <section className="mx-auto grid min-h-[78vh] max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
-        <div>
+        <div className="animate-fade-up">
           <p className="text-sm font-bold uppercase text-teal-700">{SITE_CONFIG.location}</p>
           <h1 className="mt-4 max-w-3xl font-serif text-4xl font-black leading-tight text-slate-950 sm:text-6xl">
             Premium eyewear in New Road, Kathmandu.
@@ -51,22 +75,25 @@ export default async function HomePage() {
         <HeroVisual products={products} />
       </section>
 
-      <section className="border-y border-slate-200 bg-slate-50">
+      <section className="animate-fade-up-delay-1 border-y border-slate-200 bg-slate-50">
         <div className="mx-auto grid max-w-7xl gap-4 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
-          {[
-            ["Eyeglasses", "Quality frames for daily use, screen time, and prescription needs."],
-            ["Sunglasses", "UV-protection styles selected for bright Kathmandu days."],
-            ["Contact Lenses", "Comfortable lens options with practical store guidance."],
-          ].map(([title, text]) => (
-            <a key={title} href={`/products?category=${encodeURIComponent(title)}`} className="rounded-md border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-400">
-              <h2 className="text-xl font-bold">{title}</h2>
-              <p className="mt-2 text-sm text-slate-600">{text}</p>
+          {categories.map((cat) => (
+            <a
+              key={cat.title}
+              href={`/products?category=${encodeURIComponent(cat.title)}`}
+              className={`rounded-md border p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${cat.color}`}
+            >
+              <div className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full ${cat.iconBg}`}>
+                <cat.icon className="h-5 w-5" />
+              </div>
+              <h2 className="text-xl font-bold">{cat.title}</h2>
+              <p className="mt-2 text-sm opacity-80">{cat.text}</p>
             </a>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+      <section className="animate-fade-up-delay-2 mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="mb-7 flex items-end justify-between gap-4">
           <div>
             <p className="text-sm font-bold uppercase text-teal-700">Featured</p>
@@ -148,18 +175,12 @@ function HeroVisual({ products }: { products: Product[] }) {
             ))}
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-3">
-            {["Precision frames", "UV sunglasses", "Comfort lenses"].map((label, index) => (
-              <div
-                key={label}
-                className={`grid aspect-[4/5] place-items-center rounded-md border border-white/80 bg-white/80 p-5 text-center shadow-sm ${index === 1 ? "sm:-mt-8" : ""}`}
-              >
-                <div>
-                  {index === 1 ? <Sparkles className="mx-auto h-10 w-10 text-emerald-700" /> : <Glasses className="mx-auto h-10 w-10 text-emerald-700" />}
-                  <p className="mt-4 text-sm font-black uppercase text-slate-950">{label}</p>
-                </div>
-              </div>
-            ))}
+          <div className="grid min-h-[300px] place-items-center rounded-md border border-white/80 bg-[linear-gradient(145deg,#064e3b,#065f46_40%,#059669)] p-8 text-center text-white shadow-sm">
+            <div>
+              <Glasses className="mx-auto h-24 w-24" aria-hidden="true" />
+              <p className="mt-6 text-sm font-bold uppercase tracking-wide text-emerald-100">{SITE_CONFIG.name}</p>
+              <p className="mt-2 font-serif text-3xl font-black">Premium eyewear for New Road, Kathmandu.</p>
+            </div>
           </div>
         )}
         <div className="rounded-md bg-slate-950/90 p-4 text-white">

@@ -4,15 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { CircleUser, Menu, MessageCircle, Phone, ShoppingBag, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { SITE_CONFIG } from "@/lib/constants";
 import { supabase } from "@/lib/supabase/client";
 import { useCart } from "@/components/cart/CartProvider";
+import { cn } from "@/lib/utils";
 
 const nav = [
   ["Shop", "/products"],
   ["Eye Checkup", "/book-eye-checkup"],
   ["Track Order", "/track-order"],
+  ["About", "/about"],
   ["Contact", "/contact"],
 ];
 
@@ -21,6 +24,7 @@ export function Navbar() {
   const [logoFailed, setLogoFailed] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const { count } = useCart();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!supabase) return;
@@ -51,7 +55,14 @@ export function Navbar() {
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
           {nav.map(([label, href]) => (
-            <Link key={href} href={href} className="text-sm font-medium text-slate-700 hover:text-slate-950">
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "rounded-full px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-900",
+                isActivePath(pathname, href) && "bg-emerald-50 text-emerald-900",
+              )}
+            >
               {label}
             </Link>
           ))}
@@ -85,7 +96,7 @@ export function Navbar() {
           >
             <ShoppingBag className="h-5 w-5" />
             {count > 0 ? (
-              <span className="absolute -right-1 -top-1 rounded-full bg-rose-600 px-1.5 text-xs font-bold text-white">
+              <span key={count} className="badge-pop absolute -right-1 -top-1 rounded-full bg-rose-600 px-1.5 text-xs font-bold text-white">
                 {count}
               </span>
             ) : null}
@@ -105,7 +116,10 @@ export function Navbar() {
             <Link
               key={href}
               href={href}
-              className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              className={cn(
+                "block rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-900",
+                isActivePath(pathname, href) && "bg-emerald-50 text-emerald-900",
+              )}
               onClick={() => setOpen(false)}
             >
               {label}
@@ -125,7 +139,7 @@ export function Navbar() {
           </a>
           <Link
             href={user ? "/account/orders" : "/login"}
-            className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="block rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50"
             onClick={() => setOpen(false)}
           >
             {user ? "My Orders" : "Customer Login"}
@@ -134,4 +148,9 @@ export function Navbar() {
       ) : null}
     </header>
   );
+}
+
+function isActivePath(pathname: string | null, href: string) {
+  if (!pathname) return false;
+  return pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 }
