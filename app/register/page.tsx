@@ -56,7 +56,7 @@ export default function RegisterPage() {
     }
 
     if (data.user && data.session) {
-      router.push("/account");
+      router.push("/");
       return;
     }
 

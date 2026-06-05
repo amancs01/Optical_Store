@@ -6,16 +6,19 @@ import { ProductForm } from "@/components/admin/ProductForm";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { getProductById } from "@/services/productService";
 import type { Product } from "@/types/product";
+import { useAdminStatus } from "@/lib/auth/admin";
 
 export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [error, setError] = useState("");
+  const { isAdmin } = useAdminStatus();
 
   useEffect(() => {
+    if (!isAdmin) return;
     params
       .then(({ id }) => getProductById(id).then(setProduct))
       .catch((err) => setError(err instanceof Error ? err.message : "Product could not load."));
-  }, [params]);
+  }, [isAdmin, params]);
 
   return (
     <AdminLayout>

@@ -98,8 +98,8 @@ export default async function HomePage() {
 
   return (
     <div className="bg-[#fffaf2]">
-      <section className="mx-auto max-w-7xl px-4 pb-7 pt-5 sm:px-6 lg:grid lg:min-h-[72vh] lg:grid-cols-[0.86fr_1.14fr] lg:items-center lg:gap-10 lg:px-8 lg:py-12">
-        <div className="animate-fade-up">
+      <section className="mx-auto grid max-w-7xl gap-6 px-4 pb-8 pt-6 sm:px-6 lg:min-h-[72vh] lg:grid-cols-[0.86fr_1.14fr] lg:items-center lg:gap-10 lg:px-8 lg:py-12">
+        <div className="animate-fade-up self-center">
           <p className="text-xs font-black uppercase tracking-wide text-teal-700">New Road, Kathmandu</p>
           <h1 className="mt-3 max-w-xl text-3xl font-black leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
             See clearly. Look refined.
@@ -117,41 +117,27 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <form action="/products" className="mt-6 grid grid-cols-[88px_1fr_auto] overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm lg:mt-8">
-          <select name="category" aria-label="Category" className="border-r border-slate-200 bg-emerald-50 px-3 text-sm font-bold text-emerald-800">
-            <option value="">All</option>
-            {categories.map((cat) => <option key={cat.title} value={cat.title}>{cat.title}</option>)}
-          </select>
-          <input name="search" placeholder="Search eyewear" className="min-h-12 min-w-0 px-3 text-sm outline-none" />
-          <button className="grid min-h-12 w-12 place-items-center bg-emerald-700 text-white" aria-label="Search products">
-            <Search className="h-5 w-5" />
-          </button>
-        </form>
-
-        <div className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:mt-5">
-          {quickLinks.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <Link key={item.title} href={item.href} className="inline-flex flex-none items-center gap-2 rounded-full border border-emerald-100 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm">
-                <Icon className="h-4 w-4 text-emerald-700" />
-                {item.title}
-              </Link>
-            );
-          })}
-        </div>
-
-        <div className="mt-5 lg:col-start-2 lg:row-span-4 lg:row-start-1 lg:mt-0">
+        <div className="lg:col-start-2 lg:row-start-1">
           <HeroVisual />
         </div>
       </section>
 
       <section className="animate-fade-up-delay-1 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mb-4 flex items-end justify-between">
+        <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_minmax(360px,520px)] sm:items-end">
           <div>
             <p className="text-xs font-black uppercase text-teal-700">Top categories</p>
             <h2 className="mt-1 text-xl font-black">Shop the essentials</h2>
           </div>
+          <form action="/products" className="grid grid-cols-[76px_1fr_48px] overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+            <select name="category" aria-label="Category" className="min-h-12 border-r border-slate-200 bg-emerald-50 px-2 text-sm font-bold text-emerald-800">
+              <option value="">All</option>
+              {categories.map((cat) => <option key={cat.title} value={cat.title}>{cat.title}</option>)}
+            </select>
+            <input name="search" placeholder="Search eyewear" className="min-h-12 min-w-0 px-3 text-sm outline-none" />
+            <button className="grid min-h-12 place-items-center bg-emerald-700 text-white transition hover:bg-emerald-800" aria-label="Search products">
+              <Search className="h-4 w-4" />
+            </button>
+          </form>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           {quickLinks.map((cat) => (

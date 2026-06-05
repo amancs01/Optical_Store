@@ -6,13 +6,16 @@ import { StateMessage } from "@/components/ui/StateMessage";
 import { getBookings, getContactMessages } from "@/services/bookingService";
 import { getOrders } from "@/services/orderService";
 import { getAllProductsForAdmin } from "@/services/productService";
+import { useAdminStatus } from "@/lib/auth/admin";
 
 export default function AdminPage() {
   const [stats, setStats] = useState({ products: 0, active: 0, pending: 0, bookings: 0, messages: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { isAdmin } = useAdminStatus();
 
   useEffect(() => {
+    if (!isAdmin) return;
     Promise.all([getAllProductsForAdmin(), getOrders(), getBookings(), getContactMessages()])
       .then(([products, orders, bookings, messages]) =>
         setStats({
@@ -25,7 +28,7 @@ export default function AdminPage() {
       )
       .catch((err) => setError(err instanceof Error ? err.message : "Dashboard data could not load."))
       .finally(() => setLoading(false));
-  }, []);
+  }, [isAdmin]);
 
   return (
     <AdminLayout>

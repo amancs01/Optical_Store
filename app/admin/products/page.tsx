@@ -9,12 +9,14 @@ import { StateMessage } from "@/components/ui/StateMessage";
 import { deleteProduct, getAllProductsForAdmin } from "@/services/productService";
 import type { Product } from "@/types/product";
 import { formatCurrency } from "@/lib/utils";
+import { useAdminStatus } from "@/lib/auth/admin";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { isAdmin } = useAdminStatus();
 
   function load() {
     setLoading(true);
@@ -29,8 +31,9 @@ export default function AdminProductsPage() {
   }
 
   useEffect(() => {
+    if (!isAdmin) return;
     window.queueMicrotask(load);
-  }, []);
+  }, [isAdmin]);
   const visible = useMemo(() => products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())), [products, search]);
 
   async function confirmDelete(product: Product) {

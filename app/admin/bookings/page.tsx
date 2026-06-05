@@ -6,11 +6,13 @@ import { StateMessage } from "@/components/ui/StateMessage";
 import { BOOKING_STATUSES } from "@/lib/constants";
 import { getBookings, updateBookingStatus } from "@/services/bookingService";
 import type { Booking } from "@/types/order";
+import { useAdminStatus } from "@/lib/auth/admin";
 
 export default function AdminBookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { isAdmin } = useAdminStatus();
   function load() {
     setLoading(true);
     setError("");
@@ -23,8 +25,9 @@ export default function AdminBookingsPage() {
       .finally(() => setLoading(false));
   }
   useEffect(() => {
+    if (!isAdmin) return;
     window.queueMicrotask(load);
-  }, []);
+  }, [isAdmin]);
 
   return (
     <AdminLayout>

@@ -5,11 +5,13 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { getContactMessages, updateMessageStatus } from "@/services/bookingService";
 import type { ContactMessage } from "@/types/order";
+import { useAdminStatus } from "@/lib/auth/admin";
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { isAdmin } = useAdminStatus();
   function load() {
     setLoading(true);
     setError("");
@@ -22,8 +24,9 @@ export default function AdminMessagesPage() {
       .finally(() => setLoading(false));
   }
   useEffect(() => {
+    if (!isAdmin) return;
     window.queueMicrotask(load);
-  }, []);
+  }, [isAdmin]);
 
   return (
     <AdminLayout>
