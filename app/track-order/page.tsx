@@ -34,7 +34,7 @@ export default function TrackOrderPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 lg:px-8">
-      <p className="text-xs font-black uppercase tracking-wide text-teal-700">Titan Opticals</p>
+      <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Opticals</p>
       <h1 className="mt-1 text-3xl font-black sm:text-4xl">Track order</h1>
       <form onSubmit={submit} className="mt-5 flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4 shadow-sm sm:flex-row">
         <input value={query} onChange={(e) => setQuery(e.target.value)} required placeholder="Order number or phone number" className="min-h-11 flex-1 rounded-md border border-slate-200 px-3" />
@@ -43,12 +43,12 @@ export default function TrackOrderPage() {
       {!isSupabaseConfigured ? <div className="mt-6"><StateMessage title="Supabase is not configured" message="Add Supabase variables before tracking orders." /></div> : null}
       {message ? <div className="mt-6"><StateMessage title="Order status" message={message} /></div> : null}
       {order ? (
-        <div className="mt-6 rounded-md border border-slate-200 bg-white p-5">
+        <div className="mt-6 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-5">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-sm text-slate-500">Order number</p>
               <h2 className="mt-1 text-2xl font-black">{order.order_number}</h2>
-              <div className={`mt-3 inline-flex items-center rounded-full border px-3 py-1 text-sm font-bold ${order.order_status === "cancelled" ? "border-rose-200 bg-rose-50 text-rose-800" : "border-teal-200 bg-teal-50 text-teal-800"}`}>
+              <div className={`mt-3 inline-flex items-center rounded-full border px-3 py-1 text-sm font-bold ${order.order_status === "cancelled" ? "border-rose-200 bg-rose-50 text-rose-800" : "border-emerald-200 bg-emerald-50 text-emerald-800"}`}>
                 Current status: {formatOrderStatus(order.order_status)}
               </div>
             </div>

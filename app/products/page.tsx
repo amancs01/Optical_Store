@@ -70,7 +70,7 @@ export default function ProductsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
       <div className="mb-5">
-        <p className="text-xs font-black uppercase tracking-wide text-teal-700">Titan Opticals collection</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Opticals collection</p>
         <h1 className="mt-1 animate-fade-up text-3xl font-black sm:text-4xl">Shop eyewear</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">Search and filter premium frames, sunglasses, and contact lenses.</p>
       </div>
@@ -108,8 +108,8 @@ export default function ProductsPage() {
         </div>
       ) : (
         <div className="rounded-md border border-dashed border-emerald-200 bg-emerald-50/60 p-8 text-center">
-          <p className="text-sm font-bold uppercase text-emerald-700">No matches</p>
-          <h2 className="mt-2 text-2xl font-black text-slate-950">No frames match your filters yet.</h2>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">No matches</p>
+          <h2 className="mt-2 text-2xl font-bold text-slate-950">No frames match your filters yet.</h2>
           <p className="mt-2 text-sm text-slate-600">Try another category or message us on WhatsApp for help finding a similar style.</p>
         </div>
       )}

@@ -90,16 +90,16 @@ function FormPage({
 }) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-7 sm:px-6 lg:px-8">
-      <p className="text-xs font-black uppercase tracking-wide text-teal-700">Titan Opticals</p>
+      <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Opticals</p>
       <h1 className="mt-1 text-3xl font-black sm:text-4xl">{title}</h1>
       {disabled ? <div className="mt-6"><StateMessage title="Supabase is not configured" message="Add Supabase variables before booking." /></div> : null}
       <form onSubmit={submit} className="mt-5 grid gap-4 rounded-md border border-slate-200 bg-white p-5 shadow-sm">
         {success ? (
-          <div className="rounded-md border border-teal-200 bg-teal-50 p-4 text-teal-900">
+          <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
             <div className="flex gap-3">
               <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none" aria-hidden="true" />
               <div>
-                <h2 className="font-bold">Booking submitted</h2>
+                <h2 className="font-semibold">Booking submitted</h2>
                 <p className="mt-1 text-sm">
                   Your eye checkup booking has been submitted successfully. Our team will contact you soon.
                 </p>

@@ -37,7 +37,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-3 sm:h-16 sm:px-6 lg:px-8">
-        <Link href="/" className="flex min-w-0 items-center gap-2 text-base font-black tracking-tight text-slate-950 sm:gap-3 sm:text-lg">
+        <Link href="/" className="flex min-w-0 items-center gap-2 text-base font-bold tracking-tight text-slate-950 sm:gap-3 sm:text-lg">
           {!logoFailed ? (
             <Image
               src={SITE_CONFIG.logoPath}

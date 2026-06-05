@@ -62,7 +62,7 @@ export default function LoginPage() {
   return (
     <div className="mx-auto grid min-h-[66vh] max-w-md place-items-center px-4 py-7">
       <form onSubmit={submit} className="w-full rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-        <p className="text-xs font-black uppercase tracking-wide text-teal-700">{SITE_CONFIG.name}</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">{SITE_CONFIG.name}</p>
         <h1 className="mt-1 text-3xl font-black">Sign in</h1>
         <p className="mt-2 text-sm text-slate-600">Use your Titan Opticals account for orders, bookings, or admin access.</p>
         {!isSupabaseConfigured ? <div className="mt-5"><StateMessage title="Supabase is not configured" message="Add Supabase variables to sign in." /></div> : null}
@@ -71,7 +71,7 @@ export default function LoginPage() {
         <Field name="password" label="Password" type="password" required error={fieldErrors.password} className="mt-4" />
         <Button disabled={loading || !isSupabaseConfigured} className="mt-5 w-full">{loading ? "Signing in..." : "Sign in"}</Button>
         <p className="mt-4 text-center text-sm text-slate-600">
-          New customer? <Link className="font-bold text-teal-700" href="/register">Create an account</Link>
+          New customer? <Link className="font-bold text-emerald-700" href="/register">Create an account</Link>
         </p>
       </form>
     </div>

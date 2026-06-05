@@ -100,7 +100,7 @@ export default async function HomePage() {
     <div className="bg-[#fffaf2]">
       <section className="mx-auto grid max-w-7xl gap-6 px-4 pb-8 pt-6 sm:px-6 lg:min-h-[72vh] lg:grid-cols-[0.86fr_1.14fr] lg:items-center lg:gap-10 lg:px-8 lg:py-12">
         <div className="animate-fade-up self-center">
-          <p className="text-xs font-black uppercase tracking-wide text-teal-700">New Road, Kathmandu</p>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">New Road, Kathmandu</p>
           <h1 className="mt-3 max-w-xl text-3xl font-black leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
             See clearly. Look refined.
           </h1>
@@ -125,8 +125,8 @@ export default async function HomePage() {
       <section className="animate-fade-up-delay-1 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_minmax(360px,520px)] sm:items-end">
           <div>
-            <p className="text-xs font-black uppercase text-teal-700">Top categories</p>
-            <h2 className="mt-1 text-xl font-black">Shop the essentials</h2>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Top categories</p>
+            <h2 className="mt-1 text-xl font-bold">Shop the essentials</h2>
           </div>
           <form action="/products" className="grid grid-cols-[76px_1fr_48px] overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
             <select name="category" aria-label="Category" className="min-h-12 border-r border-slate-200 bg-emerald-50 px-2 text-sm font-bold text-emerald-800">
@@ -141,7 +141,7 @@ export default async function HomePage() {
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           {quickLinks.map((cat) => (
-            <Link key={cat.title} href={cat.href} className="group overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+            <Link key={cat.title} href={cat.href} className="group overflow-hidden rounded-md border border-slate-200 bg-[#fffaf2]/60 shadow-sm">
               <div className="relative aspect-[4/3] overflow-hidden rounded-t-md bg-emerald-50">
                 <Image
                   src={cat.image}
@@ -152,7 +152,7 @@ export default async function HomePage() {
                 />
               </div>
               <div className="flex items-center justify-between gap-2 px-3 py-3">
-                <p className="line-clamp-1 text-sm font-black text-slate-900">{cat.title}</p>
+                <p className="line-clamp-1 text-sm font-semibold text-slate-900">{cat.title}</p>
                 <ArrowRight className="h-4 w-4 flex-none text-emerald-700" />
               </div>
             </Link>
@@ -161,7 +161,7 @@ export default async function HomePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-        <div className="grid overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm md:grid-cols-[0.95fr_1.05fr]">
+        <div className="grid overflow-hidden rounded-md border border-slate-200 bg-[#fffaf2]/60 shadow-sm md:grid-cols-[0.95fr_1.05fr]">
           <div className="relative min-h-[190px] md:min-h-[320px]">
             <Image
               src="/images/09_dual_frame_display.png"
@@ -172,8 +172,8 @@ export default async function HomePage() {
             />
           </div>
           <div className="grid content-center p-5 sm:p-7 md:p-8">
-            <p className="text-xs font-black uppercase tracking-wide text-teal-700">New collections</p>
-            <h2 className="mt-2 max-w-md text-2xl font-black text-slate-950 sm:text-3xl">Frames selected for everyday polish.</h2>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">New collections</p>
+            <h2 className="mt-2 max-w-md text-2xl font-bold text-slate-950 sm:text-3xl">Frames selected for everyday polish.</h2>
             <p className="mt-2 max-w-md text-sm leading-6 text-slate-600">
               Browse refined shapes, clean finishes, and lens-ready styles curated for New Road customers.
             </p>
@@ -189,8 +189,8 @@ export default async function HomePage() {
       <section className="animate-fade-up-delay-2 mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
         <div className="mb-7 flex items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-black uppercase text-teal-700">Popular picks</p>
-            <h2 className="mt-1 text-2xl font-black sm:text-3xl">Featured eyewear</h2>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Popular picks</p>
+            <h2 className="mt-1 text-2xl font-bold sm:text-3xl">Featured eyewear</h2>
           </div>
           <LinkButton href="/products" variant="secondary">View all</LinkButton>
         </div>
@@ -233,9 +233,9 @@ export default async function HomePage() {
 
       <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-7 sm:px-6 md:grid-cols-4 lg:px-8">
         {serviceHighlights.map(({ icon: Icon, title, text }) => (
-          <div key={title} className="rounded-md border border-slate-200 bg-white p-4 shadow-sm">
-            <Icon className="h-5 w-5 text-teal-700" />
-            <h3 className="mt-3 text-sm font-black">{title}</h3>
+          <div key={title} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-4 shadow-sm">
+            <Icon className="h-5 w-5 text-emerald-700" />
+            <h3 className="mt-3 text-sm font-semibold">{title}</h3>
             <p className="mt-1 text-xs text-slate-600">{text}</p>
           </div>
         ))}
@@ -253,8 +253,8 @@ export default async function HomePage() {
             />
           </div>
           <div className="p-5 sm:p-7 md:p-8">
-            <p className="text-xs font-black uppercase tracking-wide text-emerald-200">Eye checkup booking</p>
-            <h2 className="mt-2 max-w-md text-2xl font-black sm:text-3xl">Pair better frames with practical eye-care support.</h2>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-200">Eye checkup booking</p>
+            <h2 className="mt-2 max-w-md text-2xl font-bold sm:text-3xl">Pair better frames with practical eye-care support.</h2>
             <p className="mt-2 max-w-md text-sm leading-6 text-slate-300">
               Book a visit, then let the team help you choose lenses, frames, and care options with confidence.
             </p>
@@ -303,7 +303,7 @@ function VisualStoryCard({
   title: string;
 }) {
   return (
-    <Link href={href} className="group overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+    <Link href={href} className="group overflow-hidden rounded-md border border-slate-200 bg-[#fffaf2]/60 shadow-sm">
       <div className="relative aspect-[5/3] overflow-hidden rounded-t-md bg-emerald-50">
         <Image
           src={image}
@@ -314,8 +314,8 @@ function VisualStoryCard({
         />
       </div>
       <div className="p-4">
-        <p className="text-xs font-black uppercase tracking-wide text-teal-700">{eyebrow}</p>
-        <h3 className="mt-2 text-base font-black leading-snug text-slate-950">{title}</h3>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">{eyebrow}</p>
+        <h3 className="mt-2 text-base font-semibold leading-snug text-slate-950">{title}</h3>
       </div>
     </Link>
   );

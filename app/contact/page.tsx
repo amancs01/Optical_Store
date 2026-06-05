@@ -52,7 +52,7 @@ export default function ContactPage() {
   return (
     <div className="mx-auto grid max-w-6xl gap-6 px-4 py-7 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
       <div>
-        <p className="text-xs font-black uppercase tracking-wide text-teal-700">{SITE_CONFIG.name}</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">{SITE_CONFIG.name}</p>
         <h1 className="mt-1 animate-fade-up text-3xl font-black sm:text-4xl">Contact Titan Opticals</h1>
         <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
           Visit us at New Road for eyewear, sunglasses, contact lenses, and eye-care support.
@@ -67,14 +67,14 @@ export default function ContactPage() {
           </div>
           <p><strong className="text-slate-950">Opening hours:</strong> {SITE_CONFIG.openingHours}</p>
         </div>
-        <div className="mt-6 flex flex-wrap gap-3 text-sm font-bold text-teal-700">
+        <div className="mt-6 flex flex-wrap gap-3 text-sm font-bold text-emerald-700">
           <a href={SITE_CONFIG.socialLinks.facebook} target="_blank" rel="noreferrer">Facebook</a>
           <a href={SITE_CONFIG.socialLinks.instagram} target="_blank" rel="noreferrer">Instagram</a>
           <a href={SITE_CONFIG.socialLinks.tiktok} target="_blank" rel="noreferrer">TikTok</a>
         </div>
         <div className="mt-6 rounded-md border border-emerald-100 bg-emerald-50/70 p-4 sm:p-5">
           <MapPin className="h-6 w-6 text-emerald-700" aria-hidden="true" />
-          <h2 className="mt-3 text-lg font-black text-slate-950">Find us in New Road</h2>
+          <h2 className="mt-3 text-lg font-bold text-slate-950">Find us in New Road</h2>
           <p className="mt-2 text-sm text-slate-600">{SITE_CONFIG.address}</p>
           <a
             href={SITE_CONFIG.googleMapsUrl}
@@ -102,11 +102,11 @@ export default function ContactPage() {
       <form onSubmit={submit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5 shadow-sm">
         {!isSupabaseConfigured ? <StateMessage title="Supabase is not configured" message="Add Supabase variables before sending messages." /> : null}
         {success ? (
-          <div className="rounded-md border border-teal-200 bg-teal-50 p-4 text-teal-900">
+          <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
             <div className="flex gap-3">
               <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none" aria-hidden="true" />
               <div>
-                <h2 className="font-bold">Message sent</h2>
+                <h2 className="font-semibold">Message sent</h2>
                 <p className="mt-1 text-sm">
                   Your message has been sent successfully. We will get back to you soon.
                 </p>

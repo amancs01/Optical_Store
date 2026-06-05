@@ -18,7 +18,7 @@ export default function ReturnPolicyPage() {
           clean, and returned in the condition in which they were received.
         </p>
         <section>
-          <h2 className="text-xl font-black text-slate-950">Items eligible for return</h2>
+          <h2 className="text-xl font-bold text-slate-950">Items eligible for return</h2>
           <ul className="mt-3 list-disc space-y-2 pl-6">
             <li>Unused frames in original condition.</li>
             <li>Original packaging and accessories, including case, cloth, and booklet where provided.</li>
@@ -26,7 +26,7 @@ export default function ReturnPolicyPage() {
           </ul>
         </section>
         <section>
-          <h2 className="text-xl font-black text-slate-950">Items not eligible for return</h2>
+          <h2 className="text-xl font-bold text-slate-950">Items not eligible for return</h2>
           <ul className="mt-3 list-disc space-y-2 pl-6">
             <li>Frames that have already been fitted with custom prescription lenses.</li>
             <li>Opened contact lens packs for hygiene and safety reasons.</li>
@@ -49,8 +49,8 @@ export default function ReturnPolicyPage() {
           the issue, Titan Opticals may arrange a replacement, exchange, or another suitable solution.
         </p>
         <p>
-          Return support: <a className="font-semibold text-teal-700" href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a>{" "}
-          or <a className="font-semibold text-teal-700" href={`https://wa.me/977${SITE_CONFIG.whatsapp}`}>WhatsApp {SITE_CONFIG.whatsapp}</a>.
+          Return support: <a className="font-semibold text-emerald-700" href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a>{" "}
+          or <a className="font-semibold text-emerald-700" href={`https://wa.me/977${SITE_CONFIG.whatsapp}`}>WhatsApp {SITE_CONFIG.whatsapp}</a>.
         </p>
       </div>
     </main>

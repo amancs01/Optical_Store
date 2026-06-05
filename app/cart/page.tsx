@@ -13,16 +13,16 @@ export default function CartPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8">
       <div>
-        <p className="text-xs font-black uppercase tracking-wide text-teal-700">Titan Opticals</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Opticals</p>
         <h1 className="mt-1 text-3xl font-black sm:text-4xl">Your cart</h1>
       </div>
       {!hydrated ? (
-        <div className="mt-8 rounded-md border border-slate-200 bg-white p-8 text-center text-slate-600">
+        <div className="mt-8 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-8 text-center text-slate-600">
           Loading cart...
         </div>
       ) : !items.length ? (
-        <div className="mt-8 rounded-md border border-slate-200 bg-white p-8 text-center">
-          <p className="text-xl font-black text-slate-950">Your cart is waiting for the perfect frame.</p>
+        <div className="mt-8 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-8 text-center">
+          <p className="text-xl font-bold text-slate-950">Your cart is waiting for the perfect frame.</p>
           <p className="mt-2 text-sm text-slate-600">Browse Titan Opticals eyewear and add your favorite frame when you are ready.</p>
           <LinkButton href="/products" className="mt-4">Continue shopping</LinkButton>
         </div>
@@ -31,7 +31,7 @@ export default function CartPage() {
           <div className="rounded-md border border-emerald-100 bg-white p-4 shadow-sm lg:hidden">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold uppercase text-slate-500">Total</p>
+                <p className="text-[11px] font-bold uppercase tracking-wide text-slate-500">Total</p>
                 <p className="text-xl font-black">{formatCurrency(subtotal)}</p>
               </div>
               <LinkButton href="/checkout">Checkout</LinkButton>
@@ -39,7 +39,7 @@ export default function CartPage() {
           </div>
           <div className="grid gap-3">
             {items.map((item) => (
-              <div key={item.productId} className="grid grid-cols-[76px_1fr] gap-3 rounded-md border border-slate-200 bg-white p-3 shadow-sm sm:grid-cols-[88px_1fr] sm:p-4">
+              <div key={item.productId} className="grid grid-cols-[76px_1fr] gap-3 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3 shadow-sm sm:grid-cols-[88px_1fr] sm:p-4">
                 <Link href={`/products/${item.slug}`} className="relative h-20 overflow-hidden rounded-md bg-emerald-50 sm:h-24">
                   {item.imageUrl ? (
                     <Image src={item.imageUrl} alt={item.name} fill className="object-cover" sizes="88px" />
@@ -51,14 +51,14 @@ export default function CartPage() {
                 </Link>
                 <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
                   <div>
-                    <Link href={`/products/${item.slug}`} className="line-clamp-2 text-sm font-bold hover:underline sm:text-base">{item.name}</Link>
+                    <Link href={`/products/${item.slug}`} className="line-clamp-2 text-sm font-semibold hover:underline sm:text-base">{item.name}</Link>
                     <p className="mt-1 text-sm text-slate-600">{formatCurrency(item.price)} each</p>
                     <p className="mt-1 text-sm font-semibold text-slate-950">{formatCurrency(item.price * item.quantity)}</p>
                   </div>
                   <div className="flex items-center justify-between gap-2 sm:justify-end sm:gap-4">
                     <div className="flex items-center gap-3 rounded-md bg-slate-50 p-1.5">
                       <Button variant="secondary" className="h-10 w-10 px-0 sm:h-11 sm:w-11" onClick={() => decrement(item.productId)} aria-label="Decrease"><Minus className="h-5 w-5" /></Button>
-                      <span className="min-w-8 text-center text-base font-black">{item.quantity}</span>
+                      <span className="min-w-8 text-center text-base font-semibold">{item.quantity}</span>
                       <Button variant="secondary" className="h-10 w-10 px-0 sm:h-11 sm:w-11" onClick={() => increment(item.productId)} aria-label="Increase"><Plus className="h-5 w-5" /></Button>
                     </div>
                     <Button variant="ghost" className="h-10 w-10 px-0 sm:h-11 sm:w-11" onClick={() => remove(item.productId)} aria-label="Remove"><Trash2 className="h-5 w-5" /></Button>
@@ -68,7 +68,7 @@ export default function CartPage() {
             ))}
           </div>
           <aside className="h-fit rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
-            <h2 className="mb-4 text-xl font-black">Order summary</h2>
+            <h2 className="mb-4 text-xl font-bold">Order summary</h2>
             <div className="flex justify-between text-sm"><span>Subtotal</span><strong>{formatCurrency(subtotal)}</strong></div>
             <div className="mt-3 flex justify-between gap-3 text-sm">
               <div>

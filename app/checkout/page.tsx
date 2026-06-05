@@ -100,12 +100,12 @@ export default function CheckoutPage() {
       </div>
       <form onSubmit={submit} className="grid gap-5 rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:order-1">
         <div>
-          <p className="text-xs font-black uppercase tracking-wide text-teal-700">Secure manual order</p>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Secure manual order</p>
           <h1 className="mt-1 animate-fade-up text-3xl font-black">Checkout</h1>
         </div>
         {error ? <p className="rounded-md bg-rose-50 p-3 text-sm text-rose-700">{error}</p> : null}
         <section className="grid gap-4">
-          <h2 className="text-lg font-black">Delivery Details</h2>
+          <h2 className="text-lg font-bold">Delivery Details</h2>
         <div className="grid gap-4 md:grid-cols-2">
           <Field name="customer_name" label="Full name" required error={fieldErrors.customer_name} />
           <Field name="customer_phone" label="Phone" required error={fieldErrors.customer_phone} />
@@ -120,14 +120,14 @@ export default function CheckoutPage() {
         <label className="grid gap-2 text-sm font-semibold text-slate-700">Notes<textarea name="notes" rows={3} className="rounded-md border border-slate-200 px-3 py-2 font-normal" /></label>
         </section>
         <section className="rounded-md border border-emerald-100 bg-emerald-50/70 p-4">
-          <h2 className="text-lg font-black text-slate-950">Payment Method</h2>
+          <h2 className="text-lg font-bold text-slate-950">Payment Method</h2>
           <p className="mt-2 text-sm font-semibold text-slate-700">Cash on Delivery</p>
           <p className="mt-1 text-sm text-slate-600">Titan Opticals may call or WhatsApp you to confirm availability, delivery details, and any prescription lens requirements before dispatch.</p>
         </section>
         <Button disabled={saving}>{saving ? "Placing order..." : "Place order"}</Button>
       </form>
       <aside className="order-first h-fit rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24 lg:order-2">
-        <h2 className="font-black">Order Summary</h2>
+        <h2 className="font-bold">Order Summary</h2>
         <div className="mt-4 grid gap-3">
           {items.map((item) => (
             <div key={item.productId} className="flex justify-between gap-3 text-sm">
@@ -170,12 +170,12 @@ function OrderConfirmation({ confirmation }: { confirmation: Confirmation }) {
   return (
     <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 lg:px-8">
       <div className="rounded-md border border-emerald-200 bg-white p-6 shadow-sm">
-        <p className="text-sm font-bold uppercase text-emerald-700">Order placed successfully</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Order placed successfully</p>
         <h1 className="mt-2 text-3xl font-black text-slate-950">Thank you for your order.</h1>
         <p className="mt-2 text-slate-600">Please review the details below. You can use the order number to track your delivery.</p>
 
         <div className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 p-4">
-          <p className="text-sm font-black text-emerald-800">What happens next</p>
+          <p className="text-sm font-bold text-emerald-800">What happens next</p>
           <ul className="mt-2 grid gap-1.5 text-sm text-emerald-900">
             <li>1. Titan Opticals will call or WhatsApp you within a few hours to confirm your order and delivery details.</li>
             <li>2. Your order will be prepared and dispatched. Delivery inside Kathmandu Valley is typically 1-3 days.</li>
@@ -228,7 +228,7 @@ function formatStatus(value: string) {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-md bg-slate-50 p-4">
-      <p className="text-xs font-bold uppercase text-slate-500">{label}</p>
+      <p className="text-[11px] font-bold uppercase tracking-wide text-slate-500">{label}</p>
       <p className="mt-1 font-semibold text-slate-950">{value}</p>
     </div>
   );

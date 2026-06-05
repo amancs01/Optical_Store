@@ -32,7 +32,7 @@ export default function MyOrdersPage() {
       try {
         const customerOrders = await getCustomerOrders(data.user.id);
         setOrders(customerOrders);
-      } catch (err) {
+      } catch {
         setError("We could not load your orders right now. Please try again.");
       } finally {
         setLoading(false);
@@ -48,7 +48,7 @@ export default function MyOrdersPage() {
     <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-black uppercase tracking-wide text-teal-700">Account</p>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Account</p>
           <h1 className="mt-1 text-3xl font-black">My Orders</h1>
         </div>
         <LinkButton href="/products" variant="secondary">Continue shopping</LinkButton>
@@ -76,9 +76,9 @@ export default function MyOrdersPage() {
                 <tr key={order.id} className="border-t border-slate-200">
                   <td className="p-3 font-bold">{order.order_number}</td>
                   <td>{new Date(order.created_at).toLocaleDateString("en-NP", { year: "numeric", month: "short", day: "numeric" })}</td>
-                  <td><span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-bold text-teal-800">{formatOrderStatus(order.order_status)}</span></td>
+                  <td><span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">{formatOrderStatus(order.order_status)}</span></td>
                   <td className="font-bold">{formatCurrency(order.total_amount)}</td>
-                  <td><Link className="font-bold text-teal-700" href={`/account/orders/${order.order_number}`}>View</Link></td>
+                  <td><Link className="font-bold text-emerald-700" href={`/account/orders/${order.order_number}`}>View</Link></td>
                 </tr>
               ))}
             </tbody>

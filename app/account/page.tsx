@@ -28,7 +28,7 @@ export default function AccountPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 lg:px-8">
       <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-        <p className="text-xs font-black uppercase tracking-wide text-teal-700">Customer account</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Customer account</p>
         <h1 className="mt-1 text-3xl font-black">Welcome back</h1>
         <p className="mt-2 text-slate-600">{user.email}</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -39,8 +39,8 @@ export default function AccountPage() {
       </div>
       {isAdmin ? (
         <div className="mt-5 rounded-md border border-emerald-200 bg-emerald-50 p-5 shadow-sm sm:p-6">
-          <p className="text-xs font-black uppercase tracking-wide text-emerald-800">Admin access</p>
-          <h2 className="mt-1 text-2xl font-black text-slate-950">Admin Dashboard</h2>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-800">Admin access</p>
+          <h2 className="mt-1 text-2xl font-bold text-slate-950">Admin Dashboard</h2>
           <p className="mt-2 text-sm leading-6 text-slate-700">Manage products, orders, bookings, and messages.</p>
           <LinkButton href="/admin" className="mt-5">
             <LayoutDashboard className="h-4 w-4" /> Admin Dashboard

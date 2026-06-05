@@ -100,7 +100,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
         <div>
-          <p className="text-xs font-black uppercase tracking-wide text-teal-700">{product.brand || product.category}</p>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">{product.brand || product.category}</p>
           <h1 className="mt-2 text-3xl font-black leading-tight sm:text-4xl">{product.name}</h1>
           <div className="mt-3 flex items-end gap-3">
             <p className="text-2xl font-black">{formatCurrency(getSalePrice(product))}</p>
@@ -116,9 +116,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               ["Color", product.color],
               ["Gender", product.gender],
             ].map(([label, value]) => (
-              <div key={label} className="rounded-md border border-slate-200 bg-white p-3">
+              <div key={label} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3">
                 <dt className="font-semibold text-slate-500">{label}</dt>
-                <dd className="mt-1 font-bold">{value || "Available in store"}</dd>
+                <dd className="mt-1 font-semibold">{value || "Available in store"}</dd>
               </div>
             ))}
           </dl>
@@ -132,9 +132,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               [MessageCircle, "Need help choosing?", "Message us on WhatsApp for frame guidance.", `https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need help choosing eyewear.")}`],
               [CalendarCheck, "Eye checkup available", "Book an appointment before choosing lenses.", "/book-eye-checkup"],
             ].map(([Icon, title, text, href]) => (
-              <a key={String(title)} href={String(href)} className="rounded-md border border-slate-200 bg-white p-3 text-sm shadow-sm hover:border-emerald-200 sm:p-4">
+              <a key={String(title)} href={String(href)} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3 text-sm shadow-sm hover:border-emerald-200 sm:p-4">
                 <Icon className="h-5 w-5 text-emerald-700" aria-hidden="true" />
-                <p className="mt-3 font-black text-slate-950">{String(title)}</p>
+                <p className="mt-3 font-semibold text-slate-950">{String(title)}</p>
                 <p className="mt-1 text-slate-600">{String(text)}</p>
               </a>
             ))}
@@ -143,7 +143,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       </div>
       {similar.length ? (
         <section className="mt-14">
-          <h2 className="text-2xl font-black">Similar products</h2>
+          <h2 className="text-2xl font-bold">Similar products</h2>
           <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
             {similar.map((item) => <ProductCard key={item.id} product={item} />)}
           </div>

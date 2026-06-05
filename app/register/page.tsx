@@ -72,14 +72,14 @@ export default function RegisterPage() {
   return (
     <div className="mx-auto grid min-h-[66vh] max-w-md place-items-center px-4 py-7">
       <form onSubmit={submit} className="w-full rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-        <p className="text-xs font-black uppercase tracking-wide text-teal-700">{SITE_CONFIG.name}</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">{SITE_CONFIG.name}</p>
         <h1 className="mt-1 text-3xl font-black">Create account</h1>
         <p className="mt-2 text-sm text-slate-600">Register to keep your Titan Opticals orders in one place.</p>
         {!isSupabaseConfigured ? <div className="mt-5"><StateMessage title="Supabase is not configured" message="Add Supabase variables to create accounts." /></div> : null}
         {success ? (
-          <div className="mt-4 rounded-md border border-teal-100 bg-teal-50 p-4 text-sm text-teal-900">
+          <div className="mt-4 rounded-md border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-900">
             <p>{success}</p>
-            <LinkButton href="/login" className="mt-3 w-full bg-teal-700 hover:bg-teal-800">
+            <LinkButton href="/login" className="mt-3 w-full bg-emerald-700 hover:bg-emerald-800">
               Sign in
             </LinkButton>
           </div>
@@ -90,7 +90,7 @@ export default function RegisterPage() {
         <Field name="password" label="Password" type="password" required minLength={6} error={fieldErrors.password} className="mt-4" />
         <Button disabled={loading || !isSupabaseConfigured} className="mt-5 w-full">{loading ? "Creating account..." : "Create account"}</Button>
         <p className="mt-4 text-center text-sm text-slate-600">
-          Already registered? <Link className="font-bold text-teal-700" href="/login">Sign in</Link>
+          Already registered? <Link className="font-bold text-emerald-700" href="/login">Sign in</Link>
         </p>
       </form>
     </div>

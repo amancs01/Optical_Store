@@ -21,8 +21,8 @@ export function ProductCard({ product }: { product: Product }) {
       </Link>
       <div className="grid gap-2 p-3 sm:gap-3 sm:p-4">
         <div>
-          <p className="text-xs font-semibold uppercase text-slate-500">{product.brand || product.category}</p>
-          <Link href={`/products/${product.slug}`} className="mt-1 line-clamp-2 min-h-10 text-sm font-bold leading-5 text-slate-950 hover:underline sm:text-base">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-slate-500">{product.brand || product.category}</p>
+          <Link href={`/products/${product.slug}`} className="mt-1 line-clamp-2 min-h-10 text-sm font-semibold leading-5 text-slate-950 hover:underline sm:text-base">
             {product.name}
           </Link>
         </div>
@@ -54,7 +54,7 @@ export function ProductImageFallback({ name }: { name: string }) {
         <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white/15 ring-1 ring-white/30">
           <Glasses className="h-9 w-9" aria-hidden="true" />
         </div>
-        <p className="mt-4 text-xs font-bold uppercase tracking-wide text-emerald-50">Titan Opticals</p>
+        <p className="mt-4 text-[11px] font-bold uppercase tracking-wide text-emerald-50">Titan Opticals</p>
         <p className="mt-1 line-clamp-2 text-sm font-semibold text-white/90">{name}</p>
       </div>
     </div>

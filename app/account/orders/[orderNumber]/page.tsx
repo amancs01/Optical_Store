@@ -50,13 +50,13 @@ export default function CustomerOrderDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-      <Link href="/account/orders" className="text-sm font-bold text-teal-700">Back to my orders</Link>
+      <Link href="/account/orders" className="text-sm font-bold text-emerald-700">Back to my orders</Link>
       <div className="mt-5 rounded-md border border-slate-200 bg-white p-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-sm text-slate-500">Order number</p>
             <h1 className="mt-1 text-3xl font-black">{order.order_number}</h1>
-            <div className={`mt-3 inline-flex rounded-full border px-3 py-1 text-sm font-bold ${order.order_status === "cancelled" ? "border-rose-200 bg-rose-50 text-rose-800" : "border-teal-200 bg-teal-50 text-teal-800"}`}>
+            <div className={`mt-3 inline-flex rounded-full border px-3 py-1 text-sm font-bold ${order.order_status === "cancelled" ? "border-rose-200 bg-rose-50 text-rose-800" : "border-emerald-200 bg-emerald-50 text-emerald-800"}`}>
               Current status: {formatOrderStatus(order.order_status)}
             </div>
           </div>
@@ -69,13 +69,13 @@ export default function CustomerOrderDetailPage({ params }: { params: Promise<{ 
         <OrderStatusTimeline orderStatus={order.order_status} />
         <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_320px]">
           <section>
-            <h2 className="text-lg font-black">Items</h2>
+            <h2 className="text-lg font-bold">Items</h2>
             <div className="mt-3 grid gap-3">
               {(order.order_items || []).length ? (
                 order.order_items?.map((item) => (
                   <div key={item.id} className="flex justify-between gap-4 rounded-md border border-slate-200 p-3 text-sm">
                     <div>
-                      <p className="font-bold">{item.product_name}</p>
+                      <p className="font-semibold">{item.product_name}</p>
                       <p className="text-slate-500">Qty {item.quantity} x {formatCurrency(item.unit_price)}</p>
                     </div>
                     <p className="font-bold">{formatCurrency(item.total_price)}</p>
@@ -87,7 +87,7 @@ export default function CustomerOrderDetailPage({ params }: { params: Promise<{ 
             </div>
           </section>
           <aside className="rounded-md border border-slate-200 bg-slate-50 p-4">
-            <h2 className="font-black">Delivery</h2>
+            <h2 className="font-bold">Delivery</h2>
             <p className="mt-2 text-sm text-slate-600">{order.delivery_address}</p>
             {order.city ? <p className="mt-1 text-sm text-slate-600">{order.city}</p> : null}
             <div className="mt-4 border-t border-slate-200 pt-4 text-sm">

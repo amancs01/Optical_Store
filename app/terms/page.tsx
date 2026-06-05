@@ -36,8 +36,8 @@ export default function TermsPage() {
         </p>
         <p>
           For questions about orders, product availability, policies, or store service, contact Titan Opticals at{" "}
-          <a className="font-semibold text-teal-700" href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a> or{" "}
-          <a className="font-semibold text-teal-700" href={`tel:${SITE_CONFIG.phone}`}>{SITE_CONFIG.phoneDisplay}</a>.
+          <a className="font-semibold text-emerald-700" href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a> or{" "}
+          <a className="font-semibold text-emerald-700" href={`tel:${SITE_CONFIG.phone}`}>{SITE_CONFIG.phoneDisplay}</a>.
         </p>
       </div>
     </main>

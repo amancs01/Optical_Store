@@ -15,10 +15,10 @@ export function Footer() {
         <div>
           <div className="flex items-center gap-3">
             <Image src={SITE_CONFIG.logoPath} alt={SITE_CONFIG.name} width={44} height={44} className="h-11 w-11 rounded-md object-contain" />
-            <h2 className="text-xl font-black">{SITE_CONFIG.name}</h2>
+            <h2 className="text-xl font-bold">{SITE_CONFIG.name}</h2>
           </div>
           <p className="mt-3 text-sm text-slate-300">{SITE_CONFIG.description}</p>
-          <p className="mt-3 text-sm font-semibold text-teal-200">{SITE_CONFIG.deliveryNote}</p>
+          <p className="mt-3 text-sm font-semibold text-emerald-200">{SITE_CONFIG.deliveryNote}</p>
         </div>
         <div>
           <h3 className="font-semibold">Store</h3>
