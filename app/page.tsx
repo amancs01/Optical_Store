@@ -7,7 +7,15 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getFeaturedProducts } from "@/services/productService";
 import { formatCurrency, getSalePrice } from "@/lib/utils";
+import { pageMetadata } from "@/lib/seo";
 import type { Product } from "@/types/product";
+
+export const metadata = pageMetadata({
+  title: "Premium Eyewear in New Road, Kathmandu",
+  description:
+    "Shop eyeglasses, sunglasses, contact lenses, and book eye checkups at Titan Opticals in Kichapokhari, New Road.",
+  path: "/",
+});
 
 export default async function HomePage() {
   let products: Product[] = [];

@@ -1,4 +1,12 @@
 import { SITE_CONFIG } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Terms",
+  description:
+    "Read the terms for using the Titan Opticals website to browse products, place orders, book eye checkups, and contact the store.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

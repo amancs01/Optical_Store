@@ -1,4 +1,12 @@
 import { SITE_CONFIG } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Shipping Policy",
+  description:
+    "Read Titan Opticals shipping details for Kathmandu Valley delivery, courier delivery across Nepal, and prescription lens order timing.",
+  path: "/shipping-policy",
+});
 
 export default function ShippingPolicyPage() {
   return (

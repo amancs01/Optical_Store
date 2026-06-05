@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { OrderStatusTimeline } from "@/components/order/OrderStatusTimeline";
 import { LinkButton } from "@/components/ui/Button";
+import { ProductDetailSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { formatOrderStatus } from "@/lib/orderStatus";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
@@ -34,8 +35,7 @@ export default function CustomerOrderDetailPage({ params }: { params: Promise<{ 
         const customerOrder = await getCustomerOrderByNumber(data.user.id, orderNumber);
         setOrder(customerOrder);
         if (!customerOrder) setError("We could not find this order in your account.");
-      } catch (err) {
-        console.error("Customer order detail failed to load:", err);
+      } catch {
         setError("We could not load this order right now. Please try again.");
       } finally {
         setLoading(false);
@@ -44,7 +44,7 @@ export default function CustomerOrderDetailPage({ params }: { params: Promise<{ 
   }, [params, router]);
 
   if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Supabase is not configured" message="Add Supabase variables to view order details." /></div>;
-  if (loading) return <p className="mx-auto max-w-4xl px-4 py-10 text-sm text-slate-600">Loading order...</p>;
+  if (loading) return <ProductDetailSkeleton />;
   if (!user) return <p className="mx-auto max-w-4xl px-4 py-10 text-sm text-slate-600">Redirecting to login...</p>;
   if (error || !order) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Order unavailable" message={error || "This order is not available."} /><LinkButton href="/account/orders" className="mt-5">Back to my orders</LinkButton></div>;
 

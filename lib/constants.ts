@@ -18,7 +18,7 @@ export const SITE_CONFIG = {
     instagram: "https://www.instagram.com/titanoptical11/",
     tiktok: "https://www.tiktok.com/@titan.optical?_r=1&_t=ZS-96wGLXeT1cN",
   },
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://example.com",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://titanopticals.com",
 };
 
 export const CATEGORIES = ["Eyeglasses", "Sunglasses", "Contact Lenses", "Kids Frames"];

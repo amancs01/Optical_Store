@@ -1,4 +1,12 @@
 import { SITE_CONFIG } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Return Policy",
+  description:
+    "Review Titan Opticals return, exchange, and refund guidance for eyewear, frames, lenses, and delivered orders.",
+  path: "/return-policy",
+});
 
 export default function ReturnPolicyPage() {
   return (

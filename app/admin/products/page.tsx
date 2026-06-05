@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button, LinkButton } from "@/components/ui/Button";
+import { ListSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { deleteProduct, getAllProductsForAdmin } from "@/services/productService";
 import type { Product } from "@/types/product";
@@ -45,11 +46,14 @@ export default function AdminProductsPage() {
         <h1 className="text-3xl font-black">Products</h1>
         <LinkButton href="/admin/products/new">Add product</LinkButton>
       </div>
-      <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search products" className="mt-5 w-full rounded-md border border-slate-200 px-3 py-2" />
-      {loading ? <p className="mt-5 text-sm text-slate-600">Loading products...</p> : null}
+      <label className="mt-5 block text-sm font-semibold text-slate-700">
+        Search products
+        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search products" className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100" />
+      </label>
+      {loading ? <div className="mt-5"><ListSkeleton rows={5} /></div> : null}
       {error ? <div className="mt-5"><StateMessage title="Products could not load" message={error} /></div> : null}
       {!loading && !error && !visible.length ? <div className="mt-5"><StateMessage title="No products found" message="Add a product or change the search term." /></div> : null}
-      <div className="mt-5 overflow-x-auto rounded-md border border-slate-200 bg-white">
+      {!loading && !error && visible.length ? <div className="mt-5 overflow-x-auto rounded-md border border-slate-200 bg-white">
         <table className="w-full min-w-[760px] text-left text-sm">
           <thead className="bg-slate-50 text-slate-500"><tr><th className="p-3">Name</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody>
@@ -61,7 +65,7 @@ export default function AdminProductsPage() {
             ))}
           </tbody>
         </table>
-      </div>
+      </div> : null}
     </AdminLayout>
   );
 }

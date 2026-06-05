@@ -1,4 +1,12 @@
 import { SITE_CONFIG } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Privacy Policy",
+  description:
+    "Understand how Titan Opticals handles customer information for orders, delivery, bookings, messages, and customer support.",
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicyPage() {
   return (

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { LinkButton } from "@/components/ui/Button";
+import { ListSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { formatOrderStatus } from "@/lib/orderStatus";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
@@ -32,7 +33,6 @@ export default function MyOrdersPage() {
         const customerOrders = await getCustomerOrders(data.user.id);
         setOrders(customerOrders);
       } catch (err) {
-        console.error("Customer orders failed to load:", err);
         setError("We could not load your orders right now. Please try again.");
       } finally {
         setLoading(false);
@@ -41,7 +41,7 @@ export default function MyOrdersPage() {
   }, [router]);
 
   if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Supabase is not configured" message="Add Supabase variables to view orders." /></div>;
-  if (loading) return <p className="mx-auto max-w-4xl px-4 py-10 text-sm text-slate-600">Loading orders...</p>;
+  if (loading) return <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8"><ListSkeleton rows={4} /></div>;
   if (!user) return <p className="mx-auto max-w-4xl px-4 py-10 text-sm text-slate-600">Redirecting to login...</p>;
 
   return (
@@ -61,7 +61,7 @@ export default function MyOrdersPage() {
       ) : null}
       {orders.length ? (
         <div className="mt-6 overflow-x-auto rounded-md border border-slate-200 bg-white">
-          <table className="w-full min-w-[720px] text-left text-sm">
+          <table className="w-full min-w-[680px] text-left text-sm">
             <thead className="bg-slate-50 text-slate-500">
               <tr>
                 <th className="p-3">Order</th>

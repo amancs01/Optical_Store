@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ProductCard } from "@/components/product/ProductCard";
 import { StateMessage } from "@/components/ui/StateMessage";
+import { ProductGridSkeleton } from "@/components/ui/LoadingSkeletons";
 import { CATEGORIES, FRAME_TYPES, GENDERS } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getActiveProducts } from "@/services/productService";
@@ -73,27 +74,6 @@ export default function ProductsPage() {
           <p className="mt-2 text-sm text-slate-600">Try clearing one filter or searching by frame style, brand, or category.</p>
         </div>
       )}
-    </div>
-  );
-}
-
-function ProductGridSkeleton() {
-  return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-label="Loading products">
-      {Array.from({ length: 6 }).map((_, index) => (
-        <div key={index} className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
-          <div className="aspect-[4/3] animate-pulse bg-slate-100" />
-          <div className="grid gap-3 p-4">
-            <div className="h-3 w-24 animate-pulse rounded bg-slate-100" />
-            <div className="h-5 w-4/5 animate-pulse rounded bg-slate-100" />
-            <div className="flex items-center justify-between">
-              <div className="h-5 w-20 animate-pulse rounded bg-slate-100" />
-              <div className="h-3 w-16 animate-pulse rounded bg-slate-100" />
-            </div>
-            <div className="h-11 animate-pulse rounded-md bg-slate-100" />
-          </div>
-        </div>
-      ))}
     </div>
   );
 }

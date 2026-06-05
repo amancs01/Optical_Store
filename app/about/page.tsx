@@ -1,4 +1,12 @@
 import { SITE_CONFIG } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "About",
+  description:
+    "Learn about Titan Opticals, a New Road optical store offering eyewear, sunglasses, lenses, and eye-care support in Kathmandu.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

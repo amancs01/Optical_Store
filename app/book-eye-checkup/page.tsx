@@ -10,25 +10,37 @@ import { createBooking } from "@/services/bookingService";
 export default function BookEyeCheckupPage() {
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<"name" | "phone" | "booking_date", string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setIsSubmitting(true);
     setSuccess(false);
     setErrorMessage("");
     const currentForm = event.currentTarget;
     const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") || "").trim();
+    const phone = String(form.get("phone") || "").trim();
     const bookingDate = String(form.get("booking_date") || "");
+    const validationErrors: Partial<Record<"name" | "phone" | "booking_date", string>> = {};
+
+    if (!name) validationErrors.name = "Enter your full name.";
+    if (!phone) validationErrors.phone = "Enter a phone number we can call.";
     if (bookingDate && bookingDate < getTodayDate()) {
-      setErrorMessage("Please choose today or a future date for your eye checkup.");
-      setIsSubmitting(false);
+      validationErrors.booking_date = "Choose today or a future date.";
+    }
+
+    setFieldErrors(validationErrors);
+    if (Object.keys(validationErrors).length) {
+      setErrorMessage("Please complete the required booking details.");
       return;
     }
+
+    setIsSubmitting(true);
     try {
       await createBooking({
-        name: String(form.get("name") || ""),
-        phone: String(form.get("phone") || ""),
+        name,
+        phone,
         branch: String(form.get("branch") || ""),
         booking_date: bookingDate,
         booking_time: String(form.get("booking_time") || ""),
@@ -36,8 +48,7 @@ export default function BookEyeCheckupPage() {
       });
       currentForm.reset();
       setSuccess(true);
-    } catch (error) {
-      console.error("Eye checkup booking submission failed:", error);
+    } catch {
       setErrorMessage("We could not submit your eye checkup booking right now. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -49,6 +60,7 @@ export default function BookEyeCheckupPage() {
       title="Book eye checkup"
       success={success}
       errorMessage={errorMessage}
+      fieldErrors={fieldErrors}
       submit={submit}
       isSubmitting={isSubmitting}
       disabled={!isSupabaseConfigured}
@@ -60,6 +72,7 @@ function FormPage({
   title,
   success,
   errorMessage,
+  fieldErrors,
   submit,
   isSubmitting,
   disabled,
@@ -67,6 +80,7 @@ function FormPage({
   title: string;
   success: boolean;
   errorMessage: string;
+  fieldErrors: Partial<Record<"name" | "phone" | "booking_date", string>>;
   submit: (e: React.FormEvent<HTMLFormElement>) => void;
   isSubmitting: boolean;
   disabled: boolean;
@@ -94,10 +108,10 @@ function FormPage({
             {errorMessage}
           </div>
         ) : null}
-        <Field name="name" label="Full name" required />
-        <Field name="phone" label="Phone" required />
+        <Field name="name" label="Full name" required error={fieldErrors.name} />
+        <Field name="phone" label="Phone" required error={fieldErrors.phone} />
         <Field name="branch" label="Branch" defaultValue="Kathmandu" />
-        <div className="grid gap-4 md:grid-cols-2"><Field name="booking_date" label="Date" type="date" min={getTodayDate()} /><Field name="booking_time" label="Time" type="time" /></div>
+        <div className="grid gap-4 md:grid-cols-2"><Field name="booking_date" label="Date" type="date" min={getTodayDate()} error={fieldErrors.booking_date} /><Field name="booking_time" label="Time" type="time" /></div>
         <label className="grid gap-2 text-sm font-semibold text-slate-700">Message<textarea name="message" rows={4} className="rounded-md border border-slate-200 px-3 py-2 font-normal" /></label>
         <Button disabled={isSubmitting || disabled}>{isSubmitting ? "Submitting..." : "Submit booking"}</Button>
       </form>
@@ -112,7 +126,13 @@ function getTodayDate() {
   return `${today.getFullYear()}-${month}-${day}`;
 }
 
-function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string; name: string }) {
-  const { label, ...inputProps } = props;
-  return <label className="grid gap-2 text-sm font-semibold text-slate-700">{label}<input className="rounded-md border border-slate-200 px-3 py-2 font-normal" {...inputProps} /></label>;
+function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string; name: string; error?: string }) {
+  const { label, error, ...inputProps } = props;
+  return (
+    <label className="grid gap-2 text-sm font-semibold text-slate-700">
+      {label}
+      <input className="rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100" aria-invalid={Boolean(error)} {...inputProps} />
+      {error ? <span className="text-xs font-semibold text-rose-700">{error}</span> : null}
+    </label>
+  );
 }

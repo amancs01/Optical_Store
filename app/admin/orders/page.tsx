@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { ListSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { ORDER_STATUSES } from "@/lib/constants";
 import { formatCurrency } from "@/lib/utils";
@@ -40,7 +41,7 @@ export default function AdminOrdersPage() {
           {ORDER_STATUSES.map((status) => <option key={status} value={status}>{status}</option>)}
         </select>
       </div>
-      {loading ? <p className="mt-5 text-sm text-slate-600">Loading orders...</p> : null}
+      {loading ? <div className="mt-5"><ListSkeleton rows={5} /></div> : null}
       {error ? <div className="mt-5"><StateMessage title="Orders could not load" message={error} /></div> : null}
       {!loading && !error && !visible.length ? <div className="mt-5"><StateMessage title="No orders found" message="New checkout orders will appear here." /></div> : null}
       <div className="mt-5 grid gap-4">
@@ -48,7 +49,7 @@ export default function AdminOrdersPage() {
           <div key={order.id} className="rounded-md border border-slate-200 bg-white p-4">
             <div className="flex flex-wrap justify-between gap-3">
               <div><h2 className="font-black">{order.order_number}</h2><p className="text-sm text-slate-600">{order.customer_name} - {order.customer_phone}</p><p className="text-sm text-slate-600">{order.delivery_address}</p></div>
-              <div className="text-right"><p className="font-black">{formatCurrency(order.total_amount)}</p><select value={order.order_status} onChange={(e) => updateOrderStatus(order.id, e.target.value).then(load)} className="mt-2 rounded-md border border-slate-200 px-3 py-2 text-sm">{ORDER_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}</select></div>
+              <div className="w-full sm:w-auto sm:text-right"><p className="font-black">{formatCurrency(order.total_amount)}</p><select aria-label={`Update status for ${order.order_number}`} value={order.order_status} onChange={(e) => updateOrderStatus(order.id, e.target.value).then(load)} className="mt-2 h-11 w-full rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-auto">{ORDER_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}</select></div>
             </div>
             <div className="mt-3 border-t border-slate-200 pt-3 text-sm text-slate-600">
               {(order.order_items || []).map((item) => <p key={item.id}>{item.product_name} x {item.quantity}</p>)}

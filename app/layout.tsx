@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { SITE_CONFIG } from "@/lib/constants";
+import { absoluteUrl, getSiteUrl } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,8 +19,31 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: SITE_CONFIG.name,
+  metadataBase: new URL(getSiteUrl()),
+  title: {
+    default: `${SITE_CONFIG.name} | Premium Optical Store in Kathmandu`,
+    template: `%s | ${SITE_CONFIG.name}`,
+  },
   description: SITE_CONFIG.description,
+  alternates: {
+    canonical: absoluteUrl("/"),
+  },
+  openGraph: {
+    title: `${SITE_CONFIG.name} | Premium Optical Store in Kathmandu`,
+    description: SITE_CONFIG.description,
+    url: absoluteUrl("/"),
+    siteName: SITE_CONFIG.name,
+    type: "website",
+    locale: "en_NP",
+    images: [
+      {
+        url: absoluteUrl(SITE_CONFIG.logoPath),
+        width: 512,
+        height: 512,
+        alt: SITE_CONFIG.name,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
