@@ -50,11 +50,11 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
+    <div className="mx-auto grid max-w-6xl gap-6 px-4 py-7 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
       <div>
-        <p className="text-sm font-bold uppercase text-teal-700">{SITE_CONFIG.name}</p>
-        <h1 className="mt-2 animate-fade-up text-4xl font-black">Contact Titan Opticals</h1>
-        <p className="mt-4 text-slate-600">
+        <p className="text-xs font-black uppercase tracking-wide text-teal-700">{SITE_CONFIG.name}</p>
+        <h1 className="mt-1 animate-fade-up text-3xl font-black sm:text-4xl">Contact Titan Opticals</h1>
+        <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
           Visit us at New Road for eyewear, sunglasses, contact lenses, and eye-care support.
         </p>
         <div className="mt-6 space-y-3 text-slate-600">
@@ -72,7 +72,7 @@ export default function ContactPage() {
           <a href={SITE_CONFIG.socialLinks.instagram} target="_blank" rel="noreferrer">Instagram</a>
           <a href={SITE_CONFIG.socialLinks.tiktok} target="_blank" rel="noreferrer">TikTok</a>
         </div>
-        <div className="mt-8 rounded-md border border-emerald-100 bg-emerald-50/70 p-5">
+        <div className="mt-6 rounded-md border border-emerald-100 bg-emerald-50/70 p-4 sm:p-5">
           <MapPin className="h-6 w-6 text-emerald-700" aria-hidden="true" />
           <h2 className="mt-3 text-lg font-black text-slate-950">Find us in New Road</h2>
           <p className="mt-2 text-sm text-slate-600">{SITE_CONFIG.address}</p>
@@ -99,7 +99,7 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-      <form onSubmit={submit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5">
+      <form onSubmit={submit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5 shadow-sm">
         {!isSupabaseConfigured ? <StateMessage title="Supabase is not configured" message="Add Supabase variables before sending messages." /> : null}
         {success ? (
           <div className="rounded-md border border-teal-200 bg-teal-50 p-4 text-teal-900">

@@ -74,16 +74,16 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const similar = await getSimilarProducts(product.category, product.id).catch(() => []);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <nav className="mb-6 flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-500" aria-label="Breadcrumb">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <nav className="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500 sm:text-sm" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-emerald-800">Home</Link>
         <span>/</span>
         <Link href="/products" className="hover:text-emerald-800">Products</Link>
         <span>/</span>
         <span className="text-slate-900">{product.name}</span>
       </nav>
-      <div className="grid gap-8 lg:grid-cols-2">
-        <div className="overflow-hidden rounded-md border border-emerald-100 bg-emerald-50 p-3 shadow-sm">
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="overflow-hidden rounded-md border border-emerald-100 bg-emerald-50 p-2 shadow-sm sm:p-3">
           <div className="group relative aspect-square overflow-hidden rounded-md bg-white">
             {product.image_url ? (
               <Image
@@ -100,14 +100,14 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
         <div>
-          <p className="text-sm font-bold uppercase text-teal-700">{product.brand || product.category}</p>
-          <h1 className="mt-2 font-serif text-4xl font-black">{product.name}</h1>
-          <div className="mt-4 flex items-end gap-3">
+          <p className="text-xs font-black uppercase tracking-wide text-teal-700">{product.brand || product.category}</p>
+          <h1 className="mt-2 text-3xl font-black leading-tight sm:text-4xl">{product.name}</h1>
+          <div className="mt-3 flex items-end gap-3">
             <p className="text-2xl font-black">{formatCurrency(getSalePrice(product))}</p>
             {product.discount_price ? <p className="text-slate-500 line-through">{formatCurrency(product.price)}</p> : null}
           </div>
-          <p className="mt-4 leading-7 text-slate-600">{product.description || "A refined optical frame selected for comfort, durability, and everyday style."}</p>
-          <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+          <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">{product.description || "A refined optical frame selected for comfort, durability, and everyday style."}</p>
+          <dl className="mt-5 grid grid-cols-2 gap-2 text-sm sm:gap-3">
             {[
               ["Category", product.category],
               ["Frame type", product.frame_type],
@@ -125,14 +125,14 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <p className={`mt-5 inline-flex rounded-full px-3 py-1 text-sm font-bold ${getAvailabilityClass(product.stock_quantity)}`}>
             {getAvailabilityLabel(product.stock_quantity)}
           </p>
-          <div className="mt-5 max-w-sm"><AddToCartButton product={product} /></div>
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <div className="mt-5"><AddToCartButton product={product} /></div>
+          <div className="mt-4 grid gap-2 sm:grid-cols-3 sm:gap-3">
             {[
               [Truck, "Free Valley delivery", SITE_CONFIG.deliveryNote, "/shipping-policy"],
               [MessageCircle, "Need help choosing?", "Message us on WhatsApp for frame guidance.", `https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need help choosing eyewear.")}`],
               [CalendarCheck, "Eye checkup available", "Book an appointment before choosing lenses.", "/book-eye-checkup"],
             ].map(([Icon, title, text, href]) => (
-              <a key={String(title)} href={String(href)} className="rounded-md border border-slate-200 bg-white p-4 text-sm shadow-sm hover:border-emerald-200">
+              <a key={String(title)} href={String(href)} className="rounded-md border border-slate-200 bg-white p-3 text-sm shadow-sm hover:border-emerald-200 sm:p-4">
                 <Icon className="h-5 w-5 text-emerald-700" aria-hidden="true" />
                 <p className="mt-3 font-black text-slate-950">{String(title)}</p>
                 <p className="mt-1 text-slate-600">{String(text)}</p>
@@ -144,7 +144,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       {similar.length ? (
         <section className="mt-14">
           <h2 className="text-2xl font-black">Similar products</h2>
-          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
             {similar.map((item) => <ProductCard key={item.id} product={item} />)}
           </div>
         </section>

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { CartProvider } from "@/components/cart/CartProvider";
+import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
+import { MainContent } from "@/components/layout/MainContent";
 import { Navbar } from "@/components/layout/Navbar";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -53,13 +55,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} h-full antialiased`}>
-      <body className="min-h-full bg-slate-50 text-slate-950">
+      <body className="min-h-full bg-[#fffaf2] text-slate-950">
         <CartProvider>
           <div className="flex min-h-screen flex-col">
             <Navbar />
-            <main className="flex-1">{children}</main>
+            <MainContent>{children}</MainContent>
             <Footer />
             <WhatsAppButton />
+            <BottomNav />
           </div>
         </CartProvider>
       </body>

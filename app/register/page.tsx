@@ -70,10 +70,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto grid min-h-[70vh] max-w-md place-items-center px-4 py-10">
-      <form onSubmit={submit} className="w-full rounded-md border border-slate-200 bg-white p-6 shadow-sm">
-        <p className="text-sm font-bold uppercase text-teal-700">{SITE_CONFIG.name}</p>
-        <h1 className="mt-2 text-3xl font-black">Create account</h1>
+    <div className="mx-auto grid min-h-[66vh] max-w-md place-items-center px-4 py-7">
+      <form onSubmit={submit} className="w-full rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <p className="text-xs font-black uppercase tracking-wide text-teal-700">{SITE_CONFIG.name}</p>
+        <h1 className="mt-1 text-3xl font-black">Create account</h1>
         <p className="mt-2 text-sm text-slate-600">Register to keep your Titan Opticals orders in one place.</p>
         {!isSupabaseConfigured ? <div className="mt-5"><StateMessage title="Supabase is not configured" message="Add Supabase variables to create accounts." /></div> : null}
         {success ? (

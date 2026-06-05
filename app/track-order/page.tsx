@@ -33,9 +33,10 @@ export default function TrackOrderPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-      <h1 className="text-4xl font-black">Track order</h1>
-      <form onSubmit={submit} className="mt-6 flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4 sm:flex-row">
+    <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 lg:px-8">
+      <p className="text-xs font-black uppercase tracking-wide text-teal-700">Titan Opticals</p>
+      <h1 className="mt-1 text-3xl font-black sm:text-4xl">Track order</h1>
+      <form onSubmit={submit} className="mt-5 flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4 shadow-sm sm:flex-row">
         <input value={query} onChange={(e) => setQuery(e.target.value)} required placeholder="Order number or phone number" className="min-h-11 flex-1 rounded-md border border-slate-200 px-3" />
         <Button disabled={loading || !isSupabaseConfigured}>{loading ? "Checking..." : "Track"}</Button>
       </form>

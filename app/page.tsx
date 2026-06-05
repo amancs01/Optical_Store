@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarCheck, Eye, Glasses, ShieldCheck, Sun, Truck } from "lucide-react";
+import { ArrowRight, CalendarCheck, Eye, Glasses, MessageCircle, Search, ShieldCheck, Sparkles, Square, Sun, Truck } from "lucide-react";
 import { LinkButton } from "@/components/ui/Button";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -53,56 +53,85 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="bg-white">
-      <section className="mx-auto grid min-h-[78vh] max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
+    <div className="bg-[#fffaf2]">
+      <section className="mx-auto max-w-7xl px-4 pb-8 pt-7 sm:px-6 lg:grid lg:min-h-[72vh] lg:grid-cols-[1fr_0.95fr] lg:items-center lg:gap-10 lg:px-8 lg:py-12">
         <div className="animate-fade-up">
-          <p className="text-sm font-bold uppercase text-teal-700">{SITE_CONFIG.location}</p>
-          <h1 className="mt-4 max-w-3xl font-serif text-4xl font-black leading-tight text-slate-950 sm:text-6xl">
-            Premium eyewear in New Road, Kathmandu.
+          <p className="text-xs font-black uppercase tracking-wide text-teal-700">New Road, Kathmandu</p>
+          <h1 className="mt-3 max-w-xl text-3xl font-black leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
+            See clearly. Look refined.
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
-            {SITE_CONFIG.name} offers eyeglasses, sunglasses, contact lenses, and eye checkup booking from Kichapokhari, New Road. Order online with Cash on Delivery and free delivery inside Kathmandu Valley.
+          <p className="mt-4 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">
+            Premium eyeglasses, sunglasses, contact lenses, and eye checkup booking from Kichapokhari, opposite NMB Bank.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <LinkButton href="/products">
+          <div className="mt-5 flex gap-3">
+            <LinkButton href="/products" className="flex-1 sm:flex-none">
               Shop eyewear <ArrowRight className="h-4 w-4" />
             </LinkButton>
-            <LinkButton href="/book-eye-checkup" variant="secondary">
-              Book eye checkup
+            <LinkButton href="/book-eye-checkup" variant="secondary" className="flex-1 sm:flex-none">
+              Book checkup
             </LinkButton>
           </div>
         </div>
-        <HeroVisual products={products} />
+
+        <form action="/products" className="mt-6 grid grid-cols-[88px_1fr_auto] overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm lg:mt-8">
+          <select name="category" aria-label="Category" className="border-r border-slate-200 bg-emerald-50 px-3 text-sm font-bold text-emerald-800">
+            <option value="">All</option>
+            {categories.map((cat) => <option key={cat.title} value={cat.title}>{cat.title}</option>)}
+          </select>
+          <input name="search" placeholder="Search eyewear" className="min-h-12 min-w-0 px-3 text-sm outline-none" />
+          <button className="grid min-h-12 w-12 place-items-center bg-emerald-700 text-white" aria-label="Search products">
+            <Search className="h-5 w-5" />
+          </button>
+        </form>
+
+        <div className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:mt-5">
+          {[...categories, { title: "Eye Checkup", icon: CalendarCheck, href: "/book-eye-checkup" }].map((item) => {
+            const Icon = item.icon;
+            const href = "href" in item ? item.href : `/products?category=${encodeURIComponent(item.title)}`;
+
+            return (
+              <Link key={item.title} href={href} className="inline-flex flex-none items-center gap-2 rounded-full border border-emerald-100 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm">
+                <Icon className="h-4 w-4 text-emerald-700" />
+                {item.title}
+              </Link>
+            );
+          })}
+        </div>
+
+        <div className="mt-5 lg:col-start-2 lg:row-span-4 lg:row-start-1 lg:mt-0">
+          <HeroVisual products={products} />
+        </div>
       </section>
 
-      <section className="animate-fade-up-delay-1 border-y border-slate-200 bg-slate-50">
-        <div className="mx-auto grid max-w-7xl gap-4 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+      <section className="animate-fade-up-delay-1 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mb-4 flex items-end justify-between">
+          <div>
+            <p className="text-xs font-black uppercase text-teal-700">Top categories</p>
+            <h2 className="mt-1 text-xl font-black">Shop by category</h2>
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-3">
           {categories.map((cat) => (
-            <a
-              key={cat.title}
-              href={`/products?category=${encodeURIComponent(cat.title)}`}
-              className={`rounded-md border p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${cat.color}`}
-            >
-              <div className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full ${cat.iconBg}`}>
-                <cat.icon className="h-5 w-5" />
+            <Link key={cat.title} href={`/products?category=${encodeURIComponent(cat.title)}`} className="rounded-md border border-slate-200 bg-white p-2 shadow-sm">
+              <div className={`grid aspect-square place-items-center rounded-md ${cat.iconBg}`}>
+                <cat.icon className="h-7 w-7" />
               </div>
-              <h2 className="text-xl font-bold">{cat.title}</h2>
-              <p className="mt-2 text-sm opacity-80">{cat.text}</p>
-            </a>
+              <p className="mt-2 line-clamp-1 text-center text-xs font-black text-slate-900">{cat.title}</p>
+            </Link>
           ))}
         </div>
       </section>
 
-      <section className="animate-fade-up-delay-2 mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+      <section className="animate-fade-up-delay-2 mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
         <div className="mb-7 flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-bold uppercase text-teal-700">Featured</p>
-            <h2 className="mt-2 text-3xl font-black">Featured picks from Titan Opticals</h2>
+            <p className="text-xs font-black uppercase text-teal-700">Popular picks</p>
+            <h2 className="mt-1 text-2xl font-black sm:text-3xl">Featured eyewear</h2>
           </div>
           <LinkButton href="/products" variant="secondary">View all</LinkButton>
         </div>
         {products.length ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
             {products.map((product) => <ProductCard key={product.id} product={product} />)}
           </div>
         ) : (
@@ -112,30 +141,66 @@ export default async function HomePage() {
         )}
       </section>
 
-      <section className="bg-slate-950 text-white">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1fr_auto] lg:px-8">
-          <div>
-            <h2 className="text-3xl font-black">Need an eye checkup?</h2>
-            <p className="mt-3 max-w-2xl text-slate-300">Book a convenient eye checkup and get help choosing lenses and frames that fit your needs.</p>
-          </div>
-          <LinkButton href="/book-eye-checkup" variant="secondary">
-            <CalendarCheck className="h-4 w-4" /> Book now
-          </LinkButton>
+      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {["Featured", "Top Selling", "New Arrivals"].map((label, index) => (
+            <span key={label} className={`rounded-full px-4 py-2 text-xs font-black ${index === 0 ? "bg-emerald-700 text-white" : "bg-white text-slate-700 ring-1 ring-slate-200"}`}>
+              {label}
+            </span>
+          ))}
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-4 px-4 py-12 sm:px-6 md:grid-cols-3 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+        <div className="mb-4">
+          <p className="text-xs font-black uppercase text-teal-700">Shop by shape</p>
+          <h2 className="mt-1 text-xl font-black">Find your frame style</h2>
+        </div>
+        <div className="grid grid-cols-4 gap-3">
+          {[
+            [Sparkles, "Aviator"],
+            [Square, "Rectangle"],
+            [Eye, "Round"],
+            [Glasses, "Square"],
+          ].map(([Icon, label]) => (
+            <Link key={String(label)} href={`/products?frame=${encodeURIComponent(String(label))}`} className="grid justify-items-center gap-2 rounded-md bg-white p-3 text-center shadow-sm ring-1 ring-slate-200">
+              <span className="grid h-12 w-12 place-items-center rounded-full bg-emerald-50 text-emerald-700">
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="text-[11px] font-bold text-slate-700">{String(label)}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-7 sm:px-6 md:grid-cols-4 lg:px-8">
         {[
-          [ShieldCheck, "Quality frames and UV protection", "Choose from polished eyewear options with support from store staff."],
-          [Truck, "Free Valley delivery", "Free delivery inside Kathmandu Valley with Cash on Delivery order placement."],
-          [CalendarCheck, "Eye checkup booking", "Request an appointment online and let the team contact you."],
+          [Truck, "Free delivery", "Inside Kathmandu Valley"],
+          [CalendarCheck, "Eye checkup", "Booking available"],
+          [ShieldCheck, "Quality frames", "Curated eyewear"],
+          [MessageCircle, "WhatsApp support", "Fast help"],
         ].map(([Icon, title, text]) => (
-          <div key={String(title)} className="rounded-md border border-slate-200 bg-white p-5">
-            <Icon className="h-6 w-6 text-teal-700" />
-            <h3 className="mt-4 font-bold">{String(title)}</h3>
-            <p className="mt-2 text-sm text-slate-600">{String(text)}</p>
+          <div key={String(title)} className="rounded-md border border-slate-200 bg-white p-4 shadow-sm">
+            <Icon className="h-5 w-5 text-teal-700" />
+            <h3 className="mt-3 text-sm font-black">{String(title)}</h3>
+            <p className="mt-1 text-xs text-slate-600">{String(text)}</p>
           </div>
         ))}
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+        <div className="rounded-md bg-slate-950 p-5 text-white">
+          <h2 className="text-2xl font-black">Need help choosing your frame?</h2>
+          <p className="mt-2 text-sm text-slate-300">Message Titan Opticals for practical frame and lens guidance.</p>
+          <div className="mt-5 flex gap-3">
+            <LinkButton href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need help choosing eyewear.")}`} className="flex-1">
+              WhatsApp us
+            </LinkButton>
+            <LinkButton href="/book-eye-checkup" variant="secondary" className="flex-1">
+              Book checkup
+            </LinkButton>
+          </div>
+        </div>
       </section>
     </div>
   );
@@ -145,13 +210,13 @@ function HeroVisual({ products }: { products: Product[] }) {
   const heroProducts = products.slice(0, 3);
 
   return (
-    <div className="relative min-h-[420px] overflow-hidden rounded-md border border-emerald-100 bg-[linear-gradient(135deg,#ecfdf5,#ffffff_48%,#e0f2fe)] p-4 shadow-sm sm:p-6">
+    <div className="relative min-h-[300px] overflow-hidden rounded-md border border-emerald-100 bg-[linear-gradient(135deg,#ecfdf5,#ffffff_48%,#e0f2fe)] p-3 shadow-sm sm:min-h-[420px] sm:p-6">
       <div className="absolute right-6 top-6 rounded-full bg-white/85 px-4 py-2 text-xs font-bold uppercase text-emerald-800 shadow-sm">
         {SITE_CONFIG.name}
       </div>
       <div className="grid h-full content-end gap-4 pt-14">
         {heroProducts.length ? (
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
             {heroProducts.map((product, index) => (
               <Link
                 key={product.id}
@@ -167,9 +232,9 @@ function HeroVisual({ products }: { products: Product[] }) {
                     </div>
                   )}
                 </div>
-                <div className="p-3">
-                  <p className="line-clamp-1 text-sm font-bold text-slate-950">{product.name}</p>
-                  <p className="mt-1 text-xs font-semibold text-emerald-700">{formatCurrency(getSalePrice(product))}</p>
+                <div className="p-2 sm:p-3">
+                  <p className="line-clamp-1 text-xs font-bold text-slate-950 sm:text-sm">{product.name}</p>
+                  <p className="mt-1 text-[11px] font-semibold text-emerald-700 sm:text-xs">{formatCurrency(getSalePrice(product))}</p>
                 </div>
               </Link>
             ))}
@@ -183,9 +248,9 @@ function HeroVisual({ products }: { products: Product[] }) {
             </div>
           </div>
         )}
-        <div className="rounded-md bg-slate-950/90 p-4 text-white">
+        <div className="rounded-md bg-slate-950/90 p-3 text-white sm:p-4">
           <p className="text-sm font-semibold text-emerald-100">Kichapokhari, opposite NMB Bank</p>
-          <p className="mt-1 text-2xl font-black">Try refined frames with practical eye-care guidance.</p>
+          <p className="mt-1 text-xl font-black sm:text-2xl">Try refined frames with practical eye-care guidance.</p>
         </div>
       </div>
     </div>

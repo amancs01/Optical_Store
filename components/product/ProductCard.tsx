@@ -9,31 +9,31 @@ export function ProductCard({ product }: { product: Product }) {
   const availability = getAvailabilityLabel(product.stock_quantity);
 
   return (
-    <article className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md motion-reduce:hover:translate-y-0">
+    <article className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition md:hover:-translate-y-1 md:hover:border-emerald-200 md:hover:shadow-md motion-reduce:hover:translate-y-0">
       <Link href={`/products/${product.slug}`} className="group block bg-slate-100">
         <div className="relative aspect-square">
           {product.image_url ? (
-            <Image src={product.image_url} alt={product.name} fill className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" sizes="(max-width: 768px) 100vw, 33vw" />
+            <Image src={product.image_url} alt={product.name} fill className="object-cover transition duration-500 md:group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" sizes="(max-width: 768px) 50vw, 33vw" />
           ) : (
             <ProductImageFallback name={product.name} />
           )}
         </div>
       </Link>
-      <div className="grid gap-3 p-4">
+      <div className="grid gap-2 p-3 sm:gap-3 sm:p-4">
         <div>
           <p className="text-xs font-semibold uppercase text-slate-500">{product.brand || product.category}</p>
-          <Link href={`/products/${product.slug}`} className="mt-1 block font-semibold text-slate-950 hover:underline">
+          <Link href={`/products/${product.slug}`} className="mt-1 line-clamp-2 min-h-10 text-sm font-bold leading-5 text-slate-950 hover:underline sm:text-base">
             {product.name}
           </Link>
         </div>
-        <div className="flex items-end justify-between gap-3">
+        <div className="grid gap-2">
           <div>
-            <p className="font-bold text-slate-950">{formatCurrency(getSalePrice(product))}</p>
+            <p className="font-black text-slate-950">{formatCurrency(getSalePrice(product))}</p>
             {product.discount_price ? (
               <p className="text-xs text-slate-500 line-through">{formatCurrency(product.price)}</p>
             ) : null}
           </div>
-          <p className={`rounded-full px-2.5 py-1 text-xs font-bold ${availability.className}`}>{availability.label}</p>
+          <p className={`w-fit rounded-full px-2 py-0.5 text-[11px] font-bold ${availability.className}`}>{availability.label}</p>
         </div>
         <AddToCartButton product={product} />
       </div>

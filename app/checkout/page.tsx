@@ -85,23 +85,23 @@ export default function CheckoutPage() {
     }
   }
 
-  if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Supabase is not configured" message="Add Supabase variables before checkout." /></div>;
+  if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-7"><StateMessage title="Supabase is not configured" message="Add Supabase variables before checkout." /></div>;
   if (confirmation) return <OrderConfirmation confirmation={confirmation} />;
-  if (!hydrated) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Loading cart" message="Checking your saved cart before checkout." /></div>;
-  if (!items.length) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Your cart is empty" message="Add eyewear to your cart before checkout." /><LinkButton href="/products" className="mt-5">Shop products</LinkButton></div>;
+  if (!hydrated) return <div className="mx-auto max-w-4xl px-4 py-7"><StateMessage title="Loading cart" message="Checking your saved cart before checkout." /></div>;
+  if (!items.length) return <div className="mx-auto max-w-4xl px-4 py-7"><StateMessage title="Your cart is empty" message="Add eyewear to your cart before checkout." /><LinkButton href="/products" className="mt-5">Shop products</LinkButton></div>;
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_340px] lg:px-8">
+    <div className="mx-auto grid max-w-6xl gap-5 px-4 py-7 sm:px-6 lg:grid-cols-[1fr_340px] lg:px-8">
       <div className="rounded-md border border-slate-200 bg-white p-4 lg:hidden">
         <p className="text-sm font-bold text-slate-950">
           {items.length} item{items.length !== 1 ? "s" : ""} · {formatCurrency(subtotal)}
         </p>
         <p className="mt-0.5 text-xs text-slate-500">Cash on Delivery · Free Valley delivery</p>
       </div>
-      <form onSubmit={submit} className="grid gap-5 rounded-md border border-slate-200 bg-white p-5 lg:order-1">
+      <form onSubmit={submit} className="grid gap-5 rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:order-1">
         <div>
-          <p className="text-sm font-bold uppercase text-teal-700">Secure manual order</p>
-          <h1 className="mt-1 animate-fade-up font-serif text-3xl font-black">Checkout</h1>
+          <p className="text-xs font-black uppercase tracking-wide text-teal-700">Secure manual order</p>
+          <h1 className="mt-1 animate-fade-up text-3xl font-black">Checkout</h1>
         </div>
         {error ? <p className="rounded-md bg-rose-50 p-3 text-sm text-rose-700">{error}</p> : null}
         <section className="grid gap-4">
@@ -168,10 +168,10 @@ function validateCheckout(customer: CheckoutFields) {
 
 function OrderConfirmation({ confirmation }: { confirmation: Confirmation }) {
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 lg:px-8">
       <div className="rounded-md border border-emerald-200 bg-white p-6 shadow-sm">
         <p className="text-sm font-bold uppercase text-emerald-700">Order placed successfully</p>
-        <h1 className="mt-2 font-serif text-3xl font-black text-slate-950">Thank you for your order.</h1>
+        <h1 className="mt-2 text-3xl font-black text-slate-950">Thank you for your order.</h1>
         <p className="mt-2 text-slate-600">Please review the details below. You can use the order number to track your delivery.</p>
 
         <div className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 p-4">

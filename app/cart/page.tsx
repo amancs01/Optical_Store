@@ -11,10 +11,10 @@ export default function CartPage() {
   const { items, subtotal, increment, decrement, remove, hydrated } = useCart();
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8">
       <div>
-        <p className="text-sm font-bold uppercase text-teal-700">Titan Opticals</p>
-        <h1 className="mt-1 text-4xl font-black">Your cart</h1>
+        <p className="text-xs font-black uppercase tracking-wide text-teal-700">Titan Opticals</p>
+        <h1 className="mt-1 text-3xl font-black sm:text-4xl">Your cart</h1>
       </div>
       {!hydrated ? (
         <div className="mt-8 rounded-md border border-slate-200 bg-white p-8 text-center text-slate-600">
@@ -27,11 +27,20 @@ export default function CartPage() {
           <LinkButton href="/products" className="mt-4">Continue shopping</LinkButton>
         </div>
       ) : (
-        <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
+        <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_320px]">
+          <div className="rounded-md border border-emerald-100 bg-white p-4 shadow-sm lg:hidden">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase text-slate-500">Total</p>
+                <p className="text-xl font-black">{formatCurrency(subtotal)}</p>
+              </div>
+              <LinkButton href="/checkout">Checkout</LinkButton>
+            </div>
+          </div>
           <div className="grid gap-3">
             {items.map((item) => (
-              <div key={item.productId} className="grid gap-4 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-[88px_1fr]">
-                <Link href={`/products/${item.slug}`} className="relative h-24 overflow-hidden rounded-md bg-emerald-50">
+              <div key={item.productId} className="grid grid-cols-[76px_1fr] gap-3 rounded-md border border-slate-200 bg-white p-3 shadow-sm sm:grid-cols-[88px_1fr] sm:p-4">
+                <Link href={`/products/${item.slug}`} className="relative h-20 overflow-hidden rounded-md bg-emerald-50 sm:h-24">
                   {item.imageUrl ? (
                     <Image src={item.imageUrl} alt={item.name} fill className="object-cover" sizes="88px" />
                   ) : (
@@ -40,19 +49,19 @@ export default function CartPage() {
                     </div>
                   )}
                 </Link>
-                <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
+                <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
                   <div>
-                    <Link href={`/products/${item.slug}`} className="font-bold hover:underline">{item.name}</Link>
+                    <Link href={`/products/${item.slug}`} className="line-clamp-2 text-sm font-bold hover:underline sm:text-base">{item.name}</Link>
                     <p className="mt-1 text-sm text-slate-600">{formatCurrency(item.price)} each</p>
                     <p className="mt-1 text-sm font-semibold text-slate-950">{formatCurrency(item.price * item.quantity)}</p>
                   </div>
-                  <div className="flex items-center justify-between gap-4 sm:justify-end">
+                  <div className="flex items-center justify-between gap-2 sm:justify-end sm:gap-4">
                     <div className="flex items-center gap-3 rounded-md bg-slate-50 p-1.5">
-                      <Button variant="secondary" className="h-12 w-12 px-0 sm:h-11 sm:w-11" onClick={() => decrement(item.productId)} aria-label="Decrease"><Minus className="h-5 w-5" /></Button>
-                      <span className="min-w-10 text-center text-lg font-black">{item.quantity}</span>
-                      <Button variant="secondary" className="h-12 w-12 px-0 sm:h-11 sm:w-11" onClick={() => increment(item.productId)} aria-label="Increase"><Plus className="h-5 w-5" /></Button>
+                      <Button variant="secondary" className="h-10 w-10 px-0 sm:h-11 sm:w-11" onClick={() => decrement(item.productId)} aria-label="Decrease"><Minus className="h-5 w-5" /></Button>
+                      <span className="min-w-8 text-center text-base font-black">{item.quantity}</span>
+                      <Button variant="secondary" className="h-10 w-10 px-0 sm:h-11 sm:w-11" onClick={() => increment(item.productId)} aria-label="Increase"><Plus className="h-5 w-5" /></Button>
                     </div>
-                    <Button variant="ghost" className="h-12 w-12 px-0 sm:h-11 sm:w-11" onClick={() => remove(item.productId)} aria-label="Remove"><Trash2 className="h-5 w-5" /></Button>
+                    <Button variant="ghost" className="h-10 w-10 px-0 sm:h-11 sm:w-11" onClick={() => remove(item.productId)} aria-label="Remove"><Trash2 className="h-5 w-5" /></Button>
                   </div>
                 </div>
               </div>

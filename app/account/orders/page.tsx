@@ -40,16 +40,16 @@ export default function MyOrdersPage() {
     });
   }, [router]);
 
-  if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Supabase is not configured" message="Add Supabase variables to view orders." /></div>;
-  if (loading) return <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8"><ListSkeleton rows={4} /></div>;
-  if (!user) return <p className="mx-auto max-w-4xl px-4 py-10 text-sm text-slate-600">Redirecting to login...</p>;
+  if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-7"><StateMessage title="Supabase is not configured" message="Add Supabase variables to view orders." /></div>;
+  if (loading) return <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8"><ListSkeleton rows={4} /></div>;
+  if (!user) return <p className="mx-auto max-w-4xl px-4 py-7 text-sm text-slate-600">Redirecting to login...</p>;
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-sm font-bold uppercase text-teal-700">Account</p>
-          <h1 className="mt-2 text-3xl font-black">My Orders</h1>
+          <p className="text-xs font-black uppercase tracking-wide text-teal-700">Account</p>
+          <h1 className="mt-1 text-3xl font-black">My Orders</h1>
         </div>
         <LinkButton href="/products" variant="secondary">Continue shopping</LinkButton>
       </div>

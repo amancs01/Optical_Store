@@ -18,7 +18,7 @@ export function AddToCartButton({ product }: { product: Product }) {
         setAdded(true);
         window.setTimeout(() => setAdded(false), 1400);
       }}
-      className="w-full"
+      className="min-h-10 w-full px-3 text-xs sm:min-h-11 sm:text-sm"
     >
       <ShoppingBag className="h-4 w-4" />
       {product.stock_quantity <= 0 ? "Out of Stock" : added ? "Added" : "Add to Cart"}

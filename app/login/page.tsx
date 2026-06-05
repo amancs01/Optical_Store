@@ -55,10 +55,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto grid min-h-[70vh] max-w-md place-items-center px-4 py-10">
-      <form onSubmit={submit} className="w-full rounded-md border border-slate-200 bg-white p-6 shadow-sm">
-        <p className="text-sm font-bold uppercase text-teal-700">{SITE_CONFIG.name}</p>
-        <h1 className="mt-2 text-3xl font-black">Customer login</h1>
+    <div className="mx-auto grid min-h-[66vh] max-w-md place-items-center px-4 py-7">
+      <form onSubmit={submit} className="w-full rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <p className="text-xs font-black uppercase tracking-wide text-teal-700">{SITE_CONFIG.name}</p>
+        <h1 className="mt-1 text-3xl font-black">Customer login</h1>
         <p className="mt-2 text-sm text-slate-600">Sign in to view your Titan Opticals orders.</p>
         {!isSupabaseConfigured ? <div className="mt-5"><StateMessage title="Supabase is not configured" message="Add Supabase variables to sign in." /></div> : null}
         {error ? <p className="mt-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">{error}</p> : null}

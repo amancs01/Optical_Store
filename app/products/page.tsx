@@ -68,14 +68,14 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mb-8">
-        <p className="text-sm font-bold uppercase text-teal-700">Titan Opticals collection</p>
-        <h1 className="mt-2 animate-fade-up font-serif text-4xl font-black">Shop premium eyewear</h1>
-        <p className="mt-3 max-w-2xl text-slate-600">Filter frames by brand, fit, category, and style. Message us on WhatsApp if you want help choosing the right frame.</p>
+    <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+      <div className="mb-5">
+        <p className="text-xs font-black uppercase tracking-wide text-teal-700">Titan Opticals collection</p>
+        <h1 className="mt-1 animate-fade-up text-3xl font-black sm:text-4xl">Shop eyewear</h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">Search and filter premium frames, sunglasses, and contact lenses.</p>
       </div>
 
-      <div className="mb-6 rounded-md border border-slate-200 bg-white shadow-sm">
+      <div className="mb-5 rounded-md border border-slate-200 bg-white shadow-sm">
         <button
           className="flex w-full items-center justify-between px-4 py-3 text-sm font-semibold md:hidden"
           onClick={() => setFiltersOpen((open) => !open)}
@@ -83,7 +83,7 @@ export default function ProductsPage() {
           <span>Filters & sort</span>
           <span>{filtersOpen ? "▲" : "▼"}</span>
         </button>
-        <div className={`grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-4 ${filtersOpen ? "block" : "hidden"} md:grid`}>
+        <div className={`grid gap-3 p-3 sm:grid-cols-2 sm:p-4 lg:grid-cols-4 ${filtersOpen ? "block" : "hidden"} md:grid`}>
           <input aria-label="Search products" placeholder="Search products" value={filters.search} onChange={(e) => updateFilters({ ...filters, search: e.target.value })} className="rounded-md border border-slate-200 px-3 py-2" />
           <Select label="Category" value={filters.category} options={CATEGORIES} onChange={(value) => updateFilters({ ...filters, category: value })} />
           <Select label="Brand" value={filters.brand} options={brands} onChange={(value) => updateFilters({ ...filters, brand: value })} />
@@ -103,7 +103,7 @@ export default function ProductsPage() {
       ) : error ? (
         <StateMessage title="Products could not load" message={error} />
       ) : visible.length ? (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
           {visible.map((product) => <ProductCard key={product.id} product={product} />)}
         </div>
       ) : (

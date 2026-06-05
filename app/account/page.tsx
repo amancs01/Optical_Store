@@ -30,15 +30,15 @@ export default function AccountPage() {
     router.push("/");
   }
 
-  if (!isSupabaseConfigured) return <div className="mx-auto max-w-3xl px-4 py-10"><StateMessage title="Supabase is not configured" message="Add Supabase variables to use customer accounts." /></div>;
-  if (loading) return <p className="mx-auto max-w-3xl px-4 py-10 text-sm text-slate-600">Loading account...</p>;
-  if (!user) return <p className="mx-auto max-w-3xl px-4 py-10 text-sm text-slate-600">Redirecting to login...</p>;
+  if (!isSupabaseConfigured) return <div className="mx-auto max-w-3xl px-4 py-7"><StateMessage title="Supabase is not configured" message="Add Supabase variables to use customer accounts." /></div>;
+  if (loading) return <p className="mx-auto max-w-3xl px-4 py-7 text-sm text-slate-600">Loading account...</p>;
+  if (!user) return <p className="mx-auto max-w-3xl px-4 py-7 text-sm text-slate-600">Redirecting to login...</p>;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="rounded-md border border-slate-200 bg-white p-6">
-        <p className="text-sm font-bold uppercase text-teal-700">Customer account</p>
-        <h1 className="mt-2 text-3xl font-black">Welcome back</h1>
+    <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 lg:px-8">
+      <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <p className="text-xs font-black uppercase tracking-wide text-teal-700">Customer account</p>
+        <h1 className="mt-1 text-3xl font-black">Welcome back</h1>
         <p className="mt-2 text-slate-600">{user.email}</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <LinkButton href="/account/orders" className="w-full"><Package className="h-4 w-4" /> My Orders</LinkButton>
