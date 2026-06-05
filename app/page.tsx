@@ -1,36 +1,80 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarCheck, Eye, Glasses, MessageCircle, Search, ShieldCheck, Sparkles, Square, Sun, Truck } from "lucide-react";
+import { ArrowRight, CalendarCheck, Eye, Glasses, MessageCircle, Search, ShieldCheck, Sun, Truck } from "lucide-react";
 import { LinkButton } from "@/components/ui/Button";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SITE_CONFIG } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getFeaturedProducts } from "@/services/productService";
-import { formatCurrency, getSalePrice } from "@/lib/utils";
 import { pageMetadata } from "@/lib/seo";
 import type { Product } from "@/types/product";
 
 const categories = [
   {
     title: "Eyeglasses",
-    text: "Quality frames for daily use, screen time, and prescription needs.",
     icon: Glasses,
-    color: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    iconBg: "bg-emerald-100",
+    href: "/products?category=Eyeglasses",
+    image: "/images/04_pastel_glasses_product_shot.png",
+    fallbackImage: "/images/category-eyeglasses.png",
+    alt: "Pastel eyeglasses product display at Titan Opticals",
   },
   {
     title: "Sunglasses",
-    text: "UV-protection styles selected for bright Kathmandu days.",
     icon: Sun,
-    color: "bg-amber-50 text-amber-800 border-amber-200",
-    iconBg: "bg-amber-100",
+    href: "/products?category=Sunglasses",
+    image: "/images/05_marble_sunglasses_display.png",
+    fallbackImage: "/images/category-sunglasses.png",
+    alt: "Premium sunglasses displayed on marble at Titan Opticals",
   },
   {
     title: "Contact Lenses",
-    text: "Comfortable lens options with practical store guidance.",
     icon: Eye,
-    color: "bg-sky-50 text-sky-800 border-sky-200",
-    iconBg: "bg-sky-100",
+    href: "/products?category=Contact%20Lenses",
+    image: "/images/03_contact_lens_care_flatlay.png",
+    fallbackImage: "/images/category-contact-lenses.png",
+    alt: "Contact lens care essentials arranged neatly",
+  },
+  {
+    title: "Kids Frames",
+    icon: Glasses,
+    href: "/products?category=Kids%20Frames",
+    image: "/images/04_pastel_glasses_product_shot.png",
+    fallbackImage: "/images/category-eyeglasses.png",
+    alt: "Soft color eyeglasses suitable for kids frames",
+  },
+];
+
+const bookingCategory = {
+  title: "Eye Checkup",
+  icon: CalendarCheck,
+  href: "/book-eye-checkup",
+  image: "/images/08_eye_exam_consultation.png",
+  fallbackImage: "/images/category-eye-checkup.png",
+  alt: "Eye exam consultation at Titan Opticals",
+};
+
+const quickLinks = [...categories, bookingCategory];
+
+const serviceHighlights = [
+  {
+    icon: Truck,
+    title: "Free delivery",
+    text: "Inside Kathmandu Valley",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Eye checkup",
+    text: "Booking available",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Quality frames",
+    text: "Curated eyewear",
+  },
+  {
+    icon: MessageCircle,
+    title: "WhatsApp support",
+    text: "Fast help",
   },
 ];
 
@@ -54,14 +98,14 @@ export default async function HomePage() {
 
   return (
     <div className="bg-[#fffaf2]">
-      <section className="mx-auto max-w-7xl px-4 pb-8 pt-7 sm:px-6 lg:grid lg:min-h-[72vh] lg:grid-cols-[1fr_0.95fr] lg:items-center lg:gap-10 lg:px-8 lg:py-12">
+      <section className="mx-auto max-w-7xl px-4 pb-7 pt-5 sm:px-6 lg:grid lg:min-h-[72vh] lg:grid-cols-[0.86fr_1.14fr] lg:items-center lg:gap-10 lg:px-8 lg:py-12">
         <div className="animate-fade-up">
           <p className="text-xs font-black uppercase tracking-wide text-teal-700">New Road, Kathmandu</p>
           <h1 className="mt-3 max-w-xl text-3xl font-black leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
             See clearly. Look refined.
           </h1>
-          <p className="mt-4 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">
-            Premium eyeglasses, sunglasses, contact lenses, and eye checkup booking from Kichapokhari, opposite NMB Bank.
+          <p className="mt-4 max-w-lg text-sm leading-6 text-slate-600 sm:text-base">
+            Premium eyewear and eye checkup booking from Kichapokhari, opposite NMB Bank.
           </p>
           <div className="mt-5 flex gap-3">
             <LinkButton href="/products" className="flex-1 sm:flex-none">
@@ -85,12 +129,11 @@ export default async function HomePage() {
         </form>
 
         <div className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:mt-5">
-          {[...categories, { title: "Eye Checkup", icon: CalendarCheck, href: "/book-eye-checkup" }].map((item) => {
+          {quickLinks.map((item) => {
             const Icon = item.icon;
-            const href = "href" in item ? item.href : `/products?category=${encodeURIComponent(item.title)}`;
 
             return (
-              <Link key={item.title} href={href} className="inline-flex flex-none items-center gap-2 rounded-full border border-emerald-100 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm">
+              <Link key={item.title} href={item.href} className="inline-flex flex-none items-center gap-2 rounded-full border border-emerald-100 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm">
                 <Icon className="h-4 w-4 text-emerald-700" />
                 {item.title}
               </Link>
@@ -99,7 +142,7 @@ export default async function HomePage() {
         </div>
 
         <div className="mt-5 lg:col-start-2 lg:row-span-4 lg:row-start-1 lg:mt-0">
-          <HeroVisual products={products} />
+          <HeroVisual />
         </div>
       </section>
 
@@ -107,18 +150,53 @@ export default async function HomePage() {
         <div className="mb-4 flex items-end justify-between">
           <div>
             <p className="text-xs font-black uppercase text-teal-700">Top categories</p>
-            <h2 className="mt-1 text-xl font-black">Shop by category</h2>
+            <h2 className="mt-1 text-xl font-black">Shop the essentials</h2>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-3">
-          {categories.map((cat) => (
-            <Link key={cat.title} href={`/products?category=${encodeURIComponent(cat.title)}`} className="rounded-md border border-slate-200 bg-white p-2 shadow-sm">
-              <div className={`grid aspect-square place-items-center rounded-md ${cat.iconBg}`}>
-                <cat.icon className="h-7 w-7" />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+          {quickLinks.map((cat) => (
+            <Link key={cat.title} href={cat.href} className="group overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-t-md bg-emerald-50">
+                <Image
+                  src={cat.image}
+                  alt={cat.alt}
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                  sizes="(max-width: 640px) 50vw, 25vw"
+                />
               </div>
-              <p className="mt-2 line-clamp-1 text-center text-xs font-black text-slate-900">{cat.title}</p>
+              <div className="flex items-center justify-between gap-2 px-3 py-3">
+                <p className="line-clamp-1 text-sm font-black text-slate-900">{cat.title}</p>
+                <ArrowRight className="h-4 w-4 flex-none text-emerald-700" />
+              </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+        <div className="grid overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm md:grid-cols-[0.95fr_1.05fr]">
+          <div className="relative min-h-[190px] md:min-h-[320px]">
+            <Image
+              src="/images/09_dual_frame_display.png"
+              alt="Two premium eyewear frames displayed as a featured collection"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+          <div className="grid content-center p-5 sm:p-7 md:p-8">
+            <p className="text-xs font-black uppercase tracking-wide text-teal-700">New collections</p>
+            <h2 className="mt-2 max-w-md text-2xl font-black text-slate-950 sm:text-3xl">Frames selected for everyday polish.</h2>
+            <p className="mt-2 max-w-md text-sm leading-6 text-slate-600">
+              Browse refined shapes, clean finishes, and lens-ready styles curated for New Road customers.
+            </p>
+            <div className="mt-5">
+              <LinkButton href="/products" variant="secondary">
+                Explore collection <ArrowRight className="h-4 w-4" />
+              </LinkButton>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -142,63 +220,66 @@ export default async function HomePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {["Featured", "Top Selling", "New Arrivals"].map((label, index) => (
-            <span key={label} className={`rounded-full px-4 py-2 text-xs font-black ${index === 0 ? "bg-emerald-700 text-white" : "bg-white text-slate-700 ring-1 ring-slate-200"}`}>
-              {label}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-        <div className="mb-4">
-          <p className="text-xs font-black uppercase text-teal-700">Shop by shape</p>
-          <h2 className="mt-1 text-xl font-black">Find your frame style</h2>
-        </div>
-        <div className="grid grid-cols-4 gap-3">
-          {[
-            [Sparkles, "Aviator"],
-            [Square, "Rectangle"],
-            [Eye, "Round"],
-            [Glasses, "Square"],
-          ].map(([Icon, label]) => (
-            <Link key={String(label)} href={`/products?frame=${encodeURIComponent(String(label))}`} className="grid justify-items-center gap-2 rounded-md bg-white p-3 text-center shadow-sm ring-1 ring-slate-200">
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-emerald-50 text-emerald-700">
-                <Icon className="h-5 w-5" />
-              </span>
-              <span className="text-[11px] font-bold text-slate-700">{String(label)}</span>
-            </Link>
-          ))}
+        <div className="grid gap-3 md:grid-cols-3">
+          <VisualStoryCard
+            href="/about"
+            image="/images/02_store_interior_luxury_eyewear.png"
+            alt="Luxury eyewear store interior at Titan Opticals"
+            eyebrow="Store experience"
+            title="Visit a polished New Road optical space."
+          />
+          <VisualStoryCard
+            href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need frame guidance.")}`}
+            image="/images/07_store_staff_frame_fitting.png"
+            alt="Titan Opticals staff helping a customer with frame fitting"
+            eyebrow="Frame guidance"
+            title="Get personal help choosing a flattering fit."
+          />
+          <VisualStoryCard
+            href="/products"
+            image="/images/06_style_guide_and_care_collage.png"
+            alt="Eyewear style guide and frame care collage"
+            eyebrow="Care guide"
+            title="Keep lenses clear and frames looking premium."
+          />
         </div>
       </section>
 
       <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-7 sm:px-6 md:grid-cols-4 lg:px-8">
-        {[
-          [Truck, "Free delivery", "Inside Kathmandu Valley"],
-          [CalendarCheck, "Eye checkup", "Booking available"],
-          [ShieldCheck, "Quality frames", "Curated eyewear"],
-          [MessageCircle, "WhatsApp support", "Fast help"],
-        ].map(([Icon, title, text]) => (
-          <div key={String(title)} className="rounded-md border border-slate-200 bg-white p-4 shadow-sm">
+        {serviceHighlights.map(({ icon: Icon, title, text }) => (
+          <div key={title} className="rounded-md border border-slate-200 bg-white p-4 shadow-sm">
             <Icon className="h-5 w-5 text-teal-700" />
-            <h3 className="mt-3 text-sm font-black">{String(title)}</h3>
-            <p className="mt-1 text-xs text-slate-600">{String(text)}</p>
+            <h3 className="mt-3 text-sm font-black">{title}</h3>
+            <p className="mt-1 text-xs text-slate-600">{text}</p>
           </div>
         ))}
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-        <div className="rounded-md bg-slate-950 p-5 text-white">
-          <h2 className="text-2xl font-black">Need help choosing your frame?</h2>
-          <p className="mt-2 text-sm text-slate-300">Message Titan Opticals for practical frame and lens guidance.</p>
-          <div className="mt-5 flex gap-3">
-            <LinkButton href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need help choosing eyewear.")}`} className="flex-1">
-              WhatsApp us
-            </LinkButton>
-            <LinkButton href="/book-eye-checkup" variant="secondary" className="flex-1">
-              Book checkup
-            </LinkButton>
+        <div className="grid overflow-hidden rounded-md bg-slate-950 text-white shadow-sm md:grid-cols-[1fr_0.9fr]">
+          <div className="relative min-h-[190px] md:order-2 md:min-h-[300px]">
+            <Image
+              src="/images/08_eye_exam_consultation.png"
+              alt="Eye checkup consultation with Titan Opticals"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 45vw"
+            />
+          </div>
+          <div className="p-5 sm:p-7 md:p-8">
+            <p className="text-xs font-black uppercase tracking-wide text-emerald-200">Eye checkup booking</p>
+            <h2 className="mt-2 max-w-md text-2xl font-black sm:text-3xl">Pair better frames with practical eye-care support.</h2>
+            <p className="mt-2 max-w-md text-sm leading-6 text-slate-300">
+              Book a visit, then let the team help you choose lenses, frames, and care options with confidence.
+            </p>
+            <div className="mt-5 flex gap-3">
+              <LinkButton href="/book-eye-checkup" className="flex-1 sm:flex-none">
+                Book checkup
+              </LinkButton>
+              <LinkButton href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need help choosing eyewear.")}`} variant="secondary" className="flex-1 sm:flex-none">
+                WhatsApp us
+              </LinkButton>
+            </div>
           </div>
         </div>
       </section>
@@ -206,53 +287,50 @@ export default async function HomePage() {
   );
 }
 
-function HeroVisual({ products }: { products: Product[] }) {
-  const heroProducts = products.slice(0, 3);
-
+function HeroVisual() {
   return (
-    <div className="relative min-h-[300px] overflow-hidden rounded-md border border-emerald-100 bg-[linear-gradient(135deg,#ecfdf5,#ffffff_48%,#e0f2fe)] p-3 shadow-sm sm:min-h-[420px] sm:p-6">
-      <div className="absolute right-6 top-6 rounded-full bg-white/85 px-4 py-2 text-xs font-bold uppercase text-emerald-800 shadow-sm">
-        {SITE_CONFIG.name}
-      </div>
-      <div className="grid h-full content-end gap-4 pt-14">
-        {heroProducts.length ? (
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
-            {heroProducts.map((product, index) => (
-              <Link
-                key={product.id}
-                href={`/products/${product.slug}`}
-                className={`group overflow-hidden rounded-md border border-white/80 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md ${index === 1 ? "sm:-mt-8" : ""}`}
-              >
-                <div className="relative aspect-[4/5] bg-emerald-50">
-                  {product.image_url ? (
-                    <Image src={product.image_url} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 33vw, 220px" />
-                  ) : (
-                    <div className="grid h-full place-items-center bg-[linear-gradient(145deg,#064e3b,#059669)] text-white">
-                      <Glasses className="h-12 w-12" aria-hidden="true" />
-                    </div>
-                  )}
-                </div>
-                <div className="p-2 sm:p-3">
-                  <p className="line-clamp-1 text-xs font-bold text-slate-950 sm:text-sm">{product.name}</p>
-                  <p className="mt-1 text-[11px] font-semibold text-emerald-700 sm:text-xs">{formatCurrency(getSalePrice(product))}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="grid min-h-[300px] place-items-center rounded-md border border-white/80 bg-[linear-gradient(145deg,#064e3b,#065f46_40%,#059669)] p-8 text-center text-white shadow-sm">
-            <div>
-              <Glasses className="mx-auto h-24 w-24" aria-hidden="true" />
-              <p className="mt-6 text-sm font-bold uppercase tracking-wide text-emerald-100">{SITE_CONFIG.name}</p>
-              <p className="mt-2 font-serif text-3xl font-black">Premium eyewear for New Road, Kathmandu.</p>
-            </div>
-          </div>
-        )}
-        <div className="rounded-md bg-slate-950/90 p-3 text-white sm:p-4">
-          <p className="text-sm font-semibold text-emerald-100">Kichapokhari, opposite NMB Bank</p>
-          <p className="mt-1 text-xl font-black sm:text-2xl">Try refined frames with practical eye-care guidance.</p>
-        </div>
-      </div>
+    <div className="relative min-h-[260px] overflow-hidden rounded-md border border-emerald-100 bg-white shadow-sm sm:min-h-[380px] lg:min-h-[520px]">
+      <Image
+        src="/images/hero-optical-store-product-scene.png"
+        alt="Premium eyewear display at Titan Opticals"
+        width={1400}
+        height={1050}
+        priority={true}
+        className="absolute inset-0 h-full w-full object-cover"
+        sizes="(max-width: 1024px) 100vw, 54vw"
+      />
     </div>
+  );
+}
+
+function VisualStoryCard({
+  href,
+  image,
+  alt,
+  eyebrow,
+  title,
+}: {
+  href: string;
+  image: string;
+  alt: string;
+  eyebrow: string;
+  title: string;
+}) {
+  return (
+    <Link href={href} className="group overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+      <div className="relative aspect-[5/3] overflow-hidden rounded-t-md bg-emerald-50">
+        <Image
+          src={image}
+          alt={alt}
+          fill
+          className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
+      </div>
+      <div className="p-4">
+        <p className="text-xs font-black uppercase tracking-wide text-teal-700">{eyebrow}</p>
+        <h3 className="mt-2 text-base font-black leading-snug text-slate-950">{title}</h3>
+      </div>
+    </Link>
   );
 }
