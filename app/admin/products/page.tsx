@@ -32,6 +32,13 @@ export default function AdminProductsPage() {
   }, []);
   const visible = useMemo(() => products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())), [products, search]);
 
+  async function confirmDelete(product: Product) {
+    const confirmed = window.confirm(`Delete "${product.name}"? This cannot be undone.`);
+    if (!confirmed) return;
+    await deleteProduct(product.id);
+    load();
+  }
+
   return (
     <AdminLayout>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -49,7 +56,7 @@ export default function AdminProductsPage() {
             {visible.map((product) => (
               <tr key={product.id} className="border-t border-slate-200">
                 <td className="p-3 font-semibold">{product.name}</td><td>{formatCurrency(product.discount_price || product.price)}</td><td>{product.stock_quantity}</td><td>{product.is_active ? "Active" : "Inactive"}</td>
-                <td className="flex gap-2 p-3"><Link href={`/admin/products/${product.id}/edit`} className="font-semibold text-teal-700">Edit</Link><Button variant="danger" className="min-h-8 px-3" onClick={() => deleteProduct(product.id).then(load)}>Delete</Button></td>
+                <td className="flex gap-2 p-3"><Link href={`/admin/products/${product.id}/edit`} className="font-semibold text-teal-700">Edit</Link><Button variant="danger" className="min-h-8 px-3" onClick={() => confirmDelete(product)}>Delete</Button></td>
               </tr>
             ))}
           </tbody>

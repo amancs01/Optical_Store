@@ -1,9 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { Menu, ShoppingBag, X } from "lucide-react";
-import { useState } from "react";
+import { CircleUser, Menu, MessageCircle, Phone, ShoppingBag, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { User } from "@supabase/supabase-js";
 import { SITE_CONFIG } from "@/lib/constants";
+import { supabase } from "@/lib/supabase/client";
 import { useCart } from "@/components/cart/CartProvider";
 
 const nav = [
@@ -15,13 +18,36 @@ const nav = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [logoFailed, setLogoFailed] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const { count } = useCart();
+
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="text-lg font-black tracking-tight text-slate-950">
-          {SITE_CONFIG.name}
+        <Link href="/" className="flex items-center gap-3 text-lg font-black tracking-tight text-slate-950">
+          {!logoFailed ? (
+            <Image
+              src={SITE_CONFIG.logoPath}
+              alt={SITE_CONFIG.name}
+              width={42}
+              height={42}
+              className="h-10 w-10 rounded-md object-contain"
+              onError={() => setLogoFailed(true)}
+              priority
+            />
+          ) : null}
+          <span>{SITE_CONFIG.name}</span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
           {nav.map(([label, href]) => (
@@ -31,6 +57,27 @@ export function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          <a
+            href={`tel:${SITE_CONFIG.phone}`}
+            className="hidden h-10 items-center gap-2 rounded-md border border-slate-200 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 lg:inline-flex"
+          >
+            <Phone className="h-4 w-4" />
+            {SITE_CONFIG.phone}
+          </a>
+          <a
+            href={`https://wa.me/977${SITE_CONFIG.whatsapp}`}
+            className="hidden h-10 items-center justify-center rounded-md border border-slate-200 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:inline-flex"
+            aria-label="WhatsApp Titan Opticals"
+          >
+            <MessageCircle className="h-4 w-4" />
+          </a>
+          <Link
+            href={user ? "/account" : "/login"}
+            className="hidden h-10 items-center gap-2 rounded-md border border-slate-200 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:inline-flex"
+          >
+            <CircleUser className="h-4 w-4" />
+            {user ? "Account" : "Login"}
+          </Link>
           <Link
             href="/cart"
             className="relative inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 hover:bg-slate-50"
@@ -64,6 +111,25 @@ export function Navbar() {
               {label}
             </Link>
           ))}
+          <a
+            href={`tel:${SITE_CONFIG.phone}`}
+            className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            Call {SITE_CONFIG.phone}
+          </a>
+          <a
+            href={`https://wa.me/977${SITE_CONFIG.whatsapp}`}
+            className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            WhatsApp
+          </a>
+          <Link
+            href={user ? "/account/orders" : "/login"}
+            className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            onClick={() => setOpen(false)}
+          >
+            {user ? "My Orders" : "Customer Login"}
+          </Link>
         </nav>
       ) : null}
     </header>

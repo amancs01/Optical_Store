@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
-import { ProductCard } from "@/components/product/ProductCard";
+import { ProductCard, ProductImageFallback } from "@/components/product/ProductCard";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { formatCurrency, getSalePrice } from "@/lib/utils";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -33,7 +33,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="overflow-hidden rounded-md border border-slate-200 bg-slate-100">
           <div className="relative aspect-square">
-            {product.image_url ? <Image src={product.image_url} alt={product.name} fill className="object-cover" /> : <div className="grid h-full place-items-center text-slate-500">No image</div>}
+            {product.image_url ? <Image src={product.image_url} alt={product.name} fill className="object-cover" /> : <ProductImageFallback name={product.name} />}
           </div>
         </div>
         <div>

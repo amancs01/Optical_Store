@@ -6,9 +6,9 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const styles = {
-  primary: "bg-slate-950 text-white hover:bg-slate-800",
-  secondary: "border border-slate-200 bg-white text-slate-950 hover:bg-slate-50",
-  ghost: "text-slate-700 hover:bg-slate-100",
+  primary: "bg-emerald-700 text-white shadow-sm shadow-emerald-950/10 hover:bg-emerald-800",
+  secondary: "border border-emerald-200 bg-white text-emerald-900 hover:bg-emerald-50",
+  ghost: "text-slate-700 hover:bg-emerald-50 hover:text-emerald-900",
   danger: "bg-rose-600 text-white hover:bg-rose-700",
 };
 

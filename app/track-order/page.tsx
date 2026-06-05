@@ -2,36 +2,13 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { OrderStatusTimeline } from "@/components/order/OrderStatusTimeline";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { formatOrderStatus } from "@/lib/orderStatus";
 import { formatCurrency } from "@/lib/utils";
 import { trackOrder } from "@/services/orderService";
 import type { Order, OrderItem } from "@/types/order";
-
-const timelineSteps = [
-  { status: "pending", label: "Order Placed" },
-  { status: "confirmed", label: "Confirmed" },
-  { status: "processing", label: "Processing" },
-  { status: "shipped", label: "Shipped" },
-  { status: "delivered", label: "Delivered" },
-];
-
-function formatOrderStatus(status: string) {
-  const labels: Record<string, string> = {
-    pending: "Pending",
-    confirmed: "Confirmed",
-    processing: "Processing",
-    shipped: "Shipped",
-    delivered: "Delivered",
-    cancelled: "Cancelled",
-  };
-
-  return labels[status] || status;
-}
-
-function getCurrentStepIndex(order_status: string) {
-  return timelineSteps.findIndex((step) => step.status === order_status);
-}
 
 export default function TrackOrderPage() {
   const [query, setQuery] = useState("");
@@ -88,38 +65,7 @@ export default function TrackOrderPage() {
               ) : null}
             </div>
           </div>
-          {order.order_status === "cancelled" ? (
-            <div className="mt-6 rounded-md border border-rose-200 bg-rose-50 p-4 text-sm font-bold text-rose-800">
-              This order has been cancelled.
-            </div>
-          ) : (
-            <div className="mt-6 grid gap-3 sm:grid-cols-5">
-              {timelineSteps.map((step, index) => {
-                const currentIndex = getCurrentStepIndex(order.order_status);
-                const isCompleted = currentIndex > index;
-                const isCurrent = currentIndex === index;
-                const stateClass = isCurrent
-                  ? "border-teal-700 bg-teal-700 text-white shadow-md"
-                  : isCompleted
-                    ? "border-teal-300 bg-teal-50 text-teal-900"
-                    : "border-slate-200 bg-slate-50 text-slate-500";
-
-                return (
-                  <div key={step.status} className={`rounded-md border p-4 ${stateClass}`}>
-                    <div className="flex items-center gap-2">
-                      <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-black ${isCurrent ? "bg-white text-teal-700" : isCompleted ? "bg-teal-700 text-white" : "bg-slate-200 text-slate-500"}`}>
-                        {index + 1}
-                      </span>
-                      <p className="text-sm font-black">{step.label}</p>
-                    </div>
-                    <p className="mt-2 text-xs font-semibold">
-                      {isCurrent ? "Current step" : isCompleted ? "Completed" : "Upcoming"}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          <OrderStatusTimeline orderStatus={order.order_status} />
           <p className="mt-5 text-sm text-slate-600">Delivery address: {order.delivery_address}</p>
         </div>
       ) : null}

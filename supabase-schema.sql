@@ -41,6 +41,7 @@ create table if not exists products (
 
 create table if not exists orders (
   id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id),
   order_number text unique not null,
   customer_name text not null,
   customer_phone text not null,
@@ -125,10 +126,37 @@ drop policy if exists "Public can create order items" on order_items;
 create policy "Public can create order items" on order_items for insert with check (true);
 
 drop policy if exists "Public can track orders" on orders;
-create policy "Public can track orders" on orders for select using (true);
+
+drop policy if exists "Customers can read own orders" on orders;
+create policy "Customers can read own orders" on orders for select using (user_id = auth.uid() or is_admin());
 
 drop policy if exists "Public can read order items for tracking" on order_items;
-create policy "Public can read order items for tracking" on order_items for select using (true);
+
+drop policy if exists "Customers can read own order items" on order_items;
+create policy "Customers can read own order items" on order_items for select using (
+  is_admin()
+  or exists (
+    select 1 from orders
+    where orders.id = order_items.order_id
+    and orders.user_id = auth.uid()
+  )
+);
+
+create or replace function track_order(search_query text)
+returns setof orders
+language sql
+security definer
+set search_path = public
+as $$
+  select *
+  from orders
+  where order_number = search_query
+     or customer_phone = search_query
+  order by created_at desc
+  limit 1;
+$$;
+
+grant execute on function track_order(text) to anon, authenticated;
 
 drop policy if exists "Public can create bookings" on bookings;
 create policy "Public can create bookings" on bookings for insert with check (true);

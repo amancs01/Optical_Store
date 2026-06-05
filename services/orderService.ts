@@ -14,10 +14,14 @@ export type CheckoutInput = {
 
 export async function createOrder(input: CheckoutInput, items: CartItem[]) {
   const supabase = requireSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const deliveryFee = 0;
   const orderPayload = {
     ...input,
+    user_id: user?.id || null,
     order_number: generateOrderNumber(),
     payment_method: "Cash on Delivery",
     subtotal,
@@ -51,15 +55,10 @@ export async function createOrder(input: CheckoutInput, items: CartItem[]) {
 
 export async function trackOrder(query: string) {
   const supabase = requireSupabase();
-  const { data, error } = await supabase
-    .from("orders")
-    .select("*, order_items(*)")
-    .or(`order_number.eq.${query},customer_phone.eq.${query}`)
-    .order("created_at", { ascending: false })
-    .limit(1);
+  const { data, error } = await supabase.rpc("track_order", { search_query: query });
 
   if (error) throw error;
-  return (data?.[0] || null) as (Order & { order_items?: OrderItem[] }) | null;
+  return (data?.[0] || null) as Order | null;
 }
 
 export async function getOrders() {
@@ -71,6 +70,31 @@ export async function getOrders() {
 
   if (error) throw error;
   return (data || []) as (Order & { order_items?: OrderItem[] })[];
+}
+
+export async function getCustomerOrders(userId: string) {
+  const supabase = requireSupabase();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return (data || []) as Order[];
+}
+
+export async function getCustomerOrderByNumber(userId: string, orderNumber: string) {
+  const supabase = requireSupabase();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*, order_items(*)")
+    .eq("user_id", userId)
+    .eq("order_number", orderNumber)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data as (Order & { order_items?: OrderItem[] }) | null;
 }
 
 export async function updateOrderStatus(id: string, order_status: string) {

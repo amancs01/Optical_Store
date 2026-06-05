@@ -1,6 +1,6 @@
-# Optical Store
+# Titan Opticals
 
-Market-ready MVP eyewear e-commerce website for an optical store in Kathmandu, Nepal. The app includes customer shopping pages, localStorage cart, Cash on Delivery checkout, order tracking, eye-checkup booking, contact messages, and a protected Supabase-powered admin dashboard.
+Market-ready MVP eyewear e-commerce website for Titan Opticals, located at Kichapokhari, New Road, opposite NMB Bank. The app includes customer shopping pages, localStorage cart, Cash on Delivery checkout, order tracking, eye-checkup booking, contact messages, and a protected Supabase-powered admin dashboard.
 
 ## Tech Stack
 
@@ -26,10 +26,11 @@ Do not add a Supabase service role key to the frontend.
 
 1. Create a Supabase project.
 2. Open SQL Editor and run `supabase-schema.sql`.
-3. Create a public Storage bucket named `product-images`.
-4. Add Storage policies for public read and authenticated admin upload/update/delete.
-5. Create an admin Auth user with email/password.
-6. Add that user to `admin_profiles`:
+3. For existing projects that already ran the original schema, run `customer-auth-orders.sql` to add optional customer account order history support.
+4. Create a public Storage bucket named `product-images`.
+5. Add Storage policies for public read and authenticated admin upload/update/delete.
+6. Create an admin Auth user with email/password.
+7. Add that user to `admin_profiles`:
 
 ```sql
 insert into admin_profiles (user_id, email)
@@ -120,6 +121,7 @@ Admin routes:
 - Contact page and message form
 - Static policy pages
 - Supabase Auth admin login/logout
+- Optional customer login/register and My Orders pages
 - Admin dashboard metrics
 - Admin product add/edit/delete with Storage image upload
 - Admin order, booking, and message management

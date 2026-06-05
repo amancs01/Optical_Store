@@ -59,7 +59,7 @@ export default function ProductsPage() {
       {!isSupabaseConfigured ? (
         <StateMessage title="Supabase is not configured" message="Add the public Supabase variables and run the schema to load products." />
       ) : loading ? (
-        <p className="text-slate-600">Loading products...</p>
+        <ProductGridSkeleton />
       ) : error ? (
         <StateMessage title="Products could not load" message={error} />
       ) : visible.length ? (
@@ -67,8 +67,33 @@ export default function ProductsPage() {
           {visible.map((product) => <ProductCard key={product.id} product={product} />)}
         </div>
       ) : (
-        <StateMessage title="No products found" message="Try a different search term or filter combination." />
+        <div className="rounded-md border border-dashed border-emerald-200 bg-emerald-50/60 p-8 text-center">
+          <p className="text-sm font-bold uppercase text-emerald-700">No matches</p>
+          <h2 className="mt-2 text-2xl font-black text-slate-950">No eyewear matches those filters.</h2>
+          <p className="mt-2 text-sm text-slate-600">Try clearing one filter or searching by frame style, brand, or category.</p>
+        </div>
       )}
+    </div>
+  );
+}
+
+function ProductGridSkeleton() {
+  return (
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-label="Loading products">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div key={index} className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+          <div className="aspect-[4/3] animate-pulse bg-slate-100" />
+          <div className="grid gap-3 p-4">
+            <div className="h-3 w-24 animate-pulse rounded bg-slate-100" />
+            <div className="h-5 w-4/5 animate-pulse rounded bg-slate-100" />
+            <div className="flex items-center justify-between">
+              <div className="h-5 w-20 animate-pulse rounded bg-slate-100" />
+              <div className="h-3 w-16 animate-pulse rounded bg-slate-100" />
+            </div>
+            <div className="h-11 animate-pulse rounded-md bg-slate-100" />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

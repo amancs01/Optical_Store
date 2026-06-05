@@ -1,11 +1,23 @@
 export const SITE_CONFIG = {
-  name: "Optical Store",
+  name: "Titan Opticals",
+  tagline: "Premium eyewear, sunglasses, lenses, and eye care service in Kathmandu.",
   description:
-    "Premium eyewear, sunglasses, lenses, and eye-checkup booking in Kathmandu.",
-  phone: "+977-9800000000",
-  email: "hello@opticalstore.com",
-  address: "Kathmandu, Nepal",
-  location: "Kathmandu, Nepal",
+    "Titan Opticals is a premium optical store in New Road, Kathmandu, offering eyewear, sunglasses, lenses, and eye-care support.",
+  phone: "9802776649",
+  phoneDisplay: "+977-9802776649",
+  whatsapp: "9802776649",
+  email: "watchsunglasses5@gmail.com",
+  address: "Kichapokhari, New Road, opposite NMB Bank",
+  location: "New Road, Kathmandu",
+  openingHours: "10:00 AM - 7:00 PM",
+  deliveryNote: "Free delivery inside Kathmandu Valley.",
+  defaultCity: "Kathmandu",
+  logoPath: "/logo.png",
+  socialLinks: {
+    facebook: "https://www.facebook.com/profile.php?id=61576994011750",
+    instagram: "https://www.instagram.com/titanoptical11/",
+    tiktok: "https://www.tiktok.com/@titan.optical?_r=1&_t=ZS-96wGLXeT1cN",
+  },
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://example.com",
 };
 

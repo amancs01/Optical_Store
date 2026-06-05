@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Glasses } from "lucide-react";
 import { formatCurrency, getSalePrice } from "@/lib/utils";
 import type { Product } from "@/types/product";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
@@ -12,7 +13,7 @@ export function ProductCard({ product }: { product: Product }) {
           {product.image_url ? (
             <Image src={product.image_url} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
           ) : (
-            <div className="flex h-full items-center justify-center text-sm text-slate-500">No image</div>
+            <ProductImageFallback name={product.name} />
           )}
         </div>
       </Link>
@@ -35,5 +36,19 @@ export function ProductCard({ product }: { product: Product }) {
         <AddToCartButton product={product} />
       </div>
     </article>
+  );
+}
+
+export function ProductImageFallback({ name }: { name: string }) {
+  return (
+    <div className="grid h-full place-items-center bg-[linear-gradient(135deg,#064e3b,#059669_55%,#d1fae5)] p-6 text-center text-white">
+      <div>
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white/15 ring-1 ring-white/30">
+          <Glasses className="h-9 w-9" aria-hidden="true" />
+        </div>
+        <p className="mt-4 text-xs font-bold uppercase tracking-wide text-emerald-50">Titan Opticals</p>
+        <p className="mt-1 line-clamp-2 text-sm font-semibold text-white/90">{name}</p>
+      </div>
+    </div>
   );
 }

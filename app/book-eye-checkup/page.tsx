@@ -19,12 +19,18 @@ export default function BookEyeCheckupPage() {
     setErrorMessage("");
     const currentForm = event.currentTarget;
     const form = new FormData(event.currentTarget);
+    const bookingDate = String(form.get("booking_date") || "");
+    if (bookingDate && bookingDate < getTodayDate()) {
+      setErrorMessage("Please choose today or a future date for your eye checkup.");
+      setIsSubmitting(false);
+      return;
+    }
     try {
       await createBooking({
         name: String(form.get("name") || ""),
         phone: String(form.get("phone") || ""),
         branch: String(form.get("branch") || ""),
-        booking_date: String(form.get("booking_date") || ""),
+        booking_date: bookingDate,
         booking_time: String(form.get("booking_time") || ""),
         message: String(form.get("message") || ""),
       });
@@ -91,12 +97,19 @@ function FormPage({
         <Field name="name" label="Full name" required />
         <Field name="phone" label="Phone" required />
         <Field name="branch" label="Branch" defaultValue="Kathmandu" />
-        <div className="grid gap-4 md:grid-cols-2"><Field name="booking_date" label="Date" type="date" /><Field name="booking_time" label="Time" type="time" /></div>
+        <div className="grid gap-4 md:grid-cols-2"><Field name="booking_date" label="Date" type="date" min={getTodayDate()} /><Field name="booking_time" label="Time" type="time" /></div>
         <label className="grid gap-2 text-sm font-semibold text-slate-700">Message<textarea name="message" rows={4} className="rounded-md border border-slate-200 px-3 py-2 font-normal" /></label>
         <Button disabled={isSubmitting || disabled}>{isSubmitting ? "Submitting..." : "Submit booking"}</Button>
       </form>
     </div>
   );
+}
+
+function getTodayDate() {
+  const today = new Date();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${today.getFullYear()}-${month}-${day}`;
 }
 
 function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string; name: string }) {

@@ -1,9 +1,12 @@
-import { ArrowRight, CalendarCheck, ShieldCheck, Truck } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, CalendarCheck, Glasses, ShieldCheck, Sparkles, Truck } from "lucide-react";
 import { LinkButton } from "@/components/ui/Button";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SITE_CONFIG } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getFeaturedProducts } from "@/services/productService";
+import { formatCurrency, getSalePrice } from "@/lib/utils";
 import type { Product } from "@/types/product";
 
 export default async function HomePage() {
@@ -22,11 +25,11 @@ export default async function HomePage() {
       <section className="mx-auto grid min-h-[78vh] max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
         <div>
           <p className="text-sm font-bold uppercase text-teal-700">{SITE_CONFIG.location}</p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight text-slate-950 sm:text-6xl">
-            Clearer vision, sharper style.
+          <h1 className="mt-4 max-w-3xl font-serif text-4xl font-black leading-tight text-slate-950 sm:text-6xl">
+            Premium eyewear in New Road, Kathmandu.
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
-            Shop quality eyeglasses, sunglasses, lenses, and book a professional eye checkup from a trusted Kathmandu optical store.
+            {SITE_CONFIG.name} offers eyeglasses, sunglasses, contact lenses, and eye checkup booking from Kichapokhari, New Road. Order online with Cash on Delivery and free delivery inside Kathmandu Valley.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <LinkButton href="/products">
@@ -37,24 +40,15 @@ export default async function HomePage() {
             </LinkButton>
           </div>
         </div>
-        <div className="overflow-hidden rounded-md bg-slate-100 shadow-sm">
-          <div className="aspect-[4/3] bg-[linear-gradient(135deg,#e0f2fe,#f8fafc_45%,#ccfbf1)] p-8">
-            <div className="grid h-full place-items-center rounded-md border border-white/80 bg-white/60 text-center">
-              <div>
-                <p className="text-sm font-bold uppercase text-slate-500">Premium optical care</p>
-                <p className="mt-3 text-5xl font-black text-slate-950">Frames, lenses, checkups</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <HeroVisual products={products} />
       </section>
 
       <section className="border-y border-slate-200 bg-slate-50">
         <div className="mx-auto grid max-w-7xl gap-4 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
           {[
-            ["Eyeglasses", "Daily frames for work, study, and screen time."],
-            ["Sunglasses", "UV protection with polished everyday style."],
-            ["Contact Lenses", "Comfortable lens options with store guidance."],
+            ["Eyeglasses", "Quality frames for daily use, screen time, and prescription needs."],
+            ["Sunglasses", "UV-protection styles selected for bright Kathmandu days."],
+            ["Contact Lenses", "Comfortable lens options with practical store guidance."],
           ].map(([title, text]) => (
             <a key={title} href={`/products?category=${encodeURIComponent(title)}`} className="rounded-md border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-400">
               <h2 className="text-xl font-bold">{title}</h2>
@@ -68,7 +62,7 @@ export default async function HomePage() {
         <div className="mb-7 flex items-end justify-between gap-4">
           <div>
             <p className="text-sm font-bold uppercase text-teal-700">Featured</p>
-            <h2 className="mt-2 text-3xl font-black">Best picks from the store</h2>
+            <h2 className="mt-2 text-3xl font-black">Featured picks from Titan Opticals</h2>
           </div>
           <LinkButton href="/products" variant="secondary">View all</LinkButton>
         </div>
@@ -87,7 +81,7 @@ export default async function HomePage() {
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1fr_auto] lg:px-8">
           <div>
             <h2 className="text-3xl font-black">Need an eye checkup?</h2>
-            <p className="mt-3 max-w-2xl text-slate-300">Book a convenient appointment and get frame recommendations after your checkup.</p>
+            <p className="mt-3 max-w-2xl text-slate-300">Book a convenient eye checkup and get help choosing lenses and frames that fit your needs.</p>
           </div>
           <LinkButton href="/book-eye-checkup" variant="secondary">
             <CalendarCheck className="h-4 w-4" /> Book now
@@ -97,9 +91,9 @@ export default async function HomePage() {
 
       <section className="mx-auto grid max-w-7xl gap-4 px-4 py-12 sm:px-6 md:grid-cols-3 lg:px-8">
         {[
-          [ShieldCheck, "Trusted optical guidance", "Frame and lens support from store staff."],
-          [Truck, "Local delivery", "Cash on Delivery available for Kathmandu orders."],
-          [CalendarCheck, "Easy appointments", "Book eye checkups without phone back-and-forth."],
+          [ShieldCheck, "Quality frames and UV protection", "Choose from polished eyewear options with support from store staff."],
+          [Truck, "Free Valley delivery", "Free delivery inside Kathmandu Valley with Cash on Delivery order placement."],
+          [CalendarCheck, "Eye checkup booking", "Request an appointment online and let the team contact you."],
         ].map(([Icon, title, text]) => (
           <div key={String(title)} className="rounded-md border border-slate-200 bg-white p-5">
             <Icon className="h-6 w-6 text-teal-700" />
@@ -108,6 +102,63 @@ export default async function HomePage() {
           </div>
         ))}
       </section>
+    </div>
+  );
+}
+
+function HeroVisual({ products }: { products: Product[] }) {
+  const heroProducts = products.slice(0, 3);
+
+  return (
+    <div className="relative min-h-[420px] overflow-hidden rounded-md border border-emerald-100 bg-[linear-gradient(135deg,#ecfdf5,#ffffff_48%,#e0f2fe)] p-4 shadow-sm sm:p-6">
+      <div className="absolute right-6 top-6 rounded-full bg-white/85 px-4 py-2 text-xs font-bold uppercase text-emerald-800 shadow-sm">
+        {SITE_CONFIG.name}
+      </div>
+      <div className="grid h-full content-end gap-4 pt-14">
+        {heroProducts.length ? (
+          <div className="grid gap-4 sm:grid-cols-3">
+            {heroProducts.map((product, index) => (
+              <Link
+                key={product.id}
+                href={`/products/${product.slug}`}
+                className={`group overflow-hidden rounded-md border border-white/80 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md ${index === 1 ? "sm:-mt-8" : ""}`}
+              >
+                <div className="relative aspect-[4/5] bg-emerald-50">
+                  {product.image_url ? (
+                    <Image src={product.image_url} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 33vw, 220px" />
+                  ) : (
+                    <div className="grid h-full place-items-center bg-[linear-gradient(145deg,#064e3b,#059669)] text-white">
+                      <Glasses className="h-12 w-12" aria-hidden="true" />
+                    </div>
+                  )}
+                </div>
+                <div className="p-3">
+                  <p className="line-clamp-1 text-sm font-bold text-slate-950">{product.name}</p>
+                  <p className="mt-1 text-xs font-semibold text-emerald-700">{formatCurrency(getSalePrice(product))}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-3">
+            {["Precision frames", "UV sunglasses", "Comfort lenses"].map((label, index) => (
+              <div
+                key={label}
+                className={`grid aspect-[4/5] place-items-center rounded-md border border-white/80 bg-white/80 p-5 text-center shadow-sm ${index === 1 ? "sm:-mt-8" : ""}`}
+              >
+                <div>
+                  {index === 1 ? <Sparkles className="mx-auto h-10 w-10 text-emerald-700" /> : <Glasses className="mx-auto h-10 w-10 text-emerald-700" />}
+                  <p className="mt-4 text-sm font-black uppercase text-slate-950">{label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="rounded-md bg-slate-950/90 p-4 text-white">
+          <p className="text-sm font-semibold text-emerald-100">Kichapokhari, opposite NMB Bank</p>
+          <p className="mt-1 text-2xl font-black">Try refined frames with practical eye-care guidance.</p>
+        </div>
+      </div>
     </div>
   );
 }
