@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Phone, ShieldCheck, Truck } from "lucide-react";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { useCart } from "@/components/cart/CartProvider";
@@ -124,6 +125,20 @@ export default function CheckoutPage() {
           <p className="mt-2 text-sm font-semibold text-slate-700">Cash on Delivery</p>
           <p className="mt-1 text-sm text-slate-600">Titan Opticals may call or WhatsApp you to confirm availability, delivery details, and any prescription lens requirements before dispatch.</p>
         </section>
+        <div className="grid gap-2 rounded-md border border-emerald-100 bg-[#fffaf2]/60 p-3 text-sm font-semibold text-slate-700 sm:grid-cols-3">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-emerald-700" aria-hidden="true" />
+            <span>Secure order</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Truck className="h-4 w-4 text-emerald-700" aria-hidden="true" />
+            <span>Free Valley delivery</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Phone className="h-4 w-4 text-emerald-700" aria-hidden="true" />
+            <span>Confirmed by call</span>
+          </div>
+        </div>
         <Button disabled={saving}>{saving ? "Placing order..." : "Place order"}</Button>
       </form>
       <aside className="order-first h-fit rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24 lg:order-2">

@@ -2,7 +2,7 @@ export function ProductGridSkeleton() {
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-label="Loading products">
       {Array.from({ length: 6 }).map((_, index) => (
-        <div key={index} className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+        <div key={index} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           <div className="aspect-[4/3] animate-pulse bg-[#f0ebe2]" />
           <div className="grid gap-3 p-4">
             <div className="h-3 w-24 animate-pulse rounded bg-[#f0ebe2]" />
@@ -41,7 +41,7 @@ export function ListSkeleton({ rows = 4 }: { rows?: number }) {
 export function ProductDetailSkeleton() {
   return (
     <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">
-      <div className="aspect-square animate-pulse rounded-md bg-slate-100" />
+      <div className="aspect-[4/3] animate-pulse rounded-md bg-slate-100" />
       <div className="grid content-start gap-4">
         <div className="h-3 w-28 animate-pulse rounded bg-slate-100" />
         <div className="h-10 w-3/4 animate-pulse rounded bg-slate-100" />

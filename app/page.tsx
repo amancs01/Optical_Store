@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarCheck, Eye, Glasses, MessageCircle, Search, ShieldCheck, Sun, Truck } from "lucide-react";
 import { LinkButton } from "@/components/ui/Button";
+import { FadeIn } from "@/components/ui/FadeIn";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SITE_CONFIG } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -122,46 +123,48 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="animate-fade-up-delay-1 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_minmax(360px,520px)] sm:items-end">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Top categories</p>
-            <h2 className="mt-1 text-xl font-bold">Shop the essentials</h2>
+      <FadeIn delay={0}>
+        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_minmax(360px,520px)] sm:items-end">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Top categories</p>
+              <h2 className="mt-1 text-xl font-bold">Shop the essentials</h2>
+            </div>
+            <form action="/products" className="grid grid-cols-[76px_1fr_48px] overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+              <select name="category" aria-label="Category" className="min-h-12 border-r border-slate-200 bg-emerald-50 px-2 text-sm font-bold text-emerald-800">
+                <option value="">All</option>
+                {categories.map((cat) => <option key={cat.title} value={cat.title}>{cat.title}</option>)}
+              </select>
+              <input name="search" placeholder="Search eyewear" className="min-h-12 min-w-0 px-3 text-sm outline-none" />
+              <button className="grid min-h-12 place-items-center bg-emerald-700 text-white transition hover:bg-emerald-800" aria-label="Search products">
+                <Search className="h-4 w-4" />
+              </button>
+            </form>
           </div>
-          <form action="/products" className="grid grid-cols-[76px_1fr_48px] overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
-            <select name="category" aria-label="Category" className="min-h-12 border-r border-slate-200 bg-emerald-50 px-2 text-sm font-bold text-emerald-800">
-              <option value="">All</option>
-              {categories.map((cat) => <option key={cat.title} value={cat.title}>{cat.title}</option>)}
-            </select>
-            <input name="search" placeholder="Search eyewear" className="min-h-12 min-w-0 px-3 text-sm outline-none" />
-            <button className="grid min-h-12 place-items-center bg-emerald-700 text-white transition hover:bg-emerald-800" aria-label="Search products">
-              <Search className="h-4 w-4" />
-            </button>
-          </form>
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-          {quickLinks.map((cat) => (
-            <Link key={cat.title} href={cat.href} className="group overflow-hidden rounded-md border border-slate-200 bg-[#fffaf2]/60 shadow-sm">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-t-md bg-emerald-50">
-                <Image
-                  src={cat.image}
-                  alt={cat.alt}
-                  fill
-                  className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                  sizes="(max-width: 640px) 50vw, 25vw"
-                />
-              </div>
-              <div className="flex items-center justify-between gap-2 px-3 py-3">
-                <p className="line-clamp-1 text-sm font-semibold text-slate-900">{cat.title}</p>
-                <ArrowRight className="h-4 w-4 flex-none text-emerald-700" />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {quickLinks.map((cat) => (
+              <Link key={cat.title} href={cat.href} className="group overflow-hidden rounded-xl border border-slate-200 bg-[#fffaf2]/60 shadow-sm">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl bg-emerald-50">
+                  <Image
+                    src={cat.image}
+                    alt={cat.alt}
+                    fill
+                    className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    sizes="(max-width: 640px) 50vw, 25vw"
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-2 px-3 py-3">
+                  <p className="line-clamp-1 text-sm font-semibold text-slate-900">{cat.title}</p>
+                  <ArrowRight className="h-4 w-4 flex-none text-emerald-700" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </FadeIn>
 
-      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-        <div className="grid overflow-hidden rounded-md border border-slate-200 bg-[#fffaf2]/60 shadow-sm md:grid-cols-[0.95fr_1.05fr]">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="grid overflow-hidden rounded-xl border border-slate-200 bg-[#fffaf2]/60 shadow-sm md:grid-cols-[0.95fr_1.05fr]">
           <div className="relative min-h-[190px] md:min-h-[320px]">
             <Image
               src="/images/09_dual_frame_display.png"
@@ -186,63 +189,69 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="animate-fade-up-delay-2 mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-        <div className="mb-7 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Popular picks</p>
-            <h2 className="mt-1 text-2xl font-bold sm:text-3xl">Featured eyewear</h2>
+      <FadeIn delay={100}>
+        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mb-7 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Popular picks</p>
+              <h2 className="mt-1 text-2xl font-bold sm:text-3xl">Featured eyewear</h2>
+            </div>
+            <LinkButton href="/products" variant="secondary">View all</LinkButton>
           </div>
-          <LinkButton href="/products" variant="secondary">View all</LinkButton>
-        </div>
-        {products.length ? (
-          <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
-            {products.map((product) => <ProductCard key={product.id} product={product} />)}
-          </div>
-        ) : (
-          <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-600">
-            Add sample products in Supabase to show featured eyewear here.
-          </div>
-        )}
-      </section>
+          {products.length ? (
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+              {products.map((product) => <ProductCard key={product.id} product={product} />)}
+            </div>
+          ) : (
+            <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-600">
+              Add sample products in Supabase to show featured eyewear here.
+            </div>
+          )}
+        </section>
+      </FadeIn>
 
-      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-        <div className="grid gap-3 md:grid-cols-3">
-          <VisualStoryCard
-            href="/about"
-            image="/images/02_store_interior_luxury_eyewear.png"
-            alt="Luxury eyewear store interior at Titan Opticals"
-            eyebrow="Store experience"
-            title="Visit a polished New Road optical space."
-          />
-          <VisualStoryCard
-            href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need frame guidance.")}`}
-            image="/images/07_store_staff_frame_fitting.png"
-            alt="Titan Opticals staff helping a customer with frame fitting"
-            eyebrow="Frame guidance"
-            title="Get personal help choosing a flattering fit."
-          />
-          <VisualStoryCard
-            href="/products"
-            image="/images/06_style_guide_and_care_collage.png"
-            alt="Eyewear style guide and frame care collage"
-            eyebrow="Care guide"
-            title="Keep lenses clear and frames looking premium."
-          />
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-7 sm:px-6 md:grid-cols-4 lg:px-8">
-        {serviceHighlights.map(({ icon: Icon, title, text }) => (
-          <div key={title} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-4 shadow-sm">
-            <Icon className="h-5 w-5 text-emerald-700" />
-            <h3 className="mt-3 text-sm font-semibold">{title}</h3>
-            <p className="mt-1 text-xs text-slate-600">{text}</p>
+      <FadeIn delay={0}>
+        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="grid gap-3 md:grid-cols-3">
+            <VisualStoryCard
+              href="/about"
+              image="/images/02_store_interior_luxury_eyewear.png"
+              alt="Luxury eyewear store interior at Titan Opticals"
+              eyebrow="Store experience"
+              title="Visit a polished New Road optical space."
+            />
+            <VisualStoryCard
+              href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need frame guidance.")}`}
+              image="/images/07_store_staff_frame_fitting.png"
+              alt="Titan Opticals staff helping a customer with frame fitting"
+              eyebrow="Frame guidance"
+              title="Get personal help choosing a flattering fit."
+            />
+            <VisualStoryCard
+              href="/products"
+              image="/images/06_style_guide_and_care_collage.png"
+              alt="Eyewear style guide and frame care collage"
+              eyebrow="Care guide"
+              title="Keep lenses clear and frames looking premium."
+            />
           </div>
-        ))}
-      </section>
+        </section>
+      </FadeIn>
 
-      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-        <div className="grid overflow-hidden rounded-md bg-slate-950 text-white shadow-sm md:grid-cols-[1fr_0.9fr]">
+      <FadeIn delay={100}>
+        <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-10 sm:px-6 md:grid-cols-4 lg:px-8">
+          {serviceHighlights.map(({ icon: Icon, title, text }) => (
+            <div key={title} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-4 shadow-sm">
+              <Icon className="h-5 w-5 text-emerald-700" />
+              <h3 className="mt-3 text-sm font-semibold">{title}</h3>
+              <p className="mt-1 text-xs text-slate-600">{text}</p>
+            </div>
+          ))}
+        </section>
+      </FadeIn>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="grid overflow-hidden rounded-xl bg-slate-950 text-white shadow-sm md:grid-cols-[1fr_0.9fr]">
           <div className="relative min-h-[190px] md:order-2 md:min-h-[300px]">
             <Image
               src="/images/08_eye_exam_consultation.png"
@@ -275,7 +284,7 @@ export default async function HomePage() {
 
 function HeroVisual() {
   return (
-    <div className="relative min-h-[260px] overflow-hidden rounded-md border border-emerald-100 bg-white shadow-sm sm:min-h-[380px] lg:min-h-[520px]">
+    <div className="relative min-h-[260px] overflow-hidden rounded-xl border border-emerald-100 bg-white shadow-sm sm:min-h-[380px] lg:min-h-[520px]">
       <Image
         src="/images/hero-optical-store-product-scene.png"
         alt="Premium eyewear display at Titan Opticals"
@@ -303,8 +312,8 @@ function VisualStoryCard({
   title: string;
 }) {
   return (
-    <Link href={href} className="group overflow-hidden rounded-md border border-slate-200 bg-[#fffaf2]/60 shadow-sm">
-      <div className="relative aspect-[5/3] overflow-hidden rounded-t-md bg-emerald-50">
+    <Link href={href} className="group overflow-hidden rounded-xl border border-slate-200 bg-[#fffaf2]/60 shadow-sm">
+      <div className="relative aspect-[5/3] overflow-hidden rounded-t-xl bg-emerald-50">
         <Image
           src={image}
           alt={alt}

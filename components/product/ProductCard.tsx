@@ -9,9 +9,14 @@ export function ProductCard({ product }: { product: Product }) {
   const availability = getAvailabilityLabel(product.stock_quantity);
 
   return (
-    <article className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition md:hover:-translate-y-1 md:hover:border-emerald-200 md:hover:shadow-md motion-reduce:hover:translate-y-0">
+    <article className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition md:hover:-translate-y-1 md:hover:border-emerald-200 md:hover:shadow-md motion-reduce:hover:translate-y-0">
       <Link href={`/products/${product.slug}`} className="group block bg-slate-100">
-        <div className="relative aspect-square">
+        <div className="relative aspect-[4/3]">
+          {product.discount_price ? (
+            <span className="absolute left-3 top-3 z-10 rounded-full bg-emerald-700 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
+              Sale
+            </span>
+          ) : null}
           {product.image_url ? (
             <Image src={product.image_url} alt={product.name} fill className="object-cover transition duration-500 md:group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" sizes="(max-width: 768px) 50vw, 33vw" />
           ) : (
