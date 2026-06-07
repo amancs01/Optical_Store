@@ -5,28 +5,27 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { StateMessage } from "@/components/ui/StateMessage";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { SITE_CONFIG } from "@/lib/constants";
-import { getCurrentUserRole } from "@/lib/auth/admin";
+import { useCurrentUser } from "@/lib/auth/admin";
+import { signIn } from "@/services/authService";
 
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<"email" | "password", string>>>({});
   const [loading, setLoading] = useState(false);
+  const { user, isAdmin, loading: authLoading, refreshUser } = useCurrentUser();
 
   useEffect(() => {
-    supabase?.auth.getUser().then(async ({ data }) => {
-      if (!data.user) return;
-      const redirectTo = getSafeReturnTo(new URLSearchParams(window.location.search).get("returnTo"));
-      const { isAdmin } = await getCurrentUserRole();
-      router.replace(redirectTo.startsWith("/admin") && !isAdmin ? "/" : redirectTo);
-    });
-  }, [router]);
+    if (authLoading || !user) return;
+    const redirectTo = getSafeReturnTo(new URLSearchParams(window.location.search).get("returnTo"));
+    router.replace(redirectTo.startsWith("/admin") && !isAdmin ? "/" : redirectTo);
+  }, [authLoading, isAdmin, router, user]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!supabase) return;
+    if (!isSupabaseConfigured) return;
     setError("");
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email") || "").trim();
@@ -43,7 +42,7 @@ export default function LoginPage() {
     }
 
     setLoading(true);
-    const { error: signInError } = await supabase.auth.signInWithPassword({
+    const { error: signInError } = await signIn({
       email,
       password,
     });
@@ -54,9 +53,9 @@ export default function LoginPage() {
       return;
     }
 
+    const role = await refreshUser();
     const redirectTo = getSafeReturnTo(new URLSearchParams(window.location.search).get("returnTo"));
-    const { isAdmin } = await getCurrentUserRole();
-    router.push(redirectTo.startsWith("/admin") && !isAdmin ? "/" : redirectTo);
+    router.push(redirectTo.startsWith("/admin") && !role.isAdmin ? "/" : redirectTo);
   }
 
   return (

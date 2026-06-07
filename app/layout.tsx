@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { AppShell } from "@/components/layout/AppShell";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 import { SITE_CONFIG } from "@/lib/constants";
 import { absoluteUrl, getSiteUrl } from "@/lib/seo";
 import "./globals.css";
@@ -52,9 +53,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} h-full antialiased`}>
       <body className="min-h-full bg-[#fffaf2] text-slate-950">
-        <CartProvider>
-          <AppShell>{children}</AppShell>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <AppShell>{children}</AppShell>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

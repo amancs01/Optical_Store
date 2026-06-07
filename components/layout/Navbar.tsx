@@ -8,7 +8,6 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { SITE_CONFIG } from "@/lib/constants";
-import { supabase } from "@/lib/supabase/client";
 import { useCart } from "@/components/cart/CartProvider";
 import { useCurrentUser } from "@/lib/auth/admin";
 import { cn } from "@/lib/utils";
@@ -32,11 +31,11 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
   const { count } = useCart();
-  const { user, isAdmin } = useCurrentUser();
+  const { user, isAdmin, signOut } = useCurrentUser();
   const pathname = usePathname();
 
   async function logout() {
-    await supabase?.auth.signOut();
+    await signOut();
     setOpen(false);
   }
 

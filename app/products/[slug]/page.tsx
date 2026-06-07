@@ -5,7 +5,7 @@ import { CalendarCheck, MessageCircle, Truck } from "lucide-react";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
 import { ProductCard, ProductImageFallback } from "@/components/product/ProductCard";
 import { StateMessage } from "@/components/ui/StateMessage";
-import { formatCurrency, getSalePrice } from "@/lib/utils";
+import { formatCurrency, getAvailabilityDetailStatus, getSalePrice } from "@/lib/utils";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getProductBySlug, getSimilarProducts } from "@/services/productService";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -72,6 +72,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   }
 
   const similar = await getSimilarProducts(product.category, product.id).catch(() => []);
+  const availability = getAvailabilityDetailStatus(product.stock_quantity);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -122,8 +123,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               </div>
             ))}
           </dl>
-          <p className={`mt-5 inline-flex rounded-full px-3 py-1 text-sm font-bold ${getAvailabilityClass(product.stock_quantity)}`}>
-            {getAvailabilityLabel(product.stock_quantity)}
+          <p className={`mt-5 inline-flex rounded-full px-3 py-1 text-sm font-bold ${availability.className}`}>
+            {availability.label}
           </p>
           <div className="mt-5"><AddToCartButton product={product} /></div>
           <div className="mt-4 grid gap-2 sm:grid-cols-3 sm:gap-3">
@@ -151,16 +152,4 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       ) : null}
     </div>
   );
-}
-
-function getAvailabilityLabel(stock: number) {
-  if (stock <= 0) return "Out of stock";
-  if (stock <= 3) return "Limited stock";
-  return "Available in store";
-}
-
-function getAvailabilityClass(stock: number) {
-  if (stock <= 0) return "bg-rose-50 text-rose-700";
-  if (stock <= 3) return "bg-amber-50 text-amber-700";
-  return "bg-emerald-50 text-emerald-700";
 }

@@ -19,7 +19,7 @@ import {
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { AdminGuard } from "@/components/admin/AdminGuard";
-import { supabase } from "@/lib/supabase/client";
+import { useCurrentUser } from "@/lib/auth/admin";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -34,9 +34,10 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { signOut } = useCurrentUser();
 
   async function logout() {
-    await supabase?.auth.signOut();
+    await signOut();
     setMobileOpen(false);
     router.push("/admin/login");
   }

@@ -3,48 +3,53 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { User } from "@supabase/supabase-js";
 import { OrderStatusTimeline } from "@/components/order/OrderStatusTimeline";
 import { LinkButton } from "@/components/ui/Button";
 import { ProductDetailSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { formatOrderStatus } from "@/lib/orderStatus";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { formatCurrency } from "@/lib/utils";
 import { getCustomerOrderByNumber } from "@/services/orderService";
+import { useCurrentUser } from "@/lib/auth/admin";
 import type { Order, OrderItem } from "@/types/order";
 
 export default function CustomerOrderDetailPage({ params }: { params: Promise<{ orderNumber: string }> }) {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
   const [order, setOrder] = useState<(Order & { order_items?: OrderItem[] }) | null>(null);
-  const [loading, setLoading] = useState(Boolean(supabase));
+  const [loading, setLoading] = useState(isSupabaseConfigured);
   const [error, setError] = useState("");
+  const { user, loading: authLoading } = useCurrentUser();
 
   useEffect(() => {
-    if (!supabase) return;
-    supabase.auth.getUser().then(async ({ data }) => {
-      if (!data.user) {
-        router.replace("/login?redirectTo=/account/orders");
-        return;
-      }
+    if (authLoading || !isSupabaseConfigured) return;
+    if (!user) {
+      router.replace("/login?redirectTo=/account/orders");
+      return;
+    }
 
-      setUser(data.user);
-      try {
-        const { orderNumber } = await params;
-        const customerOrder = await getCustomerOrderByNumber(data.user.id, orderNumber);
+    let active = true;
+    params
+      .then(({ orderNumber }) => getCustomerOrderByNumber(user.id, orderNumber))
+      .then((customerOrder) => {
+        if (!active) return;
         setOrder(customerOrder);
         if (!customerOrder) setError("We could not find this order in your account.");
-      } catch {
-        setError("We could not load this order right now. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    });
-  }, [params, router]);
+      })
+      .catch(() => {
+        if (active) setError("We could not load this order right now. Please try again.");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [authLoading, params, router, user]);
 
   if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Supabase is not configured" message="Add Supabase variables to view order details." /></div>;
-  if (loading) return <ProductDetailSkeleton />;
+  if (authLoading || loading) return <ProductDetailSkeleton />;
   if (!user) return <p className="mx-auto max-w-4xl px-4 py-10 text-sm text-slate-600">Redirecting to login...</p>;
   if (error || !order) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Order unavailable" message={error || "This order is not available."} /><LinkButton href="/account/orders" className="mt-5">Back to my orders</LinkButton></div>;
 

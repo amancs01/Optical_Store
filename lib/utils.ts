@@ -27,6 +27,20 @@ export function getSalePrice(product: { price: number; discount_price?: number |
     : product.price;
 }
 
+export function getAvailabilityStatus(stock: number) {
+  if (stock <= 0) return { label: "Out of stock", className: "bg-rose-50 text-rose-700" };
+  if (stock <= 3) return { label: "Limited stock", className: "bg-amber-50 text-amber-700" };
+  return { label: "Available", className: "bg-emerald-50 text-emerald-700" };
+}
+
+export function getAvailabilityDetailStatus(stock: number) {
+  const status = getAvailabilityStatus(stock);
+  return {
+    ...status,
+    label: stock > 3 ? "Available in store" : status.label,
+  };
+}
+
 export function generateOrderNumber() {
   const date = new Date();
   const stamp = date.toISOString().slice(0, 10).replace(/-/g, "");

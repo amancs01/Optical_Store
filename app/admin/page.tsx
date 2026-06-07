@@ -3,29 +3,19 @@
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { StateMessage } from "@/components/ui/StateMessage";
-import { getBookings, getContactMessages } from "@/services/bookingService";
-import { getOrders } from "@/services/orderService";
-import { getAllProductsForAdmin } from "@/services/productService";
+import { getAdminDashboardStats, type AdminDashboardStats } from "@/services/adminService";
 import { useAdminStatus } from "@/lib/auth/admin";
 
 export default function AdminPage() {
-  const [stats, setStats] = useState({ products: 0, active: 0, pending: 0, bookings: 0, messages: 0 });
+  const [stats, setStats] = useState<AdminDashboardStats>({ products: 0, active: 0, pending: 0, bookings: 0, messages: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { isAdmin } = useAdminStatus();
 
   useEffect(() => {
     if (!isAdmin) return;
-    Promise.all([getAllProductsForAdmin(), getOrders(), getBookings(), getContactMessages()])
-      .then(([products, orders, bookings, messages]) =>
-        setStats({
-          products: products.length,
-          active: products.filter((p) => p.is_active).length,
-          pending: orders.filter((o) => o.order_status === "pending").length,
-          bookings: bookings.filter((b) => b.status === "pending").length,
-          messages: messages.filter((m) => m.status === "new").length,
-        }),
-      )
+    getAdminDashboardStats()
+      .then(setStats)
       .catch((err) => setError(err instanceof Error ? err.message : "Dashboard data could not load."))
       .finally(() => setLoading(false));
   }, [isAdmin]);

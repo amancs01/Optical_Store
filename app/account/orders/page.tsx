@@ -3,45 +3,49 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { User } from "@supabase/supabase-js";
 import { LinkButton } from "@/components/ui/Button";
 import { ListSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { formatOrderStatus } from "@/lib/orderStatus";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { formatCurrency } from "@/lib/utils";
 import { getCustomerOrders } from "@/services/orderService";
+import { useCurrentUser } from "@/lib/auth/admin";
 import type { Order } from "@/types/order";
 
 export default function MyOrdersPage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(Boolean(supabase));
+  const [loading, setLoading] = useState(isSupabaseConfigured);
   const [error, setError] = useState("");
+  const { user, loading: authLoading } = useCurrentUser();
 
   useEffect(() => {
-    if (!supabase) return;
-    supabase.auth.getUser().then(async ({ data }) => {
-      if (!data.user) {
-        router.replace("/login?redirectTo=/account/orders");
-        return;
-      }
+    if (authLoading || !isSupabaseConfigured) return;
+    if (!user) {
+      router.replace("/login?redirectTo=/account/orders");
+      return;
+    }
 
-      setUser(data.user);
-      try {
-        const customerOrders = await getCustomerOrders(data.user.id);
-        setOrders(customerOrders);
-      } catch {
-        setError("We could not load your orders right now. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    });
-  }, [router]);
+    let active = true;
+    getCustomerOrders(user.id)
+      .then((customerOrders) => {
+        if (active) setOrders(customerOrders);
+      })
+      .catch(() => {
+        if (active) setError("We could not load your orders right now. Please try again.");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [authLoading, router, user]);
 
   if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-7"><StateMessage title="Supabase is not configured" message="Add Supabase variables to view orders." /></div>;
-  if (loading) return <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8"><ListSkeleton rows={4} /></div>;
+  if (authLoading || loading) return <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8"><ListSkeleton rows={4} /></div>;
   if (!user) return <p className="mx-auto max-w-4xl px-4 py-7 text-sm text-slate-600">Redirecting to login...</p>;
 
   return (

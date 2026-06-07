@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { StateMessage } from "@/components/ui/StateMessage";
-import { getContactMessages, updateMessageStatus } from "@/services/bookingService";
+import { getAdminMessages, updateMessageStatus } from "@/services/contactService";
 import type { ContactMessage } from "@/types/order";
 import { useAdminStatus } from "@/lib/auth/admin";
 
@@ -15,7 +15,7 @@ export default function AdminMessagesPage() {
   function load() {
     setLoading(true);
     setError("");
-    getContactMessages()
+    getAdminMessages()
       .then(setMessages)
       .catch((err) => {
         setMessages([]);

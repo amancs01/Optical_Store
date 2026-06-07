@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Glasses } from "lucide-react";
-import { formatCurrency, getSalePrice } from "@/lib/utils";
+import { formatCurrency, getAvailabilityStatus, getSalePrice } from "@/lib/utils";
 import type { Product } from "@/types/product";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
 
 export function ProductCard({ product }: { product: Product }) {
-  const availability = getAvailabilityLabel(product.stock_quantity);
+  const availability = getAvailabilityStatus(product.stock_quantity);
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition md:hover:-translate-y-0.5 md:hover:border-emerald-200 md:hover:shadow-md motion-reduce:hover:translate-y-0">
@@ -52,12 +52,6 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
     </article>
   );
-}
-
-function getAvailabilityLabel(stock: number) {
-  if (stock <= 0) return { label: "Out of stock", className: "bg-rose-50 text-rose-700" };
-  if (stock <= 3) return { label: "Limited stock", className: "bg-amber-50 text-amber-700" };
-  return { label: "Available", className: "bg-emerald-50 text-emerald-700" };
 }
 
 export function ProductImageFallback({ name }: { name: string }) {

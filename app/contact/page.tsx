@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { SITE_CONFIG } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { createContactMessage } from "@/services/bookingService";
+import { createContactMessage } from "@/services/contactService";
 
 export default function ContactPage() {
   const [success, setSuccess] = useState(false);

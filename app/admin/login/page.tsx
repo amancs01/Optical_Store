@@ -5,29 +5,27 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { StateMessage } from "@/components/ui/StateMessage";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
-import { getCurrentUserRole } from "@/lib/auth/admin";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { useCurrentUser } from "@/lib/auth/admin";
+import { signIn } from "@/services/authService";
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { user, isAdmin, loading: authLoading, refreshUser, signOut } = useCurrentUser();
 
   useEffect(() => {
-    supabase?.auth.getUser().then(async ({ data }) => {
-      if (!data.user) return;
-      const { isAdmin } = await getCurrentUserRole();
-      if (isAdmin) router.replace("/admin");
-    });
-  }, [router]);
+    if (!authLoading && user && isAdmin) router.replace("/admin");
+  }, [authLoading, isAdmin, router, user]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!supabase) return;
+    if (!isSupabaseConfigured) return;
     setLoading(true);
     setError("");
     const form = new FormData(event.currentTarget);
-    const { error: signInError } = await supabase.auth.signInWithPassword({
+    const { error: signInError } = await signIn({
       email: String(form.get("email") || ""),
       password: String(form.get("password") || ""),
     });
@@ -37,11 +35,11 @@ export default function AdminLoginPage() {
       return;
     }
 
-    const { isAdmin } = await getCurrentUserRole();
+    const role = await refreshUser();
     setLoading(false);
 
-    if (!isAdmin) {
-      await supabase.auth.signOut();
+    if (!role.isAdmin) {
+      await signOut();
       setError("This account does not have admin access.");
       return;
     }

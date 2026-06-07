@@ -1,6 +1,6 @@
 # Titan Opticals
 
-Premium eyewear e-commerce website for Titan Opticals, located at Kichapokhari, New Road, opposite NMB Bank. The app includes polished customer shopping pages, localStorage cart, Cash on Delivery checkout, order tracking, eye-checkup booking, contact messages, customer accounts, and a protected Supabase-powered admin dashboard.
+Premium eyewear ecommerce site for Titan Opticals in Kichapokhari, New Road, Kathmandu. The app supports product browsing, cart, Cash on Delivery checkout, order tracking, eye-checkup bookings, contact messages, customer accounts, My Orders, and a protected admin dashboard.
 
 ## Tech Stack
 
@@ -9,6 +9,21 @@ Premium eyewear e-commerce website for Titan Opticals, located at Kichapokhari, 
 - Tailwind CSS
 - Supabase Auth, Database, and Storage
 - Vercel
+
+## Folder Structure
+
+- `app/`: App Router pages and layouts.
+- `components/layout/`: Customer shell, navbar, footer, WhatsApp, bottom nav.
+- `components/admin/`: Admin guard/layout/product form UI.
+- `components/product/`: Product card and add-to-cart UI.
+- `components/cart/`: Cart provider and cart state.
+- `components/providers/`: Shared app providers such as `AuthProvider`.
+- `components/ui/`: Reusable UI primitives and skeletons.
+- `services/`: Supabase data access and mutations.
+- `lib/supabase/`: Supabase browser client setup.
+- `lib/`: Constants, SEO, auth compatibility exports, formatting utilities.
+- `types/`: Shared TypeScript models.
+- `database/migrations/`: Ordered SQL setup/migration files for Supabase.
 
 ## Environment Variables
 
@@ -20,24 +35,43 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ```
 
-Do not add a Supabase service role key to the frontend.
+Never add a Supabase service role key to frontend code or public environment variables.
 
 ## Supabase Setup
 
-1. Create a Supabase project.
-2. Open SQL Editor and run `supabase-schema.sql`.
-3. For existing projects that already ran the original schema, run `customer-auth-orders.sql` to add optional customer account order history support.
-4. Create a public Storage bucket named `product-images`.
-5. Add Storage policies for public read and authenticated admin upload/update/delete.
-6. Create an admin Auth user with email/password.
-7. Add that user to `admin_profiles`:
+Run migrations manually in the Supabase SQL Editor:
+
+1. `database/migrations/001_initial_schema.sql`
+2. `database/migrations/002_customer_auth_orders.sql`
+
+The root SQL files are kept for compatibility, but `database/migrations` is the organized source for setup. Create a public Storage bucket named `product-images` and configure policies for public reads plus authenticated admin uploads/updates/deletes.
+
+## Auth And Admin
+
+Customer auth uses Supabase Auth with the public anon key. Shared auth/admin state lives in `components/providers/AuthProvider.tsx`.
+
+Admin access is determined by `public.admin_profiles` with `role = 'admin'`. Admin routes are protected by `components/admin/AdminGuard.tsx`; logged-out users are redirected to login and non-admin users are redirected away from `/admin`.
+
+To create an admin:
 
 ```sql
-insert into admin_profiles (user_id, email)
-values ('AUTH_USER_UUID', 'admin@example.com');
+insert into admin_profiles (user_id, email, role)
+values ('AUTH_USER_UUID', 'admin@example.com', 'admin');
 ```
 
-The app uses the public anon key only. Row Level Security policies in `supabase-schema.sql` allow public product browsing, public order/booking/message creation, and admin-only management through `admin_profiles`.
+## Data Access
+
+Supabase queries should live in service files:
+
+- `services/productService.ts`
+- `services/orderService.ts`
+- `services/authService.ts`
+- `services/adminService.ts`
+- `services/bookingService.ts`
+- `services/contactService.ts`
+- `services/uploadService.ts`
+
+UI components should receive props or call service functions; shared components such as `ProductCard` should not fetch their own data.
 
 ## Run Locally
 
@@ -48,89 +82,27 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-Before handing the project to a client or deploying, run:
+Before deploy or handoff:
 
 ```bash
 npm run lint
-npx tsc --noEmit
 npm run build
 ```
 
-All three commands should pass.
-
-## Deploy on Vercel
+## Deploy On Vercel
 
 1. Push the project to GitHub.
 2. Import the repository in Vercel.
-3. Add the three public environment variables.
-4. Confirm the Supabase schema has been run and sample products exist.
+3. Add the public environment variables.
+4. Run Supabase migrations and add products/admin users.
 5. Deploy.
-
-The project is Vercel-deployable as a standard Next.js App Router application. No service role key or localhost-only setting is required.
-
-## Admin Access
-
-Admin routes require a signed-in Supabase Auth user. Unauthenticated visitors are redirected to `/admin/login`. The admin login route is intentionally hidden from public navigation and footer links, but remains directly accessible to staff.
-
-To create an admin:
-
-1. Create a user in Supabase Auth.
-2. Copy the user's UUID.
-3. Insert it into `admin_profiles` using the SQL example above.
-4. Sign in at `/admin/login`.
 
 ## Route Checklist
 
-Customer routes:
+Customer routes include `/`, `/products`, `/products/[slug]`, `/cart`, `/checkout`, `/track-order`, `/book-eye-checkup`, `/contact`, `/account`, `/account/orders`, policy pages, login, and register.
 
-- `/`
-- `/products`
-- `/products/[slug]`
-- `/cart`
-- `/checkout`
-- `/track-order`
-- `/book-eye-checkup`
-- `/contact`
-- `/about`
-- `/shipping-policy`
-- `/return-policy`
-- `/privacy-policy`
-- `/terms`
+Admin routes include `/admin/login`, `/admin`, `/admin/products`, `/admin/products/new`, `/admin/products/[id]/edit`, `/admin/orders`, `/admin/bookings`, `/admin/messages`, and `/admin/logout`.
 
-Admin routes:
+## Performance Notes
 
-- `/admin/login`
-- `/admin`
-- `/admin/products`
-- `/admin/products/new`
-- `/admin/products/[id]/edit`
-- `/admin/orders`
-- `/admin/bookings`
-- `/admin/messages`
-- `/admin/logout`
-
-## Included Features
-
-- Premium home page with hero, trust badges, categories, featured products, checkup CTA, delivery support, and store visit CTA
-- Product listing with search, filters, sorting, skeleton loading, and branded empty state
-- Product detail pages with breadcrumb, premium image/fallback treatment, availability, trust notes, WhatsApp help, and similar products
-- localStorage cart
-- Mobile-friendly cart quantity controls and immediate cart count updates
-- Cash on Delivery checkout with validation, order confirmation details, and order item summary
-- Order tracking by order number or phone
-- Eye-checkup booking form with date and time-slot validation
-- Contact page, Google Maps link, social links, and message form
-- Static policy pages
-- Supabase Auth admin login/logout
-- Optional customer login/register and My Orders pages
-- Floating WhatsApp support button on customer-facing pages
-- Improved SEO metadata, sitemap, and robots configuration
-- Admin dashboard metrics
-- Admin product add/edit/delete with confirmation, safer slug handling, and Storage image upload
-- Admin order detail visibility, booking management, and message management
-
-WhatsApp is the primary customer support channel for launch. The Gmail address in configuration is the client-provided business email; a professional domain email is recommended after domain purchase.
-
-## Phase 2
-
-- See `PHASE_2_FEATURES.md` for deferred upgrades such as online payments, automation, reviews, wishlist, product galleries, professional email, coupons, invoices, advanced inventory, SEO content, analytics, and server-side pagination.
+See `PERFORMANCE_NOTES.md` for the API-call audit, optimizations made, remaining limitations, and future scaling suggestions.

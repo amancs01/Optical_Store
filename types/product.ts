@@ -20,8 +20,6 @@ export type Product = {
   updated_at: string | null;
 };
 
-export type ProductFormInput = Omit<Product, "id" | "created_at" | "updated_at">;
-
 export type CartItem = {
   productId: string;
   name: string;
@@ -30,13 +28,4 @@ export type CartItem = {
   price: number;
   quantity: number;
   selectedColor?: string | null;
-};
-
-export type Category = {
-  id: string;
-  name: string;
-  slug: string;
-  image_url: string | null;
-  is_active: boolean;
-  created_at: string;
 };

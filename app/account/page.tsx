@@ -5,19 +5,19 @@ import { LayoutDashboard, LogOut, Package, ShoppingBag } from "lucide-react";
 import { useEffect } from "react";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { StateMessage } from "@/components/ui/StateMessage";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { useCurrentUser } from "@/lib/auth/admin";
 
 export default function AccountPage() {
   const router = useRouter();
-  const { user, isAdmin, loading } = useCurrentUser();
+  const { user, isAdmin, loading, signOut } = useCurrentUser();
 
   useEffect(() => {
     if (!loading && !user) router.replace("/login?redirectTo=/account");
   }, [loading, router, user]);
 
   async function logout() {
-    await supabase?.auth.signOut();
+    await signOut();
     router.push("/");
   }
 

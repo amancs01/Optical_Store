@@ -6,7 +6,9 @@ import { useState } from "react";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { SITE_CONFIG } from "@/lib/constants";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { useCurrentUser } from "@/lib/auth/admin";
+import { signUp } from "@/services/authService";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -14,10 +16,11 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<"name" | "email" | "password", string>>>({});
   const [success, setSuccess] = useState("");
+  const { refreshUser } = useCurrentUser();
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!supabase) return;
+    if (!isSupabaseConfigured) return;
     setError("");
     setSuccess("");
     const formElement = event.currentTarget;
@@ -39,7 +42,7 @@ export default function RegisterPage() {
     }
 
     setLoading(true);
-    const { data, error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await signUp({
       email,
       password,
       options: {
@@ -56,6 +59,7 @@ export default function RegisterPage() {
     }
 
     if (data.user && data.session) {
+      await refreshUser();
       router.push("/");
       return;
     }
