@@ -1,6 +1,7 @@
 "use client";
 
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Check, ChevronDown, RotateCcw, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/product/ProductCard";
@@ -21,8 +22,16 @@ type ProductFilters = {
   shape: string;
   material: string;
   lens: string;
+  type: string;
+  age: string;
   price: string;
   sort: string;
+};
+
+type FilterKey = keyof ProductFilters;
+type SelectOption = {
+  label: string;
+  value: string;
 };
 
 const categoryTabs = ["All", ...CATEGORIES];
@@ -46,7 +55,6 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(isSupabaseConfigured);
   const [error, setError] = useState("");
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const filters = useMemo(() => filtersFromParams(searchParams), [searchParams]);
 
   useEffect(() => {
@@ -91,10 +99,23 @@ export default function ProductsPage() {
     });
   }, [filters, products]);
 
-  const hasFilters = Boolean(filters.search || filters.category || filters.brand || filters.gender || filters.frame_type || filters.shape || filters.material || filters.lens || filters.price);
+  const hasFilters = Boolean(filters.search || filters.category || filters.brand || filters.gender || filters.frame_type || filters.shape || filters.material || filters.lens || filters.type || filters.age || filters.price);
+  const filterMenus: Array<{
+    label: string;
+    field: FilterKey;
+    value: string;
+    options: SelectOption[];
+  }> = [
+    { label: "Brand", field: "brand", value: filters.brand, options: toOptions(brands) },
+    { label: "Gender", field: "gender", value: filters.gender, options: toOptions(GENDERS) },
+    { label: "Frame Type", field: "frame_type", value: filters.frame_type, options: toOptions(FRAME_TYPES) },
+    { label: "Shape", field: "shape", value: filters.shape, options: toOptions(shapes) },
+    { label: "Material", field: "material", value: filters.material, options: toOptions(materials) },
+    { label: "Price", field: "price", value: filters.price, options: priceRanges.map(({ label, value }) => ({ label, value })) },
+  ];
 
   function resetFilters() {
-    updateFilters({ search: "", category: "", brand: "", gender: "", frame_type: "", shape: "", material: "", lens: "", price: "", sort: "newest" });
+    updateFilters({ search: "", category: "", brand: "", gender: "", frame_type: "", shape: "", material: "", lens: "", type: "", age: "", price: "", sort: "newest" });
   }
 
   function updateFilters(newFilters: ProductFilters) {
@@ -112,8 +133,8 @@ export default function ProductsPage() {
         <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">Search and filter premium frames, sunglasses, and contact lenses.</p>
       </div>
 
-      <div className="mb-6 rounded-md border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_220px_auto] lg:items-center">
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_210px_auto] lg:items-center">
           <label className="relative block">
             <span className="sr-only">Search products</span>
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
@@ -122,28 +143,28 @@ export default function ProductsPage() {
               placeholder="Search products"
               value={filters.search}
               onChange={(e) => updateFilters({ ...filters, search: e.target.value })}
-              className="h-11 w-full rounded-md border border-slate-200 bg-[#fffaf2]/50 pl-10 pr-3 text-sm outline-none transition focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-100"
+              className="h-11 w-full rounded-lg border border-slate-200 bg-[#fffaf2]/50 pl-10 pr-3 text-sm outline-none transition focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-100"
             />
           </label>
-          <Select
+          <FilterMenu
             label="Sort"
             value={filters.sort}
-            options={sortOptions.map((option) => option.label)}
-            values={sortOptions.map((option) => option.value)}
+            options={sortOptions}
             onChange={(value) => updateFilters({ ...filters, sort: value })}
+            prefix="Sort"
+            buttonClassName="w-full justify-between rounded-lg"
           />
           <button
             type="button"
-            onClick={() => setFiltersOpen((open) => !open)}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-slate-200 px-3 text-sm font-bold text-slate-800 hover:bg-slate-50"
-            aria-expanded={filtersOpen}
+            onClick={resetFilters}
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-white px-4 text-sm font-bold text-emerald-900 transition hover:bg-emerald-50"
           >
-            {filtersOpen ? <X className="h-4 w-4" /> : <SlidersHorizontal className="h-4 w-4" />}
-            Filters
+            <RotateCcw className="h-4 w-4" aria-hidden="true" />
+            Reset filters
           </button>
         </div>
 
-        <div className="-mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+        <div className="-mx-4 mt-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
           {categoryTabs.map((category) => {
             const value = category === "All" ? "" : category;
             const active = filters.category === value;
@@ -165,29 +186,32 @@ export default function ProductsPage() {
           })}
         </div>
 
-        {filtersOpen ? (
-          <div className="mt-4 grid gap-3 rounded-md border border-emerald-100 bg-emerald-50/40 p-3 sm:grid-cols-2 lg:grid-cols-6">
-            <Select label="Brand" value={filters.brand} options={brands} onChange={(value) => updateFilters({ ...filters, brand: value })} />
-            <Select label="Gender" value={filters.gender} options={GENDERS} onChange={(value) => updateFilters({ ...filters, gender: value })} />
-            <Select label="Frame Type" value={filters.frame_type} options={FRAME_TYPES} onChange={(value) => updateFilters({ ...filters, frame_type: value })} />
-            <Select label="Shape" value={filters.shape} options={shapes} onChange={(value) => updateFilters({ ...filters, shape: value })} />
-            <Select label="Material" value={filters.material} options={materials} onChange={(value) => updateFilters({ ...filters, material: value })} />
-            <Select
-              label="Price Range"
-              value={filters.price}
-              options={priceRanges.map((range) => range.label)}
-              values={priceRanges.map((range) => range.value)}
-              onChange={(value) => updateFilters({ ...filters, price: value })}
+        <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+          {filterMenus.map((menu) => (
+            <FilterMenu
+              key={menu.field}
+              label={menu.label}
+              value={menu.value}
+              options={menu.options}
+              onChange={(value) => updateFilters({ ...filters, [menu.field]: value })}
             />
-            <button type="button" onClick={resetFilters} className="h-11 rounded-md border border-emerald-200 bg-white px-3 text-sm font-bold text-emerald-900 hover:bg-emerald-50">
-              Reset filters
-            </button>
-          </div>
-        ) : null}
+          ))}
+        </div>
       </div>
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm text-slate-600">
-        <p>{loading ? "Loading collection..." : `${visible.length} ${visible.length === 1 ? "frame" : "frames"} found`}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p>{loading ? "Loading collection..." : `${visible.length} ${visible.length === 1 ? "frame" : "frames"} found`}</p>
+          {hasFilters ? (
+            <div className="flex flex-wrap gap-1.5">
+              {activeFilterLabels(filters).map((label) => (
+                <span key={label} className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-900">
+                  {label}
+                </span>
+              ))}
+            </div>
+          ) : null}
+        </div>
         {hasFilters ? (
           <button type="button" onClick={resetFilters} className="font-bold text-emerald-800 hover:text-emerald-950">
             Clear all
@@ -226,6 +250,8 @@ function filtersFromParams(searchParams: { get: (key: string) => string | null }
     shape: searchParams.get("shape") || "",
     material: searchParams.get("material") || "",
     lens: searchParams.get("lens") || "",
+    type: searchParams.get("type") || "",
+    age: searchParams.get("age") || "",
     price: searchParams.get("price") || "",
     sort: searchParams.get("sort") || "newest",
   };
@@ -239,33 +265,101 @@ function matchesPriceRange(product: Product, value: string) {
   return price >= range.min && price <= range.max;
 }
 
-function Select({
+function toOptions(options: string[]): SelectOption[] {
+  return options.map((option) => ({ label: option, value: option }));
+}
+
+function activeFilterLabels(filters: ProductFilters) {
+  return [
+    filters.search ? `Search: ${filters.search}` : "",
+    filters.category,
+    filters.brand ? `Brand: ${filters.brand}` : "",
+    filters.gender ? `Gender: ${filters.gender}` : "",
+    filters.frame_type ? `Frame: ${filters.frame_type}` : "",
+    filters.shape ? `Shape: ${filters.shape}` : "",
+    filters.material ? `Material: ${filters.material}` : "",
+    filters.price ? `Price: ${priceRanges.find((range) => range.value === filters.price)?.label || filters.price}` : "",
+  ].filter(Boolean);
+}
+
+function FilterMenu({
   label,
   value,
   options,
-  values,
   onChange,
+  prefix,
+  buttonClassName,
 }: {
   label: string;
   value: string;
-  options: string[];
-  values?: string[];
+  options: SelectOption[];
   onChange: (value: string) => void;
+  prefix?: string;
+  buttonClassName?: string;
 }) {
+  const selected = options.find((option) => option.value === value);
+  const displayLabel = selected?.label || label;
+
   return (
-    <label className="block">
-      <span className="sr-only">{label}</span>
-      <select
-        aria-label={label}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-      >
-        <option value="">{label}</option>
-        {options.map((option, index) => (
-          <option key={option} value={values?.[index] || option}>{option}</option>
-        ))}
-      </select>
-    </label>
+    <DropdownMenu.Root modal={false}>
+      <DropdownMenu.Trigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "inline-flex h-10 flex-none items-center justify-center gap-2 rounded-full border px-3 text-sm font-bold outline-none transition focus-visible:ring-2 focus-visible:ring-emerald-200",
+            value
+              ? "border-emerald-200 bg-emerald-50 text-emerald-900 hover:bg-emerald-100"
+              : "border-slate-200 bg-white text-slate-700 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-900",
+            buttonClassName,
+          )}
+          aria-label={label}
+        >
+          <span className="max-w-[170px] truncate">
+            {prefix ? `${prefix}: ${displayLabel}` : value ? `${label}: ${displayLabel}` : label}
+          </span>
+          <ChevronDown className="h-4 w-4 flex-none" aria-hidden="true" />
+        </button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          align="start"
+          side="bottom"
+          sideOffset={8}
+          avoidCollisions={false}
+          className="z-[9999] max-h-64 min-w-56 overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-950/10 outline-none"
+        >
+          {!prefix ? (
+            <DropdownMenu.Item
+              onSelect={() => onChange("")}
+              className={cn(
+                "flex h-9 cursor-pointer items-center justify-between gap-3 rounded-lg px-3 text-sm font-semibold text-slate-700 outline-none transition hover:bg-emerald-50 hover:text-emerald-900 focus:bg-emerald-50 focus:text-emerald-900",
+                !value && "bg-emerald-50 text-emerald-900",
+              )}
+            >
+              <span>{`All ${label}`}</span>
+              {!value ? <Check className="h-4 w-4" aria-hidden="true" /> : null}
+            </DropdownMenu.Item>
+          ) : null}
+          {options.map((option) => {
+            const active = value === option.value;
+
+            return (
+              <DropdownMenu.Item
+                key={option.value}
+                onSelect={() => onChange(option.value)}
+                disabled={!option.value}
+                className={cn(
+                  "flex h-9 cursor-pointer items-center justify-between gap-3 rounded-lg px-3 text-sm font-semibold text-slate-700 outline-none transition hover:bg-emerald-50 hover:text-emerald-900 focus:bg-emerald-50 focus:text-emerald-900 disabled:pointer-events-none disabled:opacity-50",
+                  active && "bg-emerald-50 text-emerald-900",
+                )}
+              >
+                <span>{option.label}</span>
+                {active ? <Check className="h-4 w-4" aria-hidden="true" /> : null}
+              </DropdownMenu.Item>
+            );
+          })}
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   );
 }

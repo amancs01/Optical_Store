@@ -1,8 +1,7 @@
 "use client";
 
-import * as Select from "@radix-ui/react-select";
 import { CheckCircle2, ChevronDown, Check } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -180,47 +179,80 @@ function TimeSelect({
   slots: string[];
   hasError: boolean;
 }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function closeOnOutsideClick(event: MouseEvent | TouchEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    document.addEventListener("touchstart", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", closeOnOutsideClick);
+      document.removeEventListener("touchstart", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, []);
+
+  function chooseTime(time: string) {
+    onChange(time);
+    setOpen(false);
+  }
+
   return (
-    <>
+    <div ref={rootRef} className="relative">
       <input type="hidden" name="booking_time" value={value} readOnly />
-      <Select.Root value={value} onValueChange={onChange} disabled={!slots.length}>
-        <Select.Trigger
-          aria-label="Choose a time"
-          aria-invalid={hasError}
-          className="inline-flex h-11 w-full items-center justify-between gap-3 rounded-md border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 shadow-sm outline-none transition hover:border-emerald-200 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 data-[placeholder]:font-normal data-[placeholder]:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
+      <button
+        type="button"
+        aria-label="Choose a time"
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        disabled={!slots.length}
+        onClick={() => setOpen((value) => !value)}
+        className={`inline-flex h-11 w-full items-center justify-between gap-3 rounded-md border bg-white px-3 text-sm font-semibold text-slate-700 shadow-sm outline-none transition hover:border-emerald-200 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400 ${
+          hasError ? "border-rose-300" : "border-slate-200"
+        }`}
+      >
+        <span className={value ? "" : "font-normal text-slate-400"}>{value || (slots.length ? "Choose a time" : "No remaining slots today")}</span>
+        <ChevronDown className={`h-4 w-4 text-slate-500 transition ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open ? (
+        <div
+          role="listbox"
+          aria-label="Available times"
+          className="absolute left-0 top-full z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-xl shadow-slate-950/10"
         >
-          <Select.Value placeholder={slots.length ? "Choose a time" : "No remaining slots today"} />
-          <Select.Icon asChild>
-            <ChevronDown className="h-4 w-4 text-slate-500" />
-          </Select.Icon>
-        </Select.Trigger>
-        <Select.Portal>
-          <Select.Content
-            position="popper"
-            side="bottom"
-            align="start"
-            sideOffset={6}
-            avoidCollisions={false}
-            className="z-50 max-h-60 w-[var(--radix-select-trigger-width)] overflow-hidden rounded-md border border-slate-200 bg-white shadow-xl shadow-slate-950/10"
-          >
-            <Select.Viewport className="max-h-60 p-1">
-              {slots.map((time) => (
-                <Select.Item
-                  key={time}
-                  value={time}
-                  className="relative flex h-9 cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-3 text-sm font-semibold text-slate-700 outline-none data-[highlighted]:bg-emerald-50 data-[highlighted]:text-emerald-900 data-[state=checked]:text-emerald-800"
-                >
-                  <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
-                    <Check className="h-4 w-4" />
-                  </Select.ItemIndicator>
-                  <Select.ItemText>{time}</Select.ItemText>
-                </Select.Item>
-              ))}
-            </Select.Viewport>
-          </Select.Content>
-        </Select.Portal>
-      </Select.Root>
-    </>
+          {slots.map((time) => (
+            <button
+              key={time}
+              type="button"
+              role="option"
+              aria-selected={value === time}
+              onClick={() => chooseTime(time)}
+              className="relative flex h-9 w-full cursor-pointer items-center rounded-md py-2 pl-8 pr-3 text-left text-sm font-semibold text-slate-700 outline-none transition hover:bg-emerald-50 hover:text-emerald-900 focus:bg-emerald-50 focus:text-emerald-900 aria-selected:text-emerald-800"
+            >
+              {value === time ? (
+                <span className="absolute left-2 inline-flex items-center">
+                  <Check className="h-4 w-4" />
+                </span>
+              ) : null}
+              {time}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }
 

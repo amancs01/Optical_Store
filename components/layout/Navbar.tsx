@@ -3,18 +3,17 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarCheck, ChevronDown, CircleUser, LayoutDashboard, LogIn, LogOut, Menu, Package, ShoppingBag, UserPlus, X } from "lucide-react";
+import { CalendarCheck, CircleUser, LayoutDashboard, LogIn, LogOut, Menu, Package, ShoppingBag, UserPlus, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { SITE_CONFIG } from "@/lib/constants";
 import { useCart } from "@/components/cart/CartProvider";
 import { useCurrentUser } from "@/lib/auth/admin";
+import { HoverDropdown } from "@/components/ui/HoverDropdown";
 import { cn } from "@/lib/utils";
 
-const nav = [
-  ["Home", "/"],
-];
+const nav = [["Home", "/"]];
 
 const moreNav = [
   ["Contact Lenses", "/products?category=Contact%20Lenses"],
@@ -24,29 +23,21 @@ const moreNav = [
 ];
 
 const eyeglassesMenu = [
-  {
-    title: "Eyeglasses",
-    links: [
-      ["Men", "/products?category=Eyeglasses&gender=Men"],
-      ["Women", "/products?category=Eyeglasses&gender=Women"],
-      ["Unisex", "/products?category=Eyeglasses&gender=Unisex"],
-      ["Full Frame", "/products?category=Eyeglasses&frame_type=Full%20Rim"],
-      ["Half Frame", "/products?category=Eyeglasses&frame_type=Half%20Rim"],
-    ],
-  },
+  ["Men", "/products?category=Eyeglasses&gender=Men"],
+  ["Women", "/products?category=Eyeglasses&gender=Women"],
+  ["Unisex", "/products?category=Eyeglasses&gender=Unisex"],
+  ["Full Frame", "/products?category=Eyeglasses&frame_type=Full%20Rim"],
+  ["Half Frame", "/products?category=Eyeglasses&frame_type=Half%20Rim"],
+  ["View all Eyeglasses", "/products?category=Eyeglasses"],
 ];
 
 const sunglassesMenu = [
-  {
-    title: "Sunglasses",
-    links: [
-      ["Men", "/products?category=Sunglasses&gender=Men"],
-      ["Women", "/products?category=Sunglasses&gender=Women"],
-      ["Unisex", "/products?category=Sunglasses&gender=Unisex"],
-      ["Aviator", "/products?category=Sunglasses&shape=Aviator"],
-      ["Wayfarer", "/products?category=Sunglasses&shape=Wayfarer"],
-    ],
-  },
+  ["Men", "/products?category=Sunglasses&gender=Men"],
+  ["Women", "/products?category=Sunglasses&gender=Women"],
+  ["Unisex", "/products?category=Sunglasses&gender=Unisex"],
+  ["Aviator", "/products?category=Sunglasses&shape=Aviator"],
+  ["Wayfarer", "/products?category=Sunglasses&shape=Wayfarer"],
+  ["View all Sunglasses", "/products?category=Sunglasses"],
 ];
 
 const mobileLinks = [
@@ -74,7 +65,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-[1000] border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-3 sm:h-16 sm:px-6 lg:px-8">
         <Link href="/" className="flex min-w-0 items-center gap-2 text-base font-bold tracking-tight text-slate-950 sm:gap-3 sm:text-lg">
           {!logoFailed ? (
@@ -103,8 +94,8 @@ export function Navbar() {
               {label}
             </Link>
           ))}
-          <ProductDropdown label="Eyeglasses" columns={eyeglassesMenu} viewAllLabel="View all Eyeglasses" viewAllHref="/products?category=Eyeglasses" />
-          <ProductDropdown label="Sunglasses" columns={sunglassesMenu} viewAllLabel="View all Sunglasses" viewAllHref="/products?category=Sunglasses" />
+          <HoverDropdown label="Eyeglasses" items={toDropdownItems(eyeglassesMenu)} />
+          <HoverDropdown label="Sunglasses" items={toDropdownItems(sunglassesMenu)} />
           <Link
             href="/contact"
             className={cn(
@@ -114,31 +105,7 @@ export function Navbar() {
           >
             Contact Us
           </Link>
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild>
-              <button
-                type="button"
-                className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold text-slate-700 outline-none hover:bg-emerald-50 hover:text-emerald-900 focus-visible:ring-2 focus-visible:ring-emerald-200"
-              >
-                More
-                <ChevronDown className="h-4 w-4" />
-              </button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Portal>
-              <DropdownMenu.Content align="start" sideOffset={8} className="z-50 w-60 rounded-md border border-slate-200 bg-white p-2 shadow-lg outline-none">
-                {moreNav.map(([label, href]) => (
-                  <DropdownMenu.Item key={href} asChild>
-                    <Link
-                      href={href}
-                      className="flex cursor-pointer rounded-md px-3 py-2 text-sm font-semibold text-slate-700 outline-none hover:bg-emerald-50 hover:text-emerald-900 focus:bg-emerald-50 focus:text-emerald-900"
-                    >
-                      {label}
-                    </Link>
-                  </DropdownMenu.Item>
-                ))}
-              </DropdownMenu.Content>
-            </DropdownMenu.Portal>
-          </DropdownMenu.Root>
+          <HoverDropdown label="More" items={toDropdownItems(moreNav)} contentClassName="w-60" />
         </nav>
         <div className="flex items-center gap-2">
           <CheckupCta className="hidden lg:inline-flex" />
@@ -157,7 +124,7 @@ export function Navbar() {
                 <DropdownMenu.Content
                   align="end"
                   sideOffset={8}
-                  className="z-50 w-56 rounded-md border border-slate-200 bg-white p-2 shadow-lg outline-none"
+                  className="z-[9999] w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-950/15 outline-none"
                 >
                   <AccountMenuLink href="/account" label="My Account" icon={<CircleUser className="h-4 w-4" />} />
                   <AccountMenuLink href="/account/orders" label="My Orders" icon={<Package className="h-4 w-4" />} />
@@ -186,7 +153,7 @@ export function Navbar() {
                 </button>
               </DropdownMenu.Trigger>
               <DropdownMenu.Portal>
-                <DropdownMenu.Content align="end" sideOffset={8} className="z-50 w-48 rounded-md border border-slate-200 bg-white p-2 shadow-lg outline-none">
+                <DropdownMenu.Content align="end" sideOffset={8} className="z-[9999] w-48 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-950/15 outline-none">
                   <AccountMenuLink href="/login" label="Login" icon={<LogIn className="h-4 w-4" />} />
                   <AccountMenuLink href="/register" label="Register" icon={<UserPlus className="h-4 w-4" />} />
                 </DropdownMenu.Content>
@@ -314,67 +281,8 @@ function CheckupCta({ className }: { className?: string }) {
   );
 }
 
-function ProductDropdown({
-  label,
-  columns,
-  viewAllLabel,
-  viewAllHref,
-}: {
-  label: string;
-  columns: Array<{ title: string; links: string[][] }>;
-  viewAllLabel: string;
-  viewAllHref: string;
-}) {
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <button
-          type="button"
-          className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold text-slate-700 outline-none hover:bg-emerald-50 hover:text-emerald-900 focus-visible:ring-2 focus-visible:ring-emerald-200"
-        >
-          {label}
-          <ChevronDown className="h-4 w-4" />
-        </button>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          align="start"
-          sideOffset={8}
-          className="z-50 w-72 rounded-md border border-slate-200 bg-white p-2 shadow-lg shadow-slate-950/10 outline-none"
-        >
-          <div className="grid gap-1">
-            {columns.map((column) => (
-              <div key={column.title}>
-                <div className="grid gap-1">
-                  {column.links.map(([itemLabel, href]) => (
-                    <DropdownMenu.Item key={href} asChild>
-                      <Link
-                        href={href}
-                        className="rounded-md px-2 py-2 text-sm font-semibold text-slate-700 outline-none hover:bg-emerald-50 hover:text-emerald-900 focus:bg-emerald-50 focus:text-emerald-900"
-                      >
-                        {itemLabel}
-                      </Link>
-                    </DropdownMenu.Item>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 border-t border-slate-100 pt-3">
-            <DropdownMenu.Item asChild>
-              <Link
-                href={viewAllHref}
-                className="flex items-center justify-between rounded-md bg-emerald-50 px-3 py-2 text-sm font-black text-emerald-900 outline-none hover:bg-emerald-100 focus:bg-emerald-100"
-              >
-                {viewAllLabel}
-                <span aria-hidden="true">→</span>
-              </Link>
-            </DropdownMenu.Item>
-          </div>
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
-  );
+function toDropdownItems(items: string[][]) {
+  return items.map(([label, href], index) => ({ label, href, badge: index === items.length - 1 ? undefined : label.slice(0, 1) }));
 }
 
 function isActivePath(pathname: string | null, href: string) {

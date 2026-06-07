@@ -26,18 +26,18 @@ const categories = [
     alt: "Premium sunglasses displayed on marble at Titan Optical",
   },
   {
-    title: "Contact Lenses",
-    icon: Eye,
-    href: "/products?category=Contact%20Lenses",
-    image: "/images/03_contact_lens_care_flatlay.png",
-    alt: "Contact lens care essentials arranged neatly",
-  },
-  {
     title: "Kids Frames",
     icon: Glasses,
     href: "/products?category=Kids%20Frames",
     image: "/images/04_pastel_glasses_product_shot.png",
     alt: "Soft color eyeglasses suitable for kids frames",
+  },
+  {
+    title: "Contact Lenses",
+    icon: Eye,
+    href: "/products?category=Contact%20Lenses",
+    image: "/images/03_contact_lens_care_flatlay.png",
+    alt: "Contact lens care essentials arranged neatly",
   },
 ];
 
@@ -51,6 +51,31 @@ const quickLinks = [
     alt: "Eye exam consultation at Titan Optical",
   },
 ];
+
+type CategoryDropdownItem = {
+  label: string;
+  href: string;
+  image?: string;
+};
+
+const categoryDropdowns: Record<string, CategoryDropdownItem[]> = {
+  Eyeglasses: [
+    { label: "Men", href: "/products?category=Eyeglasses&gender=Men", image: "/images/dropdowns/eyeglasses-men.png" },
+    { label: "Women", href: "/products?category=Eyeglasses&gender=Women", image: "/images/dropdowns/eyeglasses-women.png" },
+    { label: "Unisex", href: "/products?category=Eyeglasses&gender=Unisex", image: "/images/dropdowns/eyeglasses-unisex.png" },
+  ],
+  Sunglasses: [
+    { label: "Men", href: "/products?category=Sunglasses&gender=Men", image: "/images/dropdowns/sunglasses-men.png" },
+    { label: "Women", href: "/products?category=Sunglasses&gender=Women", image: "/images/dropdowns/sunglasses-women.png" },
+    { label: "Unisex", href: "/products?category=Sunglasses&gender=Unisex", image: "/images/dropdowns/sunglasses-men.png" },
+  ],
+  "Kids Frames": [
+    { label: "1-5 years", href: "/products?category=Kids%20Frames&age=1-5", image: "/images/dropdowns/kids-1-5.png" },
+    { label: "6-8 years", href: "/products?category=Kids%20Frames&age=6-8", image: "/images/dropdowns/kids-6-8.png" },
+    { label: "8-12 years", href: "/products?category=Kids%20Frames&age=8-12", image: "/images/dropdowns/kids-8-12.png" },
+    { label: "12-17 years", href: "/products?category=Kids%20Frames&age=12-17", image: "/images/dropdowns/kids-12-17.png" },
+  ],
+};
 
 const shapeCards = FRAME_SHAPES.map((shape, index) => ({
   title: shape,
@@ -115,47 +140,33 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <FadeIn delay={0}>
-        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <FadeIn delay={0} className="relative z-40 overflow-visible">
+        <section className="relative z-40 mx-auto max-w-7xl overflow-visible px-4 py-10 sm:px-6 lg:px-8">
           <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_minmax(360px,520px)] sm:items-end">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Top categories</p>
               <h2 className="mt-1 text-xl font-bold">Shop the essentials</h2>
             </div>
-            <form action="/products" className="grid grid-cols-[76px_1fr_48px] overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
-              <select name="category" aria-label="Category" className="min-h-12 border-r border-slate-200 bg-emerald-50 px-2 text-sm font-bold text-emerald-800">
+            <form action="/products" className="grid grid-cols-[76px_1fr_48px] overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition focus-within:border-emerald-200 focus-within:ring-2 focus-within:ring-emerald-100">
+              <select name="category" aria-label="Category" className="min-h-12 border-0 border-r border-slate-200 bg-white px-2 text-sm font-bold text-slate-800 outline-none focus:border-slate-200 focus:outline-none focus:ring-0">
                 <option value="">All</option>
                 {categories.map((cat) => <option key={cat.title} value={cat.title}>{cat.title}</option>)}
               </select>
-              <input name="search" placeholder="Search eyewear" className="min-h-12 min-w-0 px-3 text-sm outline-none" />
+              <input name="search" placeholder="Search eyewear" className="min-h-12 min-w-0 border-0 px-3 text-sm outline-none focus:outline-none focus:ring-0" />
               <button className="grid min-h-12 place-items-center bg-emerald-700 text-white transition hover:bg-emerald-800" aria-label="Search products">
                 <Search className="h-4 w-4" />
               </button>
             </form>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="relative z-50 grid grid-cols-2 gap-3 overflow-visible sm:grid-cols-3 lg:grid-cols-5">
             {quickLinks.map((cat) => (
-              <Link key={cat.title} href={cat.href} className="group overflow-hidden rounded-xl border border-slate-200 bg-[#fffaf2]/60 shadow-sm">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl bg-emerald-50">
-                  <Image
-                    src={cat.image}
-                    alt={cat.alt}
-                    fill
-                    className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                    sizes="(max-width: 640px) 50vw, 25vw"
-                  />
-                </div>
-                <div className="flex items-center justify-between gap-2 px-3 py-3">
-                  <p className="line-clamp-1 text-sm font-semibold text-slate-900">{cat.title}</p>
-                  <ArrowRight className="h-4 w-4 flex-none text-emerald-700" />
-                </div>
-              </Link>
+              <TopCategoryCard key={cat.title} category={cat} />
             ))}
           </div>
         </section>
       </FadeIn>
 
-      <FadeIn delay={100}>
+      <FadeIn delay={100} className="relative z-10">
         <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="mb-7 flex items-end justify-between gap-4">
             <div>
@@ -343,6 +354,66 @@ function HeroVisual() {
         className="absolute inset-0 h-full w-full object-cover"
         sizes="(max-width: 1024px) 100vw, 54vw"
       />
+    </div>
+  );
+}
+
+function TopCategoryCard({ category }: { category: (typeof quickLinks)[number] }) {
+  const dropdownItems = categoryDropdowns[category.title];
+  const CategoryIcon = category.icon;
+
+  return (
+    <div className="group relative overflow-visible">
+      <Link
+        href={category.href}
+        className="block overflow-hidden rounded-xl border border-slate-200 bg-[#fffaf2]/60 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md motion-reduce:hover:translate-y-0"
+      >
+        <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl bg-emerald-50">
+          <Image
+            src={category.image}
+            alt={category.alt}
+            fill
+            className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            sizes="(max-width: 640px) 50vw, 25vw"
+          />
+        </div>
+        <div className="flex items-center justify-between gap-2 px-3 py-3">
+          <p className="line-clamp-1 text-sm font-semibold text-slate-900">{category.title}</p>
+          <ArrowRight className="h-4 w-4 flex-none text-emerald-700" />
+        </div>
+      </Link>
+
+      {dropdownItems ? (
+        <>
+        <div className="absolute left-0 top-full z-[9998] hidden h-2 w-full bg-transparent lg:block" aria-hidden="true" />
+        <div className="pointer-events-none invisible absolute left-0 top-[calc(100%+0.375rem)] z-[9999] hidden w-80 overflow-hidden rounded-2xl border border-slate-200 bg-white opacity-0 shadow-2xl shadow-slate-950/20 transition group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 lg:block">
+          {dropdownItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex min-h-[76px] items-center gap-3 border-b border-slate-100 bg-white px-3 py-3 text-sm font-bold text-slate-800 transition last:border-b-0 hover:bg-emerald-50 hover:text-emerald-800"
+            >
+              <span className="relative h-14 w-14 flex-none overflow-hidden rounded-xl border border-slate-100 bg-emerald-50">
+                {item.image ? (
+                  <Image
+                    src={item.image}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="56px"
+                  />
+                ) : (
+                  <span className="flex h-full w-full items-center justify-center text-emerald-700">
+                    <CategoryIcon className="h-6 w-6" aria-hidden="true" />
+                  </span>
+                )}
+              </span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </div>
+        </>
+      ) : null}
     </div>
   );
 }
