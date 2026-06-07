@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { cache } from "react";
 import { CalendarCheck, MessageCircle, Truck } from "lucide-react";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
 import { ProductCard, ProductImageFallback } from "@/components/product/ProductCard";
@@ -10,6 +11,9 @@ import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getProductBySlug, getSimilarProducts } from "@/services/productService";
 import { SITE_CONFIG } from "@/lib/constants";
 import { absoluteUrl } from "@/lib/seo";
+
+const getProductBySlugCached = cache(getProductBySlug);
+const getSimilarProductsCached = cache(getSimilarProducts);
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -22,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   try {
-    const product = await getProductBySlug(slug);
+    const product = await getProductBySlugCached(slug);
     const description = product.description || `Shop ${product.name} at Titan Optical in New Road, Kathmandu.`;
 
     return {
@@ -59,7 +63,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const { slug } = await params;
   let product;
   try {
-    product = await getProductBySlug(slug);
+    product = await getProductBySlugCached(slug);
   } catch {
     return (
       <div className="mx-auto max-w-4xl px-4 py-10">
@@ -71,7 +75,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     );
   }
 
-  const similar = await getSimilarProducts(product.category, product.id).catch(() => []);
+  const similar = await getSimilarProductsCached(product.category, product.id).catch(() => []);
   const availability = getAvailabilityDetailStatus(product.stock_quantity);
 
   return (

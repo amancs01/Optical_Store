@@ -54,7 +54,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     void load();
 
-    const { data: listener } = supabase?.auth.onAuthStateChange(() => {
+    const { data: listener } = supabase?.auth.onAuthStateChange((event) => {
+      if (event === "INITIAL_SESSION") return;
       void load();
     }) || { data: null };
 

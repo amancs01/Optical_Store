@@ -44,7 +44,7 @@ Run migrations manually in the Supabase SQL Editor:
 1. `database/migrations/001_initial_schema.sql`
 2. `database/migrations/002_customer_auth_orders.sql`
 
-The root SQL files are kept for compatibility, but `database/migrations` is the organized source for setup. Create a public Storage bucket named `product-images` and configure policies for public reads plus authenticated admin uploads/updates/deletes.
+`database/migrations` is the source of truth for Supabase setup. Create a public Storage bucket named `product-images` and configure policies for public reads plus authenticated admin uploads/updates/deletes.
 
 ## Auth And Admin
 
@@ -106,3 +106,7 @@ Admin routes include `/admin/login`, `/admin`, `/admin/products`, `/admin/produc
 ## Performance Notes
 
 See `PERFORMANCE_NOTES.md` for the API-call audit, optimizations made, remaining limitations, and future scaling suggestions.
+
+## Cleanup Notes
+
+See `CLEANUP_NOTES.md` for files removed in prior cleanup passes, files intentionally kept, and remaining low-risk cleanup suggestions.

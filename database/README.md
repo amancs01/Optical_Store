@@ -5,7 +5,7 @@ Run the SQL files in `database/migrations` in order from the Supabase SQL Editor
 1. `001_initial_schema.sql`
 2. `002_customer_auth_orders.sql`
 
-These files are organized copies of the root SQL setup files. The root files remain for compatibility, but `database/migrations` is the clearer source for future Supabase copy-paste setup.
+`database/migrations` is the source of truth for future Supabase copy-paste setup. No duplicate root SQL setup files are required.
 
 Guidelines:
 

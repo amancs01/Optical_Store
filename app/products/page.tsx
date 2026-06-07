@@ -68,11 +68,22 @@ export default function ProductsPage() {
 
   useEffect(() => {
     if (!isSupabaseConfigured) return;
+    let active = true;
 
     getActiveProducts()
-      .then(setProducts)
-      .catch((err) => setError(err instanceof Error ? err.message : "Could not load products."))
-      .finally(() => setLoading(false));
+      .then((activeProducts) => {
+        if (active) setProducts(activeProducts);
+      })
+      .catch((err) => {
+        if (active) setError(err instanceof Error ? err.message : "Could not load products.");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
