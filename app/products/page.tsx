@@ -17,9 +17,10 @@ type ProductFilters = {
   category: string;
   brand: string;
   gender: string;
-  frame: string;
+  frame_type: string;
   shape: string;
   material: string;
+  lens: string;
   price: string;
   sort: string;
 };
@@ -74,7 +75,7 @@ export default function ProductsPage() {
         (!filters.category || product.category === filters.category) &&
         (!filters.brand || product.brand === filters.brand) &&
         (!filters.gender || product.gender === filters.gender) &&
-        (!filters.frame || product.frame_type === filters.frame) &&
+        (!filters.frame_type || product.frame_type === filters.frame_type) &&
         (!filters.shape || product.shape === filters.shape) &&
         (!filters.material || product.material === filters.material) &&
         matchesPriceRange(product, filters.price)
@@ -90,10 +91,10 @@ export default function ProductsPage() {
     });
   }, [filters, products]);
 
-  const hasFilters = Boolean(filters.search || filters.category || filters.brand || filters.gender || filters.frame || filters.shape || filters.material || filters.price);
+  const hasFilters = Boolean(filters.search || filters.category || filters.brand || filters.gender || filters.frame_type || filters.shape || filters.material || filters.lens || filters.price);
 
   function resetFilters() {
-    updateFilters({ search: "", category: "", brand: "", gender: "", frame: "", shape: "", material: "", price: "", sort: "newest" });
+    updateFilters({ search: "", category: "", brand: "", gender: "", frame_type: "", shape: "", material: "", lens: "", price: "", sort: "newest" });
   }
 
   function updateFilters(newFilters: ProductFilters) {
@@ -168,7 +169,7 @@ export default function ProductsPage() {
           <div className="mt-4 grid gap-3 rounded-md border border-emerald-100 bg-emerald-50/40 p-3 sm:grid-cols-2 lg:grid-cols-6">
             <Select label="Brand" value={filters.brand} options={brands} onChange={(value) => updateFilters({ ...filters, brand: value })} />
             <Select label="Gender" value={filters.gender} options={GENDERS} onChange={(value) => updateFilters({ ...filters, gender: value })} />
-            <Select label="Frame Type" value={filters.frame} options={FRAME_TYPES} onChange={(value) => updateFilters({ ...filters, frame: value })} />
+            <Select label="Frame Type" value={filters.frame_type} options={FRAME_TYPES} onChange={(value) => updateFilters({ ...filters, frame_type: value })} />
             <Select label="Shape" value={filters.shape} options={shapes} onChange={(value) => updateFilters({ ...filters, shape: value })} />
             <Select label="Material" value={filters.material} options={materials} onChange={(value) => updateFilters({ ...filters, material: value })} />
             <Select
@@ -221,9 +222,10 @@ function filtersFromParams(searchParams: { get: (key: string) => string | null }
     category: searchParams.get("category") || "",
     brand: searchParams.get("brand") || "",
     gender: searchParams.get("gender") || "",
-    frame: searchParams.get("frame") || "",
+    frame_type: searchParams.get("frame_type") || searchParams.get("frame") || "",
     shape: searchParams.get("shape") || "",
     material: searchParams.get("material") || "",
+    lens: searchParams.get("lens") || "",
     price: searchParams.get("price") || "",
     sort: searchParams.get("sort") || "newest",
   };

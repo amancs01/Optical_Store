@@ -44,7 +44,7 @@ const categories = [
 const quickLinks = [
   ...categories,
   {
-    title: "Eye Checkup",
+    title: "Free Eye Checkup",
     icon: CalendarCheck,
     href: "/book-eye-checkup",
     image: "/images/08_eye_exam_consultation.png",
@@ -67,7 +67,7 @@ const shapeCards = FRAME_SHAPES.map((shape, index) => ({
 
 const serviceHighlights = [
   { icon: Truck, title: "Free delivery", text: "Inside Kathmandu Valley" },
-  { icon: CalendarCheck, title: "Eye checkup", text: "Booking available" },
+  { icon: CalendarCheck, title: "Free eye checkup", text: "Booking available" },
   { icon: ShieldCheck, title: "Cash on Delivery", text: "Pay at delivery" },
   { icon: MessageCircle, title: "WhatsApp support", text: "Fast help" },
 ];
@@ -75,7 +75,7 @@ const serviceHighlights = [
 export const metadata = pageMetadata({
   title: "Premium Eyewear in New Road, Kathmandu",
   description:
-    "Shop eyeglasses, sunglasses, contact lenses, and book eye checkups at Titan Optical in Kichapokhari, New Road.",
+    "Shop eyeglasses, sunglasses, contact lenses, and book a free eye checkup at Titan Optical in Kichapokhari, New Road.",
   path: "/",
 });
 
@@ -106,7 +106,7 @@ export default async function HomePage() {
               Shop eyewear <ArrowRight className="h-4 w-4" />
             </LinkButton>
             <LinkButton href="/book-eye-checkup" variant="secondary" className="flex-1 sm:flex-none">
-              Book checkup
+              Free Eye Checkup
             </LinkButton>
           </div>
         </div>
@@ -222,14 +222,14 @@ export default async function HomePage() {
             />
           </div>
           <div className="p-5 sm:p-7 md:p-8">
-            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-200">Eye checkup booking</p>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-200">Free eye checkup</p>
             <h2 className="mt-2 max-w-md text-2xl font-bold sm:text-3xl">Pair better frames with practical eye-care support.</h2>
             <p className="mt-2 max-w-md text-sm leading-6 text-slate-300">
               Book a visit, then let the team help you choose lenses, frames, and care options with confidence.
             </p>
             <div className="mt-5 flex gap-3">
               <LinkButton href="/book-eye-checkup" className="flex-1 sm:flex-none">
-                Book checkup
+                Free Eye Checkup
               </LinkButton>
               <LinkButton href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Optical, I need help choosing eyewear.")}`} variant="secondary" className="flex-1 sm:flex-none">
                 WhatsApp us
@@ -312,7 +312,7 @@ export default async function HomePage() {
         <div className="rounded-xl bg-emerald-800 px-5 py-8 text-white shadow-sm sm:px-8 md:flex md:items-center md:justify-between md:gap-8">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-100">Need help choosing?</p>
-            <h2 className="mt-2 text-2xl font-bold sm:text-3xl">Message us or book an eye checkup.</h2>
+            <h2 className="mt-2 text-2xl font-bold sm:text-3xl">Message us or book your free eye checkup.</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-emerald-50">
               Share your frame preferences on WhatsApp, or book a visit for practical eye-care support before choosing lenses.
             </p>
@@ -322,7 +322,7 @@ export default async function HomePage() {
               WhatsApp
             </LinkButton>
             <LinkButton href="/book-eye-checkup" className="flex-1 bg-slate-950 hover:bg-slate-900 sm:flex-none">
-              Book checkup
+              Free Eye Checkup
             </LinkButton>
           </div>
         </div>

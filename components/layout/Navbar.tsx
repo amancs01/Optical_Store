@@ -3,7 +3,7 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, CircleUser, LayoutDashboard, LogIn, LogOut, Menu, Package, ShoppingBag, UserPlus, X } from "lucide-react";
+import { CalendarCheck, ChevronDown, CircleUser, LayoutDashboard, LogIn, LogOut, Menu, Package, ShoppingBag, UserPlus, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -14,19 +14,51 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   ["Home", "/"],
-  ["Eyeglasses", "/products?category=Eyeglasses"],
-  ["Sunglasses", "/products?category=Sunglasses"],
-  ["Eye Checkup", "/book-eye-checkup"],
 ];
 
 const moreNav = [
   ["Contact Lenses", "/products?category=Contact%20Lenses"],
   ["Kids Frames", "/products?category=Kids%20Frames"],
   ["Track Order", "/track-order"],
-  ["About", "/about"],
-  ["Contact", "/contact"],
-  ["Delivery Policy", "/shipping-policy"],
-  ["Return Policy", "/return-policy"],
+  ["About Us", "/about"],
+];
+
+const eyeglassesMenu = [
+  {
+    title: "Eyeglasses",
+    links: [
+      ["Men", "/products?category=Eyeglasses&gender=Men"],
+      ["Women", "/products?category=Eyeglasses&gender=Women"],
+      ["Unisex", "/products?category=Eyeglasses&gender=Unisex"],
+      ["Full Frame", "/products?category=Eyeglasses&frame_type=Full%20Rim"],
+      ["Half Frame", "/products?category=Eyeglasses&frame_type=Half%20Rim"],
+    ],
+  },
+];
+
+const sunglassesMenu = [
+  {
+    title: "Sunglasses",
+    links: [
+      ["Men", "/products?category=Sunglasses&gender=Men"],
+      ["Women", "/products?category=Sunglasses&gender=Women"],
+      ["Unisex", "/products?category=Sunglasses&gender=Unisex"],
+      ["Aviator", "/products?category=Sunglasses&shape=Aviator"],
+      ["Wayfarer", "/products?category=Sunglasses&shape=Wayfarer"],
+    ],
+  },
+];
+
+const mobileLinks = [
+  ["Home", "/"],
+  ["Eyeglasses", "/products?category=Eyeglasses"],
+  ["Sunglasses", "/products?category=Sunglasses"],
+  ["Contact Us", "/contact"],
+  ["Free Eye Checkup", "/book-eye-checkup"],
+  ["Contact Lenses", "/products?category=Contact%20Lenses"],
+  ["Kids Frames", "/products?category=Kids%20Frames"],
+  ["Track Order", "/track-order"],
+  ["About Us", "/about"],
 ];
 
 export function Navbar() {
@@ -58,7 +90,7 @@ export function Navbar() {
           ) : null}
           <span className="truncate">{SITE_CONFIG.name}</span>
         </Link>
-        <nav className="hidden items-center gap-1 md:flex lg:gap-2">
+        <nav className="hidden items-center gap-1 lg:flex lg:gap-2">
           {nav.map(([label, href]) => (
             <Link
               key={href}
@@ -71,6 +103,17 @@ export function Navbar() {
               {label}
             </Link>
           ))}
+          <ProductDropdown label="Eyeglasses" columns={eyeglassesMenu} viewAllLabel="View all Eyeglasses" viewAllHref="/products?category=Eyeglasses" />
+          <ProductDropdown label="Sunglasses" columns={sunglassesMenu} viewAllLabel="View all Sunglasses" viewAllHref="/products?category=Sunglasses" />
+          <Link
+            href="/contact"
+            className={cn(
+              "rounded-full px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-900",
+              isActivePath(pathname, "/contact") && "bg-emerald-50 text-emerald-900",
+            )}
+          >
+            Contact Us
+          </Link>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
               <button
@@ -82,7 +125,7 @@ export function Navbar() {
               </button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-              <DropdownMenu.Content align="center" sideOffset={10} className="z-50 w-56 rounded-md border border-slate-200 bg-white p-2 shadow-lg outline-none">
+              <DropdownMenu.Content align="start" sideOffset={8} className="z-50 w-60 rounded-md border border-slate-200 bg-white p-2 shadow-lg outline-none">
                 {moreNav.map(([label, href]) => (
                   <DropdownMenu.Item key={href} asChild>
                     <Link
@@ -98,7 +141,7 @@ export function Navbar() {
           </DropdownMenu.Root>
         </nav>
         <div className="flex items-center gap-2">
-          <SocialLinks className="hidden sm:flex" />
+          <CheckupCta className="hidden lg:inline-flex" />
           {user ? (
             <DropdownMenu.Root>
               <DropdownMenu.Trigger asChild>
@@ -163,7 +206,7 @@ export function Navbar() {
             ) : null}
           </Link>
           <button
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 lg:hidden"
             onClick={() => setOpen((value) => !value)}
             aria-label="Menu"
           >
@@ -172,21 +215,33 @@ export function Navbar() {
         </div>
       </div>
       {open ? (
-        <nav className="border-t border-slate-200 bg-white px-4 py-3 md:hidden">
-          {[...nav, ...moreNav].map(([label, href]) => (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "block rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-900",
-                isActivePath(pathname, href) && "bg-emerald-50 text-emerald-900",
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {label}
-            </Link>
-          ))}
-          <SocialLinks className="px-3 py-3" />
+        <nav className="border-t border-slate-200 bg-white px-4 py-3 lg:hidden">
+          {mobileLinks.map(([label, href]) => {
+            const isCheckup = href === "/book-eye-checkup";
+
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "block rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-900",
+                  isActivePath(pathname, href) && "bg-emerald-50 text-emerald-900",
+                  isCheckup && "mb-1 flex items-center justify-between border border-emerald-200 bg-emerald-50 text-emerald-900",
+                )}
+                onClick={() => setOpen(false)}
+              >
+                <span className={cn(isCheckup && "inline-flex items-center gap-2")}>
+                  {isCheckup ? <CalendarCheck className="h-4 w-4" aria-hidden="true" /> : null}
+                  {label}
+                </span>
+                {isCheckup ? (
+                  <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-emerald-700">
+                    Free
+                  </span>
+                ) : null}
+              </Link>
+            );
+          })}
           {user ? (
             <>
               <Link
@@ -244,67 +299,89 @@ export function Navbar() {
   );
 }
 
+function CheckupCta({ className }: { className?: string }) {
+  return (
+    <Link
+      href="/book-eye-checkup"
+      className={cn(
+        "items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-2 text-sm font-bold text-emerald-900 shadow-sm shadow-emerald-950/5 transition hover:border-emerald-300 hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200",
+        className,
+      )}
+    >
+      <CalendarCheck className="h-3.5 w-3.5" aria-hidden="true" />
+      Free Eye Checkup
+    </Link>
+  );
+}
+
+function ProductDropdown({
+  label,
+  columns,
+  viewAllLabel,
+  viewAllHref,
+}: {
+  label: string;
+  columns: Array<{ title: string; links: string[][] }>;
+  viewAllLabel: string;
+  viewAllHref: string;
+}) {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild>
+        <button
+          type="button"
+          className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold text-slate-700 outline-none hover:bg-emerald-50 hover:text-emerald-900 focus-visible:ring-2 focus-visible:ring-emerald-200"
+        >
+          {label}
+          <ChevronDown className="h-4 w-4" />
+        </button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          align="start"
+          sideOffset={8}
+          className="z-50 w-72 rounded-md border border-slate-200 bg-white p-2 shadow-lg shadow-slate-950/10 outline-none"
+        >
+          <div className="grid gap-1">
+            {columns.map((column) => (
+              <div key={column.title}>
+                <div className="grid gap-1">
+                  {column.links.map(([itemLabel, href]) => (
+                    <DropdownMenu.Item key={href} asChild>
+                      <Link
+                        href={href}
+                        className="rounded-md px-2 py-2 text-sm font-semibold text-slate-700 outline-none hover:bg-emerald-50 hover:text-emerald-900 focus:bg-emerald-50 focus:text-emerald-900"
+                      >
+                        {itemLabel}
+                      </Link>
+                    </DropdownMenu.Item>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 border-t border-slate-100 pt-3">
+            <DropdownMenu.Item asChild>
+              <Link
+                href={viewAllHref}
+                className="flex items-center justify-between rounded-md bg-emerald-50 px-3 py-2 text-sm font-black text-emerald-900 outline-none hover:bg-emerald-100 focus:bg-emerald-100"
+              >
+                {viewAllLabel}
+                <span aria-hidden="true">→</span>
+              </Link>
+            </DropdownMenu.Item>
+          </div>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
+  );
+}
+
 function isActivePath(pathname: string | null, href: string) {
   if (!pathname) return false;
   const [path, query] = href.split("?");
   if (query) return false;
   return pathname === path || (path !== "/" && pathname.startsWith(`${path}/`));
-}
-
-function SocialLinks({ className }: { className?: string }) {
-  return (
-    <div className={cn("items-center gap-1", className)}>
-      <SocialLink href={SITE_CONFIG.socialLinks.facebook} label="Facebook">
-        <FacebookIcon className="h-4 w-4" />
-      </SocialLink>
-      <SocialLink href={SITE_CONFIG.socialLinks.instagram} label="Instagram">
-        <InstagramIcon className="h-4 w-4" />
-      </SocialLink>
-      <SocialLink href={SITE_CONFIG.socialLinks.tiktok} label="TikTok">
-        <TikTokIcon className="h-4 w-4" />
-      </SocialLink>
-    </div>
-  );
-}
-
-function SocialLink({ href, label, children }: { href: string; label: string; children: ReactNode }) {
-  return (
-    <a
-      href={href}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-emerald-900"
-      aria-label={`Titan Optical on ${label}`}
-      target="_blank"
-      rel="noreferrer"
-    >
-      {children}
-    </a>
-  );
-}
-
-function FacebookIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M14 8.4V6.9c0-.7.2-1.1 1.2-1.1h1.5V3.1C16 3 15.2 3 14.3 3c-2.2 0-3.7 1.3-3.7 3.7v1.7H8.1v3h2.5V21H14v-9.6h2.5l.4-3H14Z" />
-    </svg>
-  );
-}
-
-function InstagramIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect width="14" height="14" x="5" y="5" rx="4" stroke="currentColor" strokeWidth="2" />
-      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" />
-      <circle cx="16.5" cy="7.5" r="1" fill="currentColor" />
-    </svg>
-  );
-}
-
-function TikTokIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M15.8 3c.4 2.3 1.7 3.8 4.2 4v3.1c-1.5.1-2.9-.4-4.1-1.2v5.9c0 3.1-2 5.2-5.1 5.2-2.9 0-5-1.8-5-4.5 0-2.9 2.4-4.8 5.6-4.5v3.1c-1.4-.2-2.3.3-2.3 1.3 0 .9.7 1.5 1.8 1.5 1.2 0 1.8-.7 1.8-2.1V3h3.1Z" />
-    </svg>
-  );
 }
 
 function AccountMenuLink({

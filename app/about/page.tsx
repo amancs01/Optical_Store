@@ -23,6 +23,14 @@ export default function AboutPage() {
             <div className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-4 shadow-sm">
               <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Location</p>
               <p className="mt-2 font-semibold">{SITE_CONFIG.address}</p>
+              <a
+                href={SITE_CONFIG.googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex min-h-10 items-center justify-center rounded-md border border-emerald-200 bg-white px-3 text-xs font-bold text-emerald-800 transition hover:bg-emerald-50"
+              >
+                Open in Google Maps
+              </a>
             </div>
             <div className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-4 shadow-sm">
               <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Store hours</p>

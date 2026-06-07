@@ -1,3 +1,6 @@
+export const GOOGLE_MAPS_URL =
+  "https://www.google.com/maps/search/?api=1&query=Titan%20Optical%20Kichapokhari%20New%20Road%20opposite%20NMB%20Bank%20Kathmandu";
+
 export const SITE_CONFIG = {
   name: "Titan Optical",
   tagline: "Premium eyewear, sunglasses, lenses, and eye care service in Kathmandu.",
@@ -10,7 +13,7 @@ export const SITE_CONFIG = {
   emailNote: "Business email (temporary)",
   address: "Kichapokhari, New Road, opposite NMB Bank",
   location: "New Road, Kathmandu",
-  googleMapsUrl: "https://maps.app.goo.gl/dD8Kcgv6BM1bsj7q6",
+  googleMapsUrl: GOOGLE_MAPS_URL,
   openingHours: "Sun–Fri, 10:00 AM – 7:00 PM",
   deliveryNote: "Free delivery inside Kathmandu Valley.",
   defaultCity: "Kathmandu",

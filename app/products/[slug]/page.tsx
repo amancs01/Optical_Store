@@ -131,7 +131,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {[
               [Truck, "Free Valley delivery", SITE_CONFIG.deliveryNote, "/shipping-policy"],
               [MessageCircle, "Need help choosing?", "Message us on WhatsApp for frame guidance.", `https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Optical, I need help choosing eyewear.")}`],
-              [CalendarCheck, "Eye checkup available", "Book an appointment before choosing lenses.", "/book-eye-checkup"],
+              [CalendarCheck, "Free eye checkup available", "Reserve a visit before choosing lenses.", "/book-eye-checkup"],
             ].map(([Icon, title, text, href]) => (
               <a key={String(title)} href={String(href)} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3 text-sm shadow-sm hover:border-emerald-200 sm:p-4">
                 <Icon className="h-5 w-5 text-emerald-700" aria-hidden="true" />
