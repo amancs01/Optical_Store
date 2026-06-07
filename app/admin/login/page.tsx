@@ -51,7 +51,7 @@ export default function AdminLoginPage() {
     <div className="mx-auto grid min-h-[70vh] max-w-md place-items-center px-4 py-10">
       <form onSubmit={submit} className="w-full rounded-md border border-slate-200 bg-white p-6 shadow-sm">
         <h1 className="text-3xl font-black">Admin login</h1>
-        <p className="mt-2 text-sm text-slate-600">This uses the same Titan Opticals account login and verifies admin access.</p>
+        <p className="mt-2 text-sm text-slate-600">This uses the same Titan Optical account login and verifies admin access.</p>
         {!isSupabaseConfigured ? <div className="mt-5"><StateMessage title="Supabase is not configured" message="Add Supabase variables to sign in." /></div> : null}
         {error ? <p className="mt-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">{error}</p> : null}
         <label className="mt-5 grid gap-2 text-sm font-semibold text-slate-700">Email<input name="email" type="email" required className="rounded-md border border-slate-200 px-3 py-2 font-normal" /></label>

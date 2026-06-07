@@ -53,7 +53,7 @@ export default function ContactPage() {
     <div className="mx-auto grid max-w-6xl gap-6 px-4 py-7 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
       <div>
         <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">{SITE_CONFIG.name}</p>
-        <h1 className="mt-1 animate-fade-up text-3xl font-black sm:text-4xl">Contact Titan Opticals</h1>
+        <h1 className="mt-1 animate-fade-up text-3xl font-black sm:text-4xl">Contact Titan Optical</h1>
         <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
           Visit us at New Road for eyewear, sunglasses, contact lenses, and eye-care support.
         </p>
@@ -94,7 +94,7 @@ export default function ContactPage() {
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="Titan Opticals location map"
+            title="Titan Optical location map"
             className="block"
           />
         </div>

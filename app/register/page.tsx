@@ -78,7 +78,7 @@ export default function RegisterPage() {
       <form onSubmit={submit} className="w-full rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">{SITE_CONFIG.name}</p>
         <h1 className="mt-1 text-3xl font-black">Create account</h1>
-        <p className="mt-2 text-sm text-slate-600">Register to keep your Titan Opticals orders in one place.</p>
+        <p className="mt-2 text-sm text-slate-600">Register to keep your Titan Optical orders in one place.</p>
         {!isSupabaseConfigured ? <div className="mt-5"><StateMessage title="Supabase is not configured" message="Add Supabase variables to create accounts." /></div> : null}
         {success ? (
           <div className="mt-4 rounded-md border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-900">

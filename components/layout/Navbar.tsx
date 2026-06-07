@@ -25,6 +25,8 @@ const moreNav = [
   ["Track Order", "/track-order"],
   ["About", "/about"],
   ["Contact", "/contact"],
+  ["Delivery Policy", "/shipping-policy"],
+  ["Return Policy", "/return-policy"],
 ];
 
 export function Navbar() {
@@ -270,7 +272,7 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
     <a
       href={href}
       className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-emerald-900"
-      aria-label={`Titan Opticals on ${label}`}
+      aria-label={`Titan Optical on ${label}`}
       target="_blank"
       rel="noreferrer"
     >

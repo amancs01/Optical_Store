@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Return Policy",
   description:
-    "Review Titan Opticals return, exchange, and refund guidance for eyewear, frames, lenses, and delivered orders.",
+    "Review Titan Optical return, exchange, and refund guidance for eyewear, frames, lenses, and delivered orders.",
   path: "/return-policy",
 });
 
@@ -14,7 +14,7 @@ export default function ReturnPolicyPage() {
       <h1 className="text-4xl font-black">Return Policy</h1>
       <div className="mt-6 space-y-6 leading-8 text-slate-600">
         <p>
-          Titan Opticals accepts eligible return requests within 7 days from the delivery date. Items must be unused,
+          Titan Optical accepts eligible return requests within 7 days from the delivery date. Items must be unused,
           clean, and returned in the condition in which they were received.
         </p>
         <section>
@@ -35,7 +35,7 @@ export default function ReturnPolicyPage() {
           </ul>
         </section>
         <p>
-          To request a return, contact Titan Opticals by WhatsApp or email within 7 days. Please share your order number
+          To request a return, contact Titan Optical by WhatsApp or email within 7 days. Please share your order number
           and the reason for return. Our team will confirm whether the item should be picked up or dropped off at the
           store. The product should be packed with all original accessories.
         </p>
@@ -46,7 +46,7 @@ export default function ReturnPolicyPage() {
         </p>
         <p>
           If an item arrives damaged or defective, contact us within 48 hours and include clear photos. After checking
-          the issue, Titan Opticals may arrange a replacement, exchange, or another suitable solution.
+          the issue, Titan Optical may arrange a replacement, exchange, or another suitable solution.
         </p>
         <p>
           Return support: <a className="font-semibold text-emerald-700" href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a>{" "}

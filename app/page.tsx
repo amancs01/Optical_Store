@@ -16,23 +16,20 @@ const categories = [
     icon: Glasses,
     href: "/products?category=Eyeglasses",
     image: "/images/04_pastel_glasses_product_shot.png",
-    fallbackImage: "/images/category-eyeglasses.png",
-    alt: "Pastel eyeglasses product display at Titan Opticals",
+    alt: "Pastel eyeglasses product display at Titan Optical",
   },
   {
     title: "Sunglasses",
     icon: Sun,
     href: "/products?category=Sunglasses",
     image: "/images/05_marble_sunglasses_display.png",
-    fallbackImage: "/images/category-sunglasses.png",
-    alt: "Premium sunglasses displayed on marble at Titan Opticals",
+    alt: "Premium sunglasses displayed on marble at Titan Optical",
   },
   {
     title: "Contact Lenses",
     icon: Eye,
     href: "/products?category=Contact%20Lenses",
     image: "/images/03_contact_lens_care_flatlay.png",
-    fallbackImage: "/images/category-contact-lenses.png",
     alt: "Contact lens care essentials arranged neatly",
   },
   {
@@ -40,21 +37,20 @@ const categories = [
     icon: Glasses,
     href: "/products?category=Kids%20Frames",
     image: "/images/04_pastel_glasses_product_shot.png",
-    fallbackImage: "/images/category-eyeglasses.png",
     alt: "Soft color eyeglasses suitable for kids frames",
   },
 ];
 
-const bookingCategory = {
-  title: "Eye Checkup",
-  icon: CalendarCheck,
-  href: "/book-eye-checkup",
-  image: "/images/08_eye_exam_consultation.png",
-  fallbackImage: "/images/category-eye-checkup.png",
-  alt: "Eye exam consultation at Titan Opticals",
-};
-
-const quickLinks = [...categories, bookingCategory];
+const quickLinks = [
+  ...categories,
+  {
+    title: "Eye Checkup",
+    icon: CalendarCheck,
+    href: "/book-eye-checkup",
+    image: "/images/08_eye_exam_consultation.png",
+    alt: "Eye exam consultation at Titan Optical",
+  },
+];
 
 const shapeCards = FRAME_SHAPES.map((shape, index) => ({
   title: shape,
@@ -70,32 +66,16 @@ const shapeCards = FRAME_SHAPES.map((shape, index) => ({
 }));
 
 const serviceHighlights = [
-  {
-    icon: Truck,
-    title: "Free delivery",
-    text: "Inside Kathmandu Valley",
-  },
-  {
-    icon: CalendarCheck,
-    title: "Eye checkup",
-    text: "Booking available",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Quality frames",
-    text: "Curated eyewear",
-  },
-  {
-    icon: MessageCircle,
-    title: "WhatsApp support",
-    text: "Fast help",
-  },
+  { icon: Truck, title: "Free delivery", text: "Inside Kathmandu Valley" },
+  { icon: CalendarCheck, title: "Eye checkup", text: "Booking available" },
+  { icon: ShieldCheck, title: "Cash on Delivery", text: "Pay at delivery" },
+  { icon: MessageCircle, title: "WhatsApp support", text: "Fast help" },
 ];
 
 export const metadata = pageMetadata({
   title: "Premium Eyewear in New Road, Kathmandu",
   description:
-    "Shop eyeglasses, sunglasses, contact lenses, and book eye checkups at Titan Opticals in Kichapokhari, New Road.",
+    "Shop eyeglasses, sunglasses, contact lenses, and book eye checkups at Titan Optical in Kichapokhari, New Road.",
   path: "/",
 });
 
@@ -119,7 +99,7 @@ export default async function HomePage() {
             See clearly. Look refined.
           </h1>
           <p className="mt-4 max-w-lg text-sm leading-6 text-slate-600 sm:text-base">
-            Premium eyewear and eye checkup booking from Kichapokhari, opposite NMB Bank.
+            Premium eyewear, practical eye-care support, and curated frames from Kichapokhari, opposite NMB Bank.
           </p>
           <div className="mt-5 flex gap-3">
             <LinkButton href="/products" className="flex-1 sm:flex-none">
@@ -130,7 +110,6 @@ export default async function HomePage() {
             </LinkButton>
           </div>
         </div>
-
         <div className="lg:col-start-2 lg:row-start-1">
           <HeroVisual />
         </div>
@@ -176,31 +155,26 @@ export default async function HomePage() {
         </section>
       </FadeIn>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="grid overflow-hidden rounded-xl border border-slate-200 bg-[#fffaf2]/60 shadow-sm md:grid-cols-[0.95fr_1.05fr]">
-          <div className="relative min-h-[190px] md:min-h-[320px]">
-            <Image
-              src="/images/09_dual_frame_display.png"
-              alt="Two premium eyewear frames displayed as a featured collection"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          </div>
-          <div className="grid content-center p-5 sm:p-7 md:p-8">
-            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">New collections</p>
-            <h2 className="mt-2 max-w-md text-2xl font-bold text-slate-950 sm:text-3xl">Frames selected for everyday polish.</h2>
-            <p className="mt-2 max-w-md text-sm leading-6 text-slate-600">
-              Browse refined shapes, clean finishes, and lens-ready styles curated for New Road customers.
-            </p>
-            <div className="mt-5">
-              <LinkButton href="/products" variant="secondary">
-                Explore collection <ArrowRight className="h-4 w-4" />
-              </LinkButton>
+      <FadeIn delay={100}>
+        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mb-7 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Popular picks</p>
+              <h2 className="mt-1 text-2xl font-bold sm:text-3xl">Featured eyewear</h2>
             </div>
+            <LinkButton href="/products" variant="secondary">View all</LinkButton>
           </div>
-        </div>
-      </section>
+          {products.length ? (
+            <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {products.map((product) => <ProductCard key={product.id} product={product} />)}
+            </div>
+          ) : (
+            <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-600">
+              Add sample products in Supabase to show featured eyewear here.
+            </div>
+          )}
+        </section>
+      </FadeIn>
 
       <FadeIn delay={100}>
         <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -236,97 +210,12 @@ export default async function HomePage() {
         </section>
       </FadeIn>
 
-      <FadeIn delay={100}>
-        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="mb-7 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Popular picks</p>
-              <h2 className="mt-1 text-2xl font-bold sm:text-3xl">Featured eyewear</h2>
-            </div>
-            <LinkButton href="/products" variant="secondary">View all</LinkButton>
-          </div>
-          {products.length ? (
-            <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {products.map((product) => <ProductCard key={product.id} product={product} />)}
-            </div>
-          ) : (
-            <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-600">
-              Add sample products in Supabase to show featured eyewear here.
-            </div>
-          )}
-        </section>
-      </FadeIn>
-
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mb-7 text-center">
-          <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Customer reviews</p>
-          <h2 className="mt-1 text-2xl font-bold">What our customers say</h2>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {[
-            { quote: "Found the perfect pair of Ray-Bans here. Staff helped me choose the right frame for my face. Highly recommend.", name: "Priya S.", location: "Kathmandu" },
-            { quote: "Ordered online and got delivery the next day. Great quality frames at a fair price. Will order again.", name: "Rajan T.", location: "Lalitpur" },
-            { quote: "Booked an eye checkup and got my prescription lenses same week. Smooth experience from start to finish.", name: "Anita M.", location: "Bhaktapur" },
-          ].map(({ quote, name, location }) => (
-            <div key={name} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-2xl font-black text-emerald-200">&quot;</p>
-              <p className="mt-1 text-sm leading-6 text-slate-600">{quote}</p>
-              <div className="mt-4 border-t border-slate-100 pt-4">
-                <p className="text-[11px] font-bold text-emerald-700">★★★★★</p>
-                <p className="mt-1 text-sm font-semibold text-slate-950">{name}</p>
-                <p className="text-xs text-slate-500">{location}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <FadeIn delay={0}>
-        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="grid gap-3 md:grid-cols-3">
-            <VisualStoryCard
-              href="/about"
-              image="/images/02_store_interior_luxury_eyewear.png"
-              alt="Luxury eyewear store interior at Titan Opticals"
-              eyebrow="Store experience"
-              title="Visit a polished New Road optical space."
-            />
-            <VisualStoryCard
-              href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need frame guidance.")}`}
-              image="/images/07_store_staff_frame_fitting.png"
-              alt="Titan Opticals staff helping a customer with frame fitting"
-              eyebrow="Frame guidance"
-              title="Get personal help choosing a flattering fit."
-            />
-            <VisualStoryCard
-              href="/products"
-              image="/images/06_style_guide_and_care_collage.png"
-              alt="Eyewear style guide and frame care collage"
-              eyebrow="Care guide"
-              title="Keep lenses clear and frames looking premium."
-            />
-          </div>
-        </section>
-      </FadeIn>
-
-      <FadeIn delay={100}>
-        <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-10 sm:px-6 md:grid-cols-4 lg:px-8">
-          {serviceHighlights.map(({ icon: Icon, title, text }) => (
-            <div key={title} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-4 shadow-sm">
-              <Icon className="h-5 w-5 text-emerald-700" />
-              <h3 className="mt-3 text-sm font-semibold">{title}</h3>
-              <p className="mt-1 text-xs text-slate-600">{text}</p>
-            </div>
-          ))}
-        </section>
-      </FadeIn>
-
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid overflow-hidden rounded-xl bg-slate-950 text-white shadow-sm md:grid-cols-[1fr_0.9fr]">
           <div className="relative min-h-[190px] md:order-2 md:min-h-[300px]">
             <Image
               src="/images/08_eye_exam_consultation.png"
-              alt="Eye checkup consultation with Titan Opticals"
+              alt="Eye checkup consultation with Titan Optical"
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 45vw"
@@ -342,10 +231,99 @@ export default async function HomePage() {
               <LinkButton href="/book-eye-checkup" className="flex-1 sm:flex-none">
                 Book checkup
               </LinkButton>
-              <LinkButton href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need help choosing eyewear.")}`} variant="secondary" className="flex-1 sm:flex-none">
+              <LinkButton href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Optical, I need help choosing eyewear.")}`} variant="secondary" className="flex-1 sm:flex-none">
                 WhatsApp us
               </LinkButton>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="grid overflow-hidden rounded-xl border border-slate-200 bg-[#fffaf2]/60 shadow-sm md:grid-cols-[0.95fr_1.05fr]">
+          <div className="relative min-h-[190px] md:min-h-[320px]">
+            <Image
+              src="/images/09_dual_frame_display.png"
+              alt="Two premium eyewear frames displayed as a featured collection"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+          <div className="grid content-center p-5 sm:p-7 md:p-8">
+            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Store experience</p>
+            <h2 className="mt-2 max-w-md text-2xl font-bold text-slate-950 sm:text-3xl">Visit a polished New Road optical space.</h2>
+            <p className="mt-2 max-w-md text-sm leading-6 text-slate-600">
+              Try frame shapes in person, get practical guidance, and choose lenses with support from the Titan Optical team.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <LinkButton href="/about" variant="secondary">
+                Visit store <ArrowRight className="h-4 w-4" />
+              </LinkButton>
+              <LinkButton href={SITE_CONFIG.googleMapsUrl} variant="secondary">
+                Location
+              </LinkButton>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <FadeIn delay={100}>
+        <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-10 sm:px-6 md:grid-cols-4 lg:px-8">
+          {serviceHighlights.map(({ icon: Icon, title, text }) => (
+            <div key={title} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-4 shadow-sm">
+              <Icon className="h-5 w-5 text-emerald-700" />
+              <h3 className="mt-3 text-sm font-semibold">{title}</h3>
+              <p className="mt-1 text-xs text-slate-600">{text}</p>
+            </div>
+          ))}
+        </section>
+      </FadeIn>
+
+      <FadeIn delay={0}>
+        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="grid gap-3 md:grid-cols-3">
+            <VisualStoryCard
+              href="/about"
+              image="/images/02_store_interior_luxury_eyewear.png"
+              alt="Luxury eyewear store interior at Titan Optical"
+              eyebrow="Store visit"
+              title="See the collection in person."
+            />
+            <VisualStoryCard
+              href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Optical, I need frame guidance.")}`}
+              image="/images/07_store_staff_frame_fitting.png"
+              alt="Titan Optical staff helping a customer with frame fitting"
+              eyebrow="Frame guidance"
+              title="Get personal help choosing a flattering fit."
+            />
+            <VisualStoryCard
+              href="/products"
+              image="/images/06_style_guide_and_care_collage.png"
+              alt="Eyewear style guide and frame care collage"
+              eyebrow="Care guide"
+              title="Keep lenses clear and frames looking premium."
+            />
+          </div>
+        </section>
+      </FadeIn>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="rounded-xl bg-emerald-800 px-5 py-8 text-white shadow-sm sm:px-8 md:flex md:items-center md:justify-between md:gap-8">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-100">Need help choosing?</p>
+            <h2 className="mt-2 text-2xl font-bold sm:text-3xl">Message us or book an eye checkup.</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-emerald-50">
+              Share your frame preferences on WhatsApp, or book a visit for practical eye-care support before choosing lenses.
+            </p>
+          </div>
+          <div className="mt-5 flex gap-3 md:mt-0">
+            <LinkButton href={`https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Optical, I need help choosing eyewear.")}`} variant="secondary" className="flex-1 sm:flex-none">
+              WhatsApp
+            </LinkButton>
+            <LinkButton href="/book-eye-checkup" className="flex-1 bg-slate-950 hover:bg-slate-900 sm:flex-none">
+              Book checkup
+            </LinkButton>
           </div>
         </div>
       </section>
@@ -358,7 +336,7 @@ function HeroVisual() {
     <div className="relative min-h-[260px] overflow-hidden rounded-xl border border-emerald-100 bg-white shadow-sm sm:min-h-[380px] lg:min-h-[520px]">
       <Image
         src="/images/hero-optical-store-product-scene.png"
-        alt="Premium eyewear display at Titan Opticals"
+        alt="Premium eyewear display at Titan Optical"
         width={1400}
         height={1050}
         priority={true}

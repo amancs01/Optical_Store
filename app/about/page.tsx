@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "About",
   description:
-    "Learn about Titan Opticals, a New Road optical store offering eyewear, sunglasses, lenses, and eye-care support in Kathmandu.",
+    "Learn about Titan Optical, a New Road optical store offering eyewear, sunglasses, lenses, and eye-care support in Kathmandu.",
   path: "/about",
 });
 
@@ -33,7 +33,7 @@ export default function AboutPage() {
         <div className="relative min-h-[240px] overflow-hidden rounded-md border border-slate-200 bg-[#fffaf2]/60 shadow-sm sm:min-h-[360px]">
           <Image
             src="/images/02_store_interior_luxury_eyewear.png"
-            alt="Luxury eyewear store interior at Titan Opticals in New Road"
+            alt="Luxury eyewear store interior at Titan Optical in New Road"
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 54vw"

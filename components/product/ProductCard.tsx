@@ -61,7 +61,7 @@ export function ProductImageFallback({ name }: { name: string }) {
         <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-white/15 ring-1 ring-white/30 sm:h-14 sm:w-14">
           <Glasses className="h-7 w-7 sm:h-8 sm:w-8" aria-hidden="true" />
         </div>
-        <p className="mt-3 text-[10px] font-bold uppercase tracking-wide text-emerald-50">Titan Opticals</p>
+        <p className="mt-3 text-[10px] font-bold uppercase tracking-wide text-emerald-50">Titan Optical</p>
         <p className="mt-1 line-clamp-2 text-sm font-semibold text-white/90">{name}</p>
       </div>
     </div>

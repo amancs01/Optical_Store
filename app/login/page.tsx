@@ -63,7 +63,7 @@ export default function LoginPage() {
       <form onSubmit={submit} className="w-full rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">{SITE_CONFIG.name}</p>
         <h1 className="mt-1 text-3xl font-black">Sign in</h1>
-        <p className="mt-2 text-sm text-slate-600">Use your Titan Opticals account for orders, bookings, or admin access.</p>
+        <p className="mt-2 text-sm text-slate-600">Use your Titan Optical account for orders, bookings, or admin access.</p>
         {!isSupabaseConfigured ? <div className="mt-5"><StateMessage title="Supabase is not configured" message="Add Supabase variables to sign in." /></div> : null}
         {error ? <p className="mt-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">{error}</p> : null}
         <Field name="email" label="Email" type="email" required error={fieldErrors.email} className="mt-5" />

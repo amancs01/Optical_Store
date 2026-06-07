@@ -90,7 +90,7 @@ function FormPage({
 }) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-7 sm:px-6 lg:px-8">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Opticals</p>
+      <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Optical</p>
       <h1 className="mt-1 text-3xl font-black sm:text-4xl">{title}</h1>
       {disabled ? <div className="mt-6"><StateMessage title="Supabase is not configured" message="Add Supabase variables before booking." /></div> : null}
       <form onSubmit={submit} className="mt-5 grid gap-4 rounded-md border border-slate-200 bg-white p-5 shadow-sm">

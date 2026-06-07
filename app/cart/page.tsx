@@ -13,7 +13,7 @@ export default function CartPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Opticals</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Optical</p>
         <h1 className="mt-1 text-3xl font-black sm:text-4xl">Your cart</h1>
       </div>
       {!hydrated ? (
@@ -23,7 +23,7 @@ export default function CartPage() {
       ) : !items.length ? (
         <div className="mt-8 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-8 text-center">
           <p className="text-xl font-bold text-slate-950">Your cart is waiting for the perfect frame.</p>
-          <p className="mt-2 text-sm text-slate-600">Browse Titan Opticals eyewear and add your favorite frame when you are ready.</p>
+          <p className="mt-2 text-sm text-slate-600">Browse Titan Optical eyewear and add your favorite frame when you are ready.</p>
           <LinkButton href="/products" className="mt-4">Continue shopping</LinkButton>
         </div>
       ) : (

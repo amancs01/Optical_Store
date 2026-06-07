@@ -58,7 +58,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                 {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
               <Link href="/admin" className="truncate text-base font-black text-slate-950 sm:text-lg">
-                Titan Opticals Admin
+                Titan Optical Admin
               </Link>
             </div>
             <div className="flex items-center gap-2">

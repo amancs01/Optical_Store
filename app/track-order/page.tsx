@@ -34,7 +34,7 @@ export default function TrackOrderPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 lg:px-8">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Opticals</p>
+      <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Optical</p>
       <h1 className="mt-1 text-3xl font-black sm:text-4xl">Track order</h1>
       <form onSubmit={submit} className="mt-5 flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4 shadow-sm sm:flex-row">
         <input value={query} onChange={(e) => setQuery(e.target.value)} required placeholder="Order number or phone number" className="min-h-11 flex-1 rounded-md border border-slate-200 px-3" />

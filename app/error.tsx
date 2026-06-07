@@ -8,7 +8,7 @@ export default function ErrorPage({ unstable_retry }: { error: Error & { digest?
   return (
     <main className="mx-auto grid min-h-[64vh] max-w-3xl place-items-center px-4 py-12 text-center sm:px-6 lg:px-8">
       <div className="rounded-md border border-emerald-100 bg-white p-8 shadow-sm">
-        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Opticals</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Optical</p>
         <h1 className="mt-3 font-serif text-4xl font-black text-slate-950">Something went wrong</h1>
         <p className="mt-3 text-slate-600">
           We could not load this page properly. Please try again, or return home and continue browsing.

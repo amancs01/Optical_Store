@@ -1,9 +1,9 @@
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Contact Titan Opticals",
+  title: "Contact Titan Optical",
   description:
-    "Contact Titan Opticals at Kichapokhari, New Road, opposite NMB Bank for eyewear, orders, and eye checkup booking support.",
+    "Contact Titan Optical at Kichapokhari, New Road, opposite NMB Bank for eyewear, orders, and eye checkup booking support.",
   path: "/contact",
 });
 

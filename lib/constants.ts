@@ -1,11 +1,11 @@
 export const SITE_CONFIG = {
-  name: "Titan Opticals",
+  name: "Titan Optical",
   tagline: "Premium eyewear, sunglasses, lenses, and eye care service in Kathmandu.",
   description:
-    "Titan Opticals is a premium optical store in New Road, Kathmandu, offering eyewear, sunglasses, lenses, and eye-care support.",
-  phone: "9802776649",
-  phoneDisplay: "+977-9802776649",
-  whatsapp: "9802776649",
+    "Titan Optical is a premium optical store in New Road, Kathmandu, offering eyewear, sunglasses, lenses, and eye-care support.",
+  phone: "9808547043",
+  phoneDisplay: "+977-9808547043",
+  whatsapp: "9808547043",
   email: "watchsunglasses5@gmail.com",
   emailNote: "Business email (temporary)",
   address: "Kichapokhari, New Road, opposite NMB Bank",

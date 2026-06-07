@@ -19,6 +19,8 @@ type ProductFilters = {
   gender: string;
   frame: string;
   shape: string;
+  material: string;
+  price: string;
   sort: string;
 };
 
@@ -29,6 +31,12 @@ const sortOptions = [
   { label: "Price: High to Low", value: "price-high" },
   { label: "Name: A to Z", value: "name-asc" },
   { label: "Name: Z to A", value: "name-desc" },
+];
+const priceRanges = [
+  { label: "Under NPR 2,000", value: "0-2000", min: 0, max: 2000 },
+  { label: "NPR 2,000 - 5,000", value: "2000-5000", min: 2000, max: 5000 },
+  { label: "NPR 5,000 - 10,000", value: "5000-10000", min: 5000, max: 10000 },
+  { label: "Above NPR 10,000", value: "10000-", min: 10000, max: Number.POSITIVE_INFINITY },
 ];
 
 export default function ProductsPage() {
@@ -54,6 +62,7 @@ export default function ProductsPage() {
     () => Array.from(new Set([...FRAME_SHAPES, ...products.map((p) => p.shape).filter(Boolean)])) as string[],
     [products],
   );
+  const materials = useMemo(() => Array.from(new Set(products.map((p) => p.material).filter(Boolean))) as string[], [products]);
 
   const visible = useMemo(() => {
     const term = filters.search.trim().toLowerCase();
@@ -66,7 +75,9 @@ export default function ProductsPage() {
         (!filters.brand || product.brand === filters.brand) &&
         (!filters.gender || product.gender === filters.gender) &&
         (!filters.frame || product.frame_type === filters.frame) &&
-        (!filters.shape || product.shape === filters.shape)
+        (!filters.shape || product.shape === filters.shape) &&
+        (!filters.material || product.material === filters.material) &&
+        matchesPriceRange(product, filters.price)
       );
     });
 
@@ -79,10 +90,10 @@ export default function ProductsPage() {
     });
   }, [filters, products]);
 
-  const hasFilters = Boolean(filters.search || filters.category || filters.brand || filters.gender || filters.frame || filters.shape);
+  const hasFilters = Boolean(filters.search || filters.category || filters.brand || filters.gender || filters.frame || filters.shape || filters.material || filters.price);
 
   function resetFilters() {
-    updateFilters({ search: "", category: "", brand: "", gender: "", frame: "", shape: "", sort: "newest" });
+    updateFilters({ search: "", category: "", brand: "", gender: "", frame: "", shape: "", material: "", price: "", sort: "newest" });
   }
 
   function updateFilters(newFilters: ProductFilters) {
@@ -95,7 +106,7 @@ export default function ProductsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
       <div className="mb-6">
-        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Opticals collection</p>
+        <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Optical collection</p>
         <h1 className="mt-1 animate-fade-up text-3xl font-black sm:text-4xl">Shop eyewear</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">Search and filter premium frames, sunglasses, and contact lenses.</p>
       </div>
@@ -154,11 +165,19 @@ export default function ProductsPage() {
         </div>
 
         {filtersOpen ? (
-          <div className="mt-4 grid gap-3 rounded-md border border-emerald-100 bg-emerald-50/40 p-3 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-4 grid gap-3 rounded-md border border-emerald-100 bg-emerald-50/40 p-3 sm:grid-cols-2 lg:grid-cols-6">
             <Select label="Brand" value={filters.brand} options={brands} onChange={(value) => updateFilters({ ...filters, brand: value })} />
             <Select label="Gender" value={filters.gender} options={GENDERS} onChange={(value) => updateFilters({ ...filters, gender: value })} />
             <Select label="Frame Type" value={filters.frame} options={FRAME_TYPES} onChange={(value) => updateFilters({ ...filters, frame: value })} />
             <Select label="Shape" value={filters.shape} options={shapes} onChange={(value) => updateFilters({ ...filters, shape: value })} />
+            <Select label="Material" value={filters.material} options={materials} onChange={(value) => updateFilters({ ...filters, material: value })} />
+            <Select
+              label="Price Range"
+              value={filters.price}
+              options={priceRanges.map((range) => range.label)}
+              values={priceRanges.map((range) => range.value)}
+              onChange={(value) => updateFilters({ ...filters, price: value })}
+            />
             <button type="button" onClick={resetFilters} className="h-11 rounded-md border border-emerald-200 bg-white px-3 text-sm font-bold text-emerald-900 hover:bg-emerald-50">
               Reset filters
             </button>
@@ -204,8 +223,18 @@ function filtersFromParams(searchParams: { get: (key: string) => string | null }
     gender: searchParams.get("gender") || "",
     frame: searchParams.get("frame") || "",
     shape: searchParams.get("shape") || "",
+    material: searchParams.get("material") || "",
+    price: searchParams.get("price") || "",
     sort: searchParams.get("sort") || "newest",
   };
+}
+
+function matchesPriceRange(product: Product, value: string) {
+  if (!value) return true;
+  const range = priceRanges.find((item) => item.value === value);
+  if (!range) return true;
+  const price = getSalePrice(product);
+  return price >= range.min && price <= range.max;
 }
 
 function Select({

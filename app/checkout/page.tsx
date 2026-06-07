@@ -123,7 +123,7 @@ export default function CheckoutPage() {
         <section className="rounded-md border border-emerald-100 bg-emerald-50/70 p-4">
           <h2 className="text-lg font-bold text-slate-950">Payment Method</h2>
           <p className="mt-2 text-sm font-semibold text-slate-700">Cash on Delivery</p>
-          <p className="mt-1 text-sm text-slate-600">Titan Opticals may call or WhatsApp you to confirm availability, delivery details, and any prescription lens requirements before dispatch.</p>
+          <p className="mt-1 text-sm text-slate-600">Titan Optical may call or WhatsApp you to confirm availability, delivery details, and any prescription lens requirements before dispatch.</p>
         </section>
         <div className="grid gap-2 rounded-md border border-emerald-100 bg-[#fffaf2]/60 p-3 text-sm font-semibold text-slate-700 sm:grid-cols-3">
           <div className="flex items-center gap-2">
@@ -192,7 +192,7 @@ function OrderConfirmation({ confirmation }: { confirmation: Confirmation }) {
         <div className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 p-4">
           <p className="text-sm font-bold text-emerald-800">What happens next</p>
           <ul className="mt-2 grid gap-1.5 text-sm text-emerald-900">
-            <li>1. Titan Opticals will call or WhatsApp you within a few hours to confirm your order and delivery details.</li>
+            <li>1. Titan Optical will call or WhatsApp you within a few hours to confirm your order and delivery details.</li>
             <li>2. Your order will be prepared and dispatched. Delivery inside Kathmandu Valley is typically 1-3 days.</li>
             <li>3. Pay cash to the delivery person when your order arrives.</li>
           </ul>

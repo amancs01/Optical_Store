@@ -1,6 +1,6 @@
-# Titan Opticals
+# Titan Optical
 
-Premium eyewear ecommerce site for Titan Opticals in Kichapokhari, New Road, Kathmandu. The app supports product browsing, cart, Cash on Delivery checkout, order tracking, eye-checkup bookings, contact messages, customer accounts, My Orders, and a protected admin dashboard.
+Premium eyewear ecommerce site for Titan Optical in Kichapokhari, New Road, Kathmandu. The app supports product browsing, cart, Cash on Delivery checkout, order tracking, eye-checkup bookings, contact messages, customer accounts, My Orders, and a protected admin dashboard.
 
 ## Tech Stack
 

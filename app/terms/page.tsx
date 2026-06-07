@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Terms",
   description:
-    "Read the terms for using the Titan Opticals website to browse products, place orders, book eye checkups, and contact the store.",
+    "Read the terms for using the Titan Optical website to browse products, place orders, book eye checkups, and contact the store.",
   path: "/terms",
 });
 
@@ -14,7 +14,7 @@ export default function TermsPage() {
       <h1 className="text-4xl font-black">Terms</h1>
       <div className="mt-6 space-y-5 leading-8 text-slate-600">
         <p>
-          By using the Titan Opticals website, customers agree to use the site for browsing products, placing genuine
+          By using the Titan Optical website, customers agree to use the site for browsing products, placing genuine
           orders, booking eye checkups, and contacting the store.
         </p>
         <p>
@@ -35,7 +35,7 @@ export default function TermsPage() {
           items may have additional limits because they are prepared or handled specifically for the customer.
         </p>
         <p>
-          For questions about orders, product availability, policies, or store service, contact Titan Opticals at{" "}
+          For questions about orders, product availability, policies, or store service, contact Titan Optical at{" "}
           <a className="font-semibold text-emerald-700" href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a> or{" "}
           <a className="font-semibold text-emerald-700" href={`tel:${SITE_CONFIG.phone}`}>{SITE_CONFIG.phoneDisplay}</a>.
         </p>

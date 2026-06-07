@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Shipping Policy",
   description:
-    "Read Titan Opticals shipping details for Kathmandu Valley delivery, courier delivery across Nepal, and prescription lens order timing.",
+    "Read Titan Optical shipping details for Kathmandu Valley delivery, courier delivery across Nepal, and prescription lens order timing.",
   path: "/shipping-policy",
 });
 
@@ -14,7 +14,7 @@ export default function ShippingPolicyPage() {
       <h1 className="text-4xl font-black">Shipping Policy</h1>
       <div className="mt-6 space-y-6 leading-8 text-slate-600">
         <p>
-          Titan Opticals provides free delivery inside Kathmandu Valley, covering Kathmandu, Lalitpur, and Bhaktapur.
+          Titan Optical provides free delivery inside Kathmandu Valley, covering Kathmandu, Lalitpur, and Bhaktapur.
           Orders received before 4:00 PM are prepared for same-day dispatch whenever stock and delivery timing allow.
           Orders placed later in the day may be dispatched on the following day.
         </p>
@@ -33,7 +33,7 @@ export default function ShippingPolicyPage() {
         </p>
         <p>
           Courier partners may attempt delivery more than once. If delivery cannot be completed because of an incorrect
-          address, unavailable customer, or unreachable phone number, Titan Opticals may contact the customer to arrange
+          address, unavailable customer, or unreachable phone number, Titan Optical may contact the customer to arrange
           redelivery or receive further instructions.
         </p>
         <p>

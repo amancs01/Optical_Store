@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   try {
     const product = await getProductBySlug(slug);
-    const description = product.description || `Shop ${product.name} at Titan Opticals in New Road, Kathmandu.`;
+    const description = product.description || `Shop ${product.name} at Titan Optical in New Road, Kathmandu.`;
 
     return {
       title: product.name,
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   } catch {
     return {
       title: "Product not found",
-      description: "This Titan Opticals product is unavailable.",
+      description: "This Titan Optical product is unavailable.",
     };
   }
 }
@@ -130,7 +130,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <div className="mt-4 grid gap-2 sm:grid-cols-3 sm:gap-3">
             {[
               [Truck, "Free Valley delivery", SITE_CONFIG.deliveryNote, "/shipping-policy"],
-              [MessageCircle, "Need help choosing?", "Message us on WhatsApp for frame guidance.", `https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Opticals, I need help choosing eyewear.")}`],
+              [MessageCircle, "Need help choosing?", "Message us on WhatsApp for frame guidance.", `https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Optical, I need help choosing eyewear.")}`],
               [CalendarCheck, "Eye checkup available", "Book an appointment before choosing lenses.", "/book-eye-checkup"],
             ].map(([Icon, title, text, href]) => (
               <a key={String(title)} href={String(href)} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3 text-sm shadow-sm hover:border-emerald-200 sm:p-4">
