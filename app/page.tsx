@@ -67,7 +67,7 @@ const categoryDropdowns: Record<string, CategoryDropdownItem[]> = {
   Sunglasses: [
     { label: "Men", href: "/products?category=Sunglasses&gender=Men", image: "/images/dropdowns/sunglasses-men.png" },
     { label: "Women", href: "/products?category=Sunglasses&gender=Women", image: "/images/dropdowns/sunglasses-women.png" },
-    { label: "Unisex", href: "/products?category=Sunglasses&gender=Unisex", image: "/images/dropdowns/sunglasses-men.png" },
+    { label: "Unisex", href: "/products?category=Sunglasses&gender=Unisex", image: "/images/dropdowns/sunglasses-unisex.png" },
   ],
   "Kids Frames": [
     { label: "1-5 years", href: "/products?category=Kids%20Frames&age=1-5", image: "/images/dropdowns/kids-1-5.png" },
