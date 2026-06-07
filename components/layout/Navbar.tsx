@@ -44,12 +44,11 @@ const mobileLinks = [
   ["Home", "/"],
   ["Eyeglasses", "/products?category=Eyeglasses"],
   ["Sunglasses", "/products?category=Sunglasses"],
-  ["Contact Us", "/contact"],
-  ["Free Eye Checkup", "/book-eye-checkup"],
   ["Contact Lenses", "/products?category=Contact%20Lenses"],
   ["Kids Frames", "/products?category=Kids%20Frames"],
   ["Track Order", "/track-order"],
   ["About Us", "/about"],
+  ["Contact Us", "/contact"],
 ];
 
 export function Navbar() {
@@ -182,45 +181,35 @@ export function Navbar() {
         </div>
       </div>
       {open ? (
-        <nav className="border-t border-slate-200 bg-white px-4 py-3 lg:hidden">
-          {mobileLinks.map(([label, href]) => {
-            const isCheckup = href === "/book-eye-checkup";
-
-            return (
+        <nav className="border-t border-slate-200 bg-white px-4 py-4 shadow-lg shadow-slate-950/5 lg:hidden">
+          <div className="grid gap-1">
+            {mobileLinks.map(([label, href], index) => (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  "block rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-900",
+                  "block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-900",
                   isActivePath(pathname, href) && "bg-emerald-50 text-emerald-900",
-                  isCheckup && "mb-1 flex items-center justify-between border border-emerald-200 bg-emerald-50 text-emerald-900",
+                  index === 5 && "mt-2 border-t border-slate-100 pt-3",
                 )}
                 onClick={() => setOpen(false)}
               >
-                <span className={cn(isCheckup && "inline-flex items-center gap-2")}>
-                  {isCheckup ? <CalendarCheck className="h-4 w-4" aria-hidden="true" /> : null}
-                  {label}
-                </span>
-                {isCheckup ? (
-                  <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-emerald-700">
-                    Free
-                  </span>
-                ) : null}
+                {label}
               </Link>
-            );
-          })}
+            ))}
+          </div>
           {user ? (
-            <>
+            <div className="mt-3 border-t border-slate-100 pt-3">
               <Link
                 href="/account"
-                className="block rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50"
+                className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50"
                 onClick={() => setOpen(false)}
               >
                 My Account
               </Link>
               <Link
                 href="/account/orders"
-                className="block rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50"
+                className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50"
                 onClick={() => setOpen(false)}
               >
                 My Orders
@@ -228,7 +217,7 @@ export function Navbar() {
               {isAdmin ? (
                 <Link
                   href="/admin"
-                  className="block rounded-md bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-900 hover:bg-emerald-100"
+                  className="block rounded-xl bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-900 hover:bg-emerald-100"
                   onClick={() => setOpen(false)}
                 >
                   Admin Dashboard
@@ -236,30 +225,48 @@ export function Navbar() {
               ) : null}
               <button
                 type="button"
-                className="block w-full rounded-md px-3 py-2 text-left text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                className="block w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-slate-700 hover:bg-slate-50"
                 onClick={logout}
               >
                 Logout
               </button>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="mt-3 border-t border-slate-100 pt-3">
               <Link
                 href="/login"
-                className="block rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50"
+                className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50"
                 onClick={() => setOpen(false)}
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="block rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-emerald-50"
+                className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50"
                 onClick={() => setOpen(false)}
               >
                 Register
               </Link>
-            </>
+            </div>
           )}
+          <Link
+            href="/book-eye-checkup"
+            className="mt-4 flex w-full items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-emerald-950 shadow-sm shadow-emerald-950/5"
+            onClick={() => setOpen(false)}
+          >
+            <span className="inline-flex min-w-0 items-center gap-3">
+              <span className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-white text-emerald-700 shadow-sm">
+                <CalendarCheck className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-sm font-black">Free Eye Checkup</span>
+                <span className="block text-xs font-semibold text-emerald-700">Book a visit at Titan Optical</span>
+              </span>
+            </span>
+            <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-emerald-700">
+              Free
+            </span>
+          </Link>
         </nav>
       ) : null}
     </header>
