@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+PERFORMANCE_NOTES.md 
+CLEANUP_NOTES.md
+PHASE_2_FEATURES.md
+
