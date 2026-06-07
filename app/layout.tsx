@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { CartProvider } from "@/components/cart/CartProvider";
-import { BottomNav } from "@/components/layout/BottomNav";
-import { Footer } from "@/components/layout/Footer";
-import { MainContent } from "@/components/layout/MainContent";
-import { Navbar } from "@/components/layout/Navbar";
-import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
+import { AppShell } from "@/components/layout/AppShell";
 import { SITE_CONFIG } from "@/lib/constants";
 import { absoluteUrl, getSiteUrl } from "@/lib/seo";
 import "./globals.css";
@@ -57,13 +53,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${playfair.variable} h-full antialiased`}>
       <body className="min-h-full bg-[#fffaf2] text-slate-950">
         <CartProvider>
-          <div className="flex min-h-screen flex-col">
-            <Navbar />
-            <MainContent>{children}</MainContent>
-            <Footer />
-            <WhatsAppButton />
-            <BottomNav />
-          </div>
+          <AppShell>{children}</AppShell>
         </CartProvider>
       </body>
     </html>

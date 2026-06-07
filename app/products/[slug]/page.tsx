@@ -144,7 +144,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       {similar.length ? (
         <section className="mt-14">
           <h2 className="text-2xl font-bold">Similar products</h2>
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+          <div className="mt-5 grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {similar.map((item) => <ProductCard key={item.id} product={item} />)}
           </div>
         </section>

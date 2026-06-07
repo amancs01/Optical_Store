@@ -4,7 +4,7 @@ import { ArrowRight, CalendarCheck, Eye, Glasses, MessageCircle, Search, ShieldC
 import { LinkButton } from "@/components/ui/Button";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { ProductCard } from "@/components/product/ProductCard";
-import { SITE_CONFIG } from "@/lib/constants";
+import { FRAME_SHAPES, SITE_CONFIG } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getFeaturedProducts } from "@/services/productService";
 import { pageMetadata } from "@/lib/seo";
@@ -55,6 +55,19 @@ const bookingCategory = {
 };
 
 const quickLinks = [...categories, bookingCategory];
+
+const shapeCards = FRAME_SHAPES.map((shape, index) => ({
+  title: shape,
+  href: `/products?shape=${encodeURIComponent(shape)}`,
+  image: [
+    "/images/11_gold_aviator_sunglasses.png",
+    "/images/04_pastel_glasses_product_shot.png",
+    "/images/10_dark_tortoiseshell_frame_product.png",
+    "/images/09_dual_frame_display.png",
+    "/images/05_marble_sunglasses_display.png",
+    "/images/category-sunglasses.png",
+  ][index],
+}));
 
 const serviceHighlights = [
   {
@@ -191,6 +204,40 @@ export default async function HomePage() {
 
       <FadeIn delay={100}>
         <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Frame shapes</p>
+              <h2 className="mt-1 text-2xl font-bold sm:text-3xl">Shop by frame shape</h2>
+              <p className="mt-2 text-sm text-slate-600">Find frames that match your face and style.</p>
+            </div>
+            <Link href="/products" className="text-sm font-bold text-emerald-800 hover:text-emerald-950">
+              View all
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {shapeCards.map((shape) => (
+              <Link key={shape.title} href={shape.href} className="group overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm hover:border-emerald-200 hover:shadow-md">
+                <div className="relative aspect-[4/3] overflow-hidden bg-emerald-50">
+                  <Image
+                    src={shape.image}
+                    alt={`${shape.title} frame shape`}
+                    fill
+                    className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-2 px-3 py-3">
+                  <p className="text-sm font-bold text-slate-950">{shape.title}</p>
+                  <ArrowRight className="h-4 w-4 flex-none text-emerald-700" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn delay={100}>
+        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="mb-7 flex items-end justify-between gap-4">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Popular picks</p>
@@ -199,7 +246,7 @@ export default async function HomePage() {
             <LinkButton href="/products" variant="secondary">View all</LinkButton>
           </div>
           {products.length ? (
-            <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+            <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {products.map((product) => <ProductCard key={product.id} product={product} />)}
             </div>
           ) : (

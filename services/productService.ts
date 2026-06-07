@@ -16,14 +16,15 @@ export async function getActiveProducts() {
   return (data || []) as Product[];
 }
 
-export async function getFeaturedProducts() {
+export async function getFeaturedProducts(limit = 10) {
   const supabase = requireSupabase();
   const { data, error } = await supabase
     .from("products")
     .select(productSelect)
     .eq("is_active", true)
-    .eq("is_featured", true)
-    .limit(6);
+    .order("is_featured", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(limit);
 
   if (error) throw error;
   return (data || []) as Product[];

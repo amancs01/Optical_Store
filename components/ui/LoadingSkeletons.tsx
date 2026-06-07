@@ -1,17 +1,15 @@
 export function ProductGridSkeleton() {
   return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-label="Loading products">
-      {Array.from({ length: 6 }).map((_, index) => (
-        <div key={index} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="aspect-[4/3] animate-pulse bg-[#f0ebe2]" />
-          <div className="grid gap-3 p-4">
-            <div className="h-3 w-24 animate-pulse rounded bg-[#f0ebe2]" />
-            <div className="h-5 w-4/5 animate-pulse rounded bg-[#f0ebe2]" />
-            <div className="flex items-center justify-between">
-              <div className="h-5 w-20 animate-pulse rounded bg-[#f0ebe2]" />
-              <div className="h-3 w-16 animate-pulse rounded bg-[#f0ebe2]" />
-            </div>
-            <div className="h-11 animate-pulse rounded-md bg-[#f0ebe2]" />
+    <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" aria-label="Loading products">
+      {Array.from({ length: 10 }).map((_, index) => (
+        <div key={index} className="flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+          <div className="aspect-square animate-pulse bg-[#f0ebe2] sm:aspect-[4/3]" />
+          <div className="flex flex-1 flex-col gap-2 p-2.5 sm:p-3">
+            <div className="h-3 w-20 animate-pulse rounded bg-[#f0ebe2]" />
+            <div className="h-10 w-full animate-pulse rounded bg-[#f0ebe2]" />
+            <div className="h-5 w-24 animate-pulse rounded bg-[#f0ebe2]" />
+            <div className="h-4 w-20 animate-pulse rounded-full bg-[#f0ebe2]" />
+            <div className="mt-auto h-9 animate-pulse rounded-md bg-[#f0ebe2]" />
           </div>
         </div>
       ))}

@@ -26,5 +26,6 @@ export const SITE_CONFIG = {
 export const CATEGORIES = ["Eyeglasses", "Sunglasses", "Contact Lenses", "Kids Frames"];
 export const GENDERS = ["Men", "Women", "Unisex", "Kids"];
 export const FRAME_TYPES = ["Full Rim", "Half Rim", "Rimless", "Aviator", "Wayfarer"];
+export const FRAME_SHAPES = ["Aviator", "Round", "Rectangle", "Square", "Cat Eye", "Wayfarer"];
 export const ORDER_STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"];
 export const BOOKING_STATUSES = ["pending", "confirmed", "completed", "cancelled"];
