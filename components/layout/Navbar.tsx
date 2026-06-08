@@ -294,8 +294,7 @@ function toDropdownItems(items: string[][]) {
 
 function isActivePath(pathname: string | null, href: string) {
   if (!pathname) return false;
-  const [path, query] = href.split("?");
-  if (query) return false;
+  const [path] = href.split("?");
   return pathname === path || (path !== "/" && pathname.startsWith(`${path}/`));
 }
 

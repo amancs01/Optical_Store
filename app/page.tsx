@@ -77,17 +77,19 @@ const categoryDropdowns: Record<string, CategoryDropdownItem[]> = {
   ],
 };
 
-const shapeCards = FRAME_SHAPES.map((shape, index) => ({
+const shapeImages: Record<string, string> = {
+  Aviator: "/images/11_gold_aviator_sunglasses.png",
+  Round: "/images/04_pastel_glasses_product_shot.png",
+  Rectangle: "/images/10_dark_tortoiseshell_frame_product.png",
+  Square: "/images/09_dual_frame_display.png",
+  "Cat Eye": "/images/05_marble_sunglasses_display.png",
+  Wayfarer: "/images/category-sunglasses.png",
+};
+
+const shapeCards = FRAME_SHAPES.map((shape) => ({
   title: shape,
   href: `/products?shape=${encodeURIComponent(shape)}`,
-  image: [
-    "/images/11_gold_aviator_sunglasses.png",
-    "/images/04_pastel_glasses_product_shot.png",
-    "/images/10_dark_tortoiseshell_frame_product.png",
-    "/images/09_dual_frame_display.png",
-    "/images/05_marble_sunglasses_display.png",
-    "/images/category-sunglasses.png",
-  ][index],
+  image: shapeImages[shape] || "/images/04_pastel_glasses_product_shot.png",
 }));
 
 const serviceHighlights = [

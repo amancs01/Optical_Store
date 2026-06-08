@@ -17,16 +17,12 @@ export function FadeIn({
   immediate?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(immediate);
 
   useEffect(() => {
+    if (immediate) return;
     const node = ref.current;
     if (!node) return;
-
-    if (immediate) {
-      setIsVisible(true);
-      return;
-    }
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
