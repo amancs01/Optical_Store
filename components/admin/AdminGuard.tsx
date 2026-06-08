@@ -4,12 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { useAdminStatus } from "@/lib/auth/admin";
+import { useCurrentUser } from "@/lib/auth/admin";
 import { StateMessage } from "@/components/ui/StateMessage";
 
 export function AdminGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { user, isAdmin, loading } = useAdminStatus();
+  const { user, isAdmin, loading } = useCurrentUser();
 
   useEffect(() => {
     if (loading) return;

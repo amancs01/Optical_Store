@@ -6,12 +6,12 @@ import { ProductForm } from "@/components/admin/ProductForm";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { getProductById } from "@/services/productService";
 import type { Product } from "@/types/product";
-import { useAdminStatus } from "@/lib/auth/admin";
+import { useCurrentUser } from "@/lib/auth/admin";
 
 export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [error, setError] = useState("");
-  const { isAdmin } = useAdminStatus();
+  const { isAdmin } = useCurrentUser();
 
   useEffect(() => {
     if (!isAdmin) return;

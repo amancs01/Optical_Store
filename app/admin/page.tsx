@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { getAdminDashboardStats, type AdminDashboardStats } from "@/services/adminService";
-import { useAdminStatus } from "@/lib/auth/admin";
+import { useCurrentUser } from "@/lib/auth/admin";
 
 export default function AdminPage() {
   const [stats, setStats] = useState<AdminDashboardStats>({ products: 0, active: 0, pending: 0, bookings: 0, messages: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { isAdmin } = useAdminStatus();
+  const { isAdmin } = useCurrentUser();
 
   useEffect(() => {
     if (!isAdmin) return;

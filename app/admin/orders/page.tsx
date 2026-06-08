@@ -9,7 +9,7 @@ import { formatCurrency } from "@/lib/utils";
 import { formatOrderStatus } from "@/lib/orderStatus";
 import { getOrders, updateOrderStatus } from "@/services/orderService";
 import type { Order, OrderItem } from "@/types/order";
-import { useAdminStatus } from "@/lib/auth/admin";
+import { useCurrentUser } from "@/lib/auth/admin";
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<(Order & { order_items?: OrderItem[] })[]>([]);
@@ -17,7 +17,7 @@ export default function AdminOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [updating, setUpdating] = useState<Record<string, boolean>>({});
-  const { isAdmin } = useAdminStatus();
+  const { isAdmin } = useCurrentUser();
 
   function load() {
     setLoading(true);

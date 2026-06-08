@@ -6,13 +6,13 @@ import { StateMessage } from "@/components/ui/StateMessage";
 import { BOOKING_STATUSES } from "@/lib/constants";
 import { getBookings, updateBookingStatus } from "@/services/bookingService";
 import type { Booking } from "@/types/order";
-import { useAdminStatus } from "@/lib/auth/admin";
+import { useCurrentUser } from "@/lib/auth/admin";
 
 export default function AdminBookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { isAdmin } = useAdminStatus();
+  const { isAdmin } = useCurrentUser();
   function load() {
     setLoading(true);
     setError("");

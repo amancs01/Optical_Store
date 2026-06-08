@@ -5,13 +5,13 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { getAdminMessages, updateMessageStatus } from "@/services/contactService";
 import type { ContactMessage } from "@/types/order";
-import { useAdminStatus } from "@/lib/auth/admin";
+import { useCurrentUser } from "@/lib/auth/admin";
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { isAdmin } = useAdminStatus();
+  const { isAdmin } = useCurrentUser();
   function load() {
     setLoading(true);
     setError("");

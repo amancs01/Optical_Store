@@ -11,14 +11,14 @@ import { StateMessage } from "@/components/ui/StateMessage";
 import { deleteProduct, getAllProductsForAdmin } from "@/services/productService";
 import type { Product } from "@/types/product";
 import { formatCurrency } from "@/lib/utils";
-import { useAdminStatus } from "@/lib/auth/admin";
+import { useCurrentUser } from "@/lib/auth/admin";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { isAdmin } = useAdminStatus();
+  const { isAdmin } = useCurrentUser();
 
   function load() {
     setLoading(true);
