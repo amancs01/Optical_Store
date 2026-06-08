@@ -101,7 +101,7 @@ npm run build
 
 Customer routes include `/`, `/products`, `/products/[slug]`, `/cart`, `/checkout`, `/track-order`, `/book-eye-checkup`, `/contact`, `/account`, `/account/orders`, policy pages, login, and register.
 
-Admin routes include `/admin/login`, `/admin`, `/admin/products`, `/admin/products/new`, `/admin/products/[id]/edit`, `/admin/orders`, `/admin/bookings`, `/admin/messages`, and `/admin/logout`.
+Admin routes include `/admin/login`, `/admin`, `/admin/products`, `/admin/products/new`, `/admin/products/[id]/edit`, `/admin/orders`, `/admin/bookings`, and `/admin/messages`.
 
 ## Performance Notes
 
