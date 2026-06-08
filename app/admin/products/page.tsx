@@ -34,7 +34,7 @@ export default function AdminProductsPage() {
 
   useEffect(() => {
     if (!isAdmin) return;
-    window.queueMicrotask(load);
+    load();
   }, [isAdmin]);
   const visible = useMemo(() => products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())), [products, search]);
 

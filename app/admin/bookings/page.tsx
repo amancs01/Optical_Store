@@ -26,7 +26,7 @@ export default function AdminBookingsPage() {
   }
   useEffect(() => {
     if (!isAdmin) return;
-    window.queueMicrotask(load);
+    load();
   }, [isAdmin]);
 
   return (
