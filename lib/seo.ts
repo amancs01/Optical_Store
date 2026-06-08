@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/constants";
 
-const fallbackSiteUrl = "https://titanopticals.com";
+function defaultSiteUrl() {
+  if (process.env.NODE_ENV === "development") return "http://localhost:3000";
+  return "https://titanopticals.com";
+}
 
 export function getSiteUrl() {
+  const fallback = defaultSiteUrl();
   try {
     const url = new URL(SITE_CONFIG.siteUrl);
-    if (url.hostname === "localhost" || url.hostname === "127.0.0.1") return fallbackSiteUrl;
+    if (url.hostname === "localhost" || url.hostname === "127.0.0.1") return fallback;
     return url.origin;
   } catch {
-    return fallbackSiteUrl;
+    return fallback;
   }
 }
 
