@@ -9,10 +9,12 @@ export function FadeIn({
   children,
   delay = 0,
   className = "",
+  immediate = false,
 }: {
   children: ReactNode;
   delay?: FadeInDelay;
   className?: string;
+  immediate?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -20,6 +22,11 @@ export function FadeIn({
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
+
+    if (immediate) {
+      setIsVisible(true);
+      return;
+    }
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
@@ -40,7 +47,7 @@ export function FadeIn({
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [immediate]);
 
   return (
     <div
