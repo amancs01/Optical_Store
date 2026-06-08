@@ -4,7 +4,7 @@ import Link from "next/link";
 import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-export default function ErrorPage({ unstable_retry }: { error: Error & { digest?: string }; unstable_retry: () => void }) {
+export default function ErrorPage({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <main className="mx-auto grid min-h-[64vh] max-w-3xl place-items-center px-4 py-12 text-center sm:px-6 lg:px-8">
       <div className="rounded-md border border-emerald-100 bg-white p-8 shadow-sm">
@@ -14,7 +14,7 @@ export default function ErrorPage({ unstable_retry }: { error: Error & { digest?
           We could not load this page properly. Please try again, or return home and continue browsing.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Button onClick={() => unstable_retry()}>
+          <Button onClick={() => reset()}>
             <RefreshCw className="h-4 w-4" aria-hidden="true" /> Try again
           </Button>
           <Link
