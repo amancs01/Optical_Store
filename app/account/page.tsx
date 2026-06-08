@@ -13,7 +13,7 @@ export default function AccountPage() {
   const { user, isAdmin, loading, signOut } = useCurrentUser();
 
   useEffect(() => {
-    if (!loading && !user) router.replace("/login?redirectTo=/account");
+    if (!loading && !user) router.replace("/login?returnTo=/account");
   }, [loading, router, user]);
 
   async function logout() {

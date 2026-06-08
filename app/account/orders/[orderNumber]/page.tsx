@@ -24,7 +24,7 @@ export default function CustomerOrderDetailPage({ params }: { params: Promise<{ 
   useEffect(() => {
     if (authLoading || !isSupabaseConfigured) return;
     if (!user) {
-      router.replace("/login?redirectTo=/account/orders");
+      router.replace("/login?returnTo=/account/orders");
       return;
     }
 
