@@ -9,7 +9,7 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center gap-3">
-            <Image src={SITE_CONFIG.logoPath} alt={SITE_CONFIG.name} width={44} height={44} className="h-11 w-11 rounded-md object-contain" />
+            <Image src={SITE_CONFIG.logoPath} alt={SITE_CONFIG.name} width={44} height={44} loading="lazy" className="h-11 w-11 rounded-md object-contain" />
             <h2 className="text-xl font-bold">{SITE_CONFIG.name}</h2>
           </div>
           <p className="mt-3 text-sm text-slate-300">{SITE_CONFIG.description}</p>

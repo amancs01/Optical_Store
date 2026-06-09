@@ -22,6 +22,7 @@ export function ProductCard({ product }: { product: Product }) {
               src={product.image_url}
               alt={product.name}
               fill
+              loading="lazy"
               className="object-cover transition duration-500 md:group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
             />

@@ -255,13 +255,14 @@ export default async function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid overflow-hidden rounded-xl border border-slate-200 bg-[#fffaf2]/60 shadow-sm md:grid-cols-[0.95fr_1.05fr]">
           <div className="relative min-h-[190px] md:min-h-[320px]">
-            <Image
-              src="/images/09_dual_frame_display.png"
-              alt="Two premium eyewear frames displayed as a featured collection"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
+          <Image
+            src="/images/09_dual_frame_display.png"
+            alt="Two premium eyewear frames displayed as a featured collection"
+            fill
+            loading="lazy"
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
           </div>
           <div className="grid content-center p-5 sm:p-7 md:p-8">
             <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Store experience</p>
@@ -401,6 +402,7 @@ function TopCategoryCard({ category }: { category: (typeof quickLinks)[number] }
                     src={item.image}
                     alt=""
                     fill
+                    loading="lazy"
                     className="object-cover"
                     sizes="56px"
                   />
@@ -440,6 +442,7 @@ function VisualStoryCard({
           src={image}
           alt={alt}
           fill
+          loading="lazy"
           className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           sizes="(max-width: 768px) 100vw, 33vw"
         />

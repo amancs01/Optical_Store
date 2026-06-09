@@ -42,7 +42,7 @@ export default function CartPage() {
               <div key={item.productId} className="grid grid-cols-[76px_1fr] gap-3 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3 shadow-sm sm:grid-cols-[88px_1fr] sm:p-4 sm:items-start">
                 <Link href={`/products/${item.slug}`} className="relative h-20 overflow-hidden rounded-md bg-emerald-50 sm:h-24">
                   {item.imageUrl ? (
-                    <Image src={item.imageUrl} alt={item.name} fill className="object-cover" sizes="88px" />
+                    <Image src={item.imageUrl} alt={item.name} fill loading="lazy" className="object-cover" sizes="88px" />
                   ) : (
                     <div className="grid h-full place-items-center bg-emerald-700 text-white">
                       <Glasses className="h-8 w-8" aria-hidden="true" />
