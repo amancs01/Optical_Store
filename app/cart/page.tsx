@@ -49,7 +49,7 @@ export default function CartPage() {
                     </div>
                   )}
                 </Link>
-                <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
+                <div className="grid gap-3 sm:grid-cols-[1fr_auto] items-start">
                   <div>
                     <Link href={`/products/${item.slug}`} className="line-clamp-2 text-sm font-semibold hover:underline sm:text-base">{item.name}</Link>
                     <p className="mt-1 text-sm text-slate-600">{formatCurrency(item.price)} each</p>
