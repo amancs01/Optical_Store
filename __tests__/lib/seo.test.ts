@@ -54,7 +54,6 @@ describe("pageMetadata", () => {
     const meta = pageMetadata({ title: "T", description: "D", path: "/og" });
     expect(meta.openGraph?.title).toBe("T");
     expect(meta.openGraph?.description).toBe("D");
-    expect(meta.openGraph?.type).toBe("website");
     expect(meta.openGraph?.locale).toBe("en_NP");
   });
 

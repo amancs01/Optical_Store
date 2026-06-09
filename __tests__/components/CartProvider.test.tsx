@@ -17,7 +17,7 @@ function renderCart() {
 }
 
 function flushMicrotasks() {
-  return act(() => new Promise((r) => window.queueMicrotask(r)));
+  return act(() => new Promise<void>((r) => window.queueMicrotask(() => r())));
 }
 
 describe("CartProvider", () => {
