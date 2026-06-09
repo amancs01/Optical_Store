@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Home, ShoppingBag, ShoppingCart, User } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -16,6 +17,11 @@ const items = [
 export function BottomNav() {
   const pathname = usePathname();
   const { count } = useCart();
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   if (pathname?.startsWith("/admin")) return null;
 
@@ -36,7 +42,7 @@ export function BottomNav() {
             >
               <Icon className="h-5 w-5" aria-hidden="true" />
               <span>{label}</span>
-              {href === "/cart" && count > 0 ? (
+              {href === "/cart" && hydrated && count > 0 ? (
                 <span key={count} className="badge-pop absolute right-3 top-1 rounded-full bg-rose-600 px-1.5 text-[10px] leading-4 text-white">
                   {count}
                 </span>

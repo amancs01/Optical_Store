@@ -43,6 +43,7 @@ export default function AboutPage() {
             src="/images/02_store_interior_luxury_eyewear.png"
             alt="Luxury eyewear store interior at Titan Optical in New Road"
             fill
+            priority
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 54vw"
           />

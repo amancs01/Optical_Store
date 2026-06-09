@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CalendarCheck, CircleUser, LayoutDashboard, LogIn, LogOut, Menu, Package, ShoppingBag, UserPlus, X } from "lucide-react";
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { SITE_CONFIG } from "@/lib/constants";
 import { useCart } from "@/components/cart/CartProvider";
@@ -54,9 +54,14 @@ const mobileLinks = [
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const { count } = useCart();
   const { user, isAdmin, signOut } = useCurrentUser();
   const pathname = usePathname();
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   async function logout() {
     await signOut();
@@ -165,7 +170,7 @@ export function Navbar() {
             aria-label="Cart"
           >
             <ShoppingBag className="h-5 w-5" />
-            {count > 0 ? (
+            {hydrated && count > 0 ? (
               <span key={count} className="badge-pop absolute -right-1 -top-1 rounded-full bg-rose-600 px-1.5 text-xs font-bold text-white">
                 {count}
               </span>
