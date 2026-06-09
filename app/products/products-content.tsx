@@ -7,10 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/product/ProductCard";
 import { StateMessage } from "@/components/ui/StateMessage";
-import { ProductGridSkeleton } from "@/components/ui/LoadingSkeletons";
 import { CATEGORIES, FRAME_SHAPES, FRAME_TYPES, GENDERS } from "@/lib/constants";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { getActiveProducts } from "@/services/productService";
 import { cn, getSalePrice } from "@/lib/utils";
 import type { Product } from "@/types/product";
 
@@ -56,35 +53,18 @@ const mobilePriceRanges = [
   { label: "NPR 3,000+", value: "3000-", min: 3000, max: Number.POSITIVE_INFINITY },
 ];
 
-export default function ProductsContent() {
+export default function ProductsContent({
+  products = [],
+  error = "",
+}: {
+  products: Product[];
+  error: string;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(isSupabaseConfigured);
-  const [error, setError] = useState("");
   const [sortSheetOpen, setSortSheetOpen] = useState(false);
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
   const filters = useMemo(() => filtersFromParams(searchParams), [searchParams]);
-
-  useEffect(() => {
-    if (!isSupabaseConfigured) return;
-    let active = true;
-
-    getActiveProducts()
-      .then((activeProducts) => {
-        if (active) setProducts(activeProducts);
-      })
-      .catch((err) => {
-        if (active) setError(err instanceof Error ? err.message : "Could not load products.");
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
 
   useEffect(() => {
     function closeSheets(event: KeyboardEvent) {
@@ -302,7 +282,7 @@ export default function ProductsContent() {
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm text-slate-600">
         <div className="flex flex-wrap items-center gap-2">
-          <p>{loading ? "Loading collection..." : `${visible.length} ${visible.length === 1 ? "frame" : "frames"} found`}</p>
+          <p>{`${visible.length} ${visible.length === 1 ? "frame" : "frames"} found`}</p>
           {hasFilters ? (
             <div className="hidden flex-wrap gap-1.5 md:flex">
               {activeFilterLabels(filters).map((label) => (
@@ -320,11 +300,7 @@ export default function ProductsContent() {
         ) : null}
       </div>
 
-      {!isSupabaseConfigured ? (
-        <StateMessage title="Supabase is not configured" message="Add the public Supabase variables and run the schema to load products." />
-      ) : loading ? (
-        <ProductGridSkeleton />
-      ) : error ? (
+      {error ? (
         <StateMessage title="Products could not load" message={error} />
       ) : visible.length ? (
         <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
