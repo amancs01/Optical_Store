@@ -5,6 +5,7 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { ListSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { Pagination } from "@/components/ui/Pagination";
+import { Select } from "@/components/ui/Select";
 import { getAdminMessages, updateMessageStatus } from "@/services/contactService";
 import type { ContactMessage } from "@/types/order";
 import { useAdminStatus } from "@/lib/auth/admin";
@@ -45,7 +46,7 @@ export default function AdminMessagesPage() {
           <div key={message.id} className="rounded-md border border-slate-200 bg-white p-4">
             <div className="flex flex-wrap justify-between gap-3">
               <div><h2 className="font-black">{message.name}</h2><p className="text-sm text-slate-600">{message.phone} - {message.email}</p><p className="mt-2 text-sm text-slate-700">{message.message}</p></div>
-              <select value={message.status} onChange={(e) => updateMessageStatus(message.id, e.target.value).then(load)} className="h-11 rounded-md border border-slate-200 px-3 text-sm"><option value="new">new</option><option value="read">read</option><option value="resolved">resolved</option></select>
+              <Select value={message.status} onValueChange={(v) => updateMessageStatus(message.id, v).then(load)} items={["new", "read", "resolved"].map((s) => ({ label: s.charAt(0).toUpperCase() + s.slice(1), value: s }))} />
             </div>
           </div>
         ))}
