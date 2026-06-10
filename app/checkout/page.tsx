@@ -95,12 +95,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="mx-auto grid max-w-6xl gap-5 px-4 py-7 sm:px-6 lg:grid-cols-[1fr_340px] lg:px-8">
-      <div className="rounded-md border border-slate-200 bg-white p-4 lg:hidden">
-        <p className="text-sm font-bold text-slate-950">
-          {items.length} item{items.length !== 1 ? "s" : ""} · {formatCurrency(subtotal)}
-        </p>
-        <p className="mt-0.5 text-xs text-slate-500">Cash on Delivery · Free Valley delivery</p>
-      </div>
       <form onSubmit={submit} className="grid gap-5 rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:order-1">
         <div>
           <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Secure manual order</p>
@@ -117,10 +111,10 @@ export default function CheckoutPage() {
         </div>
         <label className="grid gap-2 text-sm font-semibold text-slate-700">
           Delivery address
-          <textarea name="delivery_address" required rows={3} aria-invalid={Boolean(fieldErrors.delivery_address)} className="rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100" />
+          <textarea name="delivery_address" required rows={3} aria-invalid={Boolean(fieldErrors.delivery_address)} className="min-h-[96px] rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100" />
           {fieldErrors.delivery_address ? <span className="text-xs font-semibold text-rose-700">{fieldErrors.delivery_address}</span> : null}
         </label>
-        <label className="grid gap-2 text-sm font-semibold text-slate-700">Notes<textarea name="notes" rows={3} className="rounded-md border border-slate-200 px-3 py-2 font-normal" /></label>
+        <label className="grid gap-2 text-sm font-semibold text-slate-700">Notes<textarea name="notes" rows={3} className="min-h-[96px] rounded-md border border-slate-200 px-3 py-2 font-normal" /></label>
         </section>
         <section className="rounded-md border border-emerald-100 bg-emerald-50/70 p-4">
           <h2 className="text-lg font-bold text-slate-950">Payment Method</h2>
@@ -143,12 +137,12 @@ export default function CheckoutPage() {
         </div>
         <Button disabled={saving}>{saving ? "Placing order..." : "Place order"}</Button>
       </form>
-      <aside className="order-first h-fit rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24 lg:order-2">
+      <aside className="order-first h-fit rounded-md border border-slate-200 bg-white p-4 shadow-sm sm:p-5 lg:sticky lg:top-24 lg:order-2">
         <h2 className="font-bold">Order Summary</h2>
         <div className="mt-4 grid gap-3">
           {items.map((item) => (
             <div key={item.productId} className="flex justify-between gap-3 text-sm">
-              <span>{item.name} x {item.quantity}</span>
+              <span className="min-w-0">{item.name} x {item.quantity}</span>
               <strong>{formatCurrency(item.price * item.quantity)}</strong>
             </div>
           ))}
@@ -192,7 +186,7 @@ function notifyOrder(
       }),
     });
   } catch {
-    // Fire-and-forget — must not affect the user experience
+    // Fire-and-forget; must not affect the user experience.
   }
 }
 
@@ -284,7 +278,7 @@ function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: str
     <label className="grid gap-2 text-sm font-semibold text-slate-700">
       {label}
       <input
-        className="rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+        className="min-h-11 rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"
         aria-invalid={Boolean(error)}
         {...inputProps}
       />
