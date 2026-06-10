@@ -144,7 +144,7 @@ function FormPage({
       <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Titan Optical</p>
       <h1 className="mt-1 text-3xl font-black sm:text-4xl">{title}</h1>
       {disabled ? <div className="mt-6"><StateMessage title="Supabase is not configured" message="Add Supabase variables before booking." /></div> : null}
-      <form onSubmit={submit} className="mt-5 grid gap-4 rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <form onSubmit={submit} className="mt-5 grid gap-4 rounded-md border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         {success ? (
           <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
             <div className="flex gap-3">
@@ -191,7 +191,7 @@ function FormPage({
             {fieldErrors.booking_time ? <span className="text-xs font-semibold text-rose-700">{fieldErrors.booking_time}</span> : null}
           </label>
         </div>
-        <label className="grid gap-2 text-sm font-semibold text-slate-700">Message<textarea name="message" rows={4} className="rounded-md border border-slate-200 px-3 py-2 font-normal" /></label>
+        <label className="grid gap-2 text-sm font-semibold text-slate-700">Message<textarea name="message" rows={3} className="min-h-[96px] rounded-md border border-slate-200 px-3 py-2 font-normal sm:min-h-[128px]" /></label>
         <Button disabled={isSubmitting || disabled}>{isSubmitting ? "Submitting..." : "Free Eye Checkup"}</Button>
       </form>
     </div>
@@ -332,7 +332,7 @@ function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: str
   return (
     <label className="grid gap-2 text-sm font-semibold text-slate-700">
       {label}
-      <input className="rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100" aria-invalid={Boolean(error)} {...inputProps} />
+      <input className="min-h-11 rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100" aria-invalid={Boolean(error)} {...inputProps} />
       {error ? <span className="text-xs font-semibold text-rose-700">{error}</span> : null}
     </label>
   );
