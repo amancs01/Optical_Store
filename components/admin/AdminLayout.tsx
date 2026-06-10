@@ -44,7 +44,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-slate-100">
+      <div className="flex min-h-screen flex-col bg-slate-100">
         <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
           <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
             <div className="flex min-w-0 items-center gap-3">
@@ -114,7 +114,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             </div>
           ) : null}
         </header>
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[240px_1fr] lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl flex-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[240px_1fr] lg:px-8">
           <aside className="hidden h-fit rounded-md border border-slate-200 bg-white p-3 shadow-sm lg:block">
             <AdminNav pathname={pathname} />
             <button
@@ -128,6 +128,12 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           </aside>
           <main className="min-w-0">{children}</main>
         </div>
+        <footer className="border-t border-slate-200 px-4 py-4 text-sm text-slate-500 sm:px-6 lg:px-8">
+          <div className="mx-auto flex max-w-7xl flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <p>&copy; 2026 Titan Optical Admin</p>
+            <p>Internal management panel</p>
+          </div>
+        </footer>
       </div>
     </AdminGuard>
   );
