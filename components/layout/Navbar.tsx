@@ -186,7 +186,7 @@ export function Navbar() {
         </div>
       </div>
       {open ? (
-        <nav className="border-t border-slate-200 bg-white px-4 py-4 shadow-lg shadow-slate-950/5 lg:hidden">
+        <nav className="max-h-[calc(100vh-3.5rem)] overflow-y-auto border-t border-slate-200 bg-white px-4 py-4 shadow-lg shadow-slate-950/5 sm:max-h-[calc(100vh-4rem)] lg:hidden">
           <div className="grid gap-1">
             {mobileLinks.map(([label, href], index) => (
               <Link
