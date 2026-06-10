@@ -67,6 +67,7 @@ export default function CheckoutPage() {
     try {
       const orderedItems = [...items];
       const order = await createOrder(customer, orderedItems);
+      notifyOrder(order, customer, orderedItems);
       clear();
       setConfirmation({
         orderNumber: order.order_number,
@@ -165,6 +166,33 @@ export default function CheckoutPage() {
       </aside>
     </div>
   );
+}
+
+function notifyOrder(
+  order: { order_number: string; total_amount: number },
+  customer: CheckoutFields,
+  items: CartItem[],
+) {
+  try {
+    fetch("/api/notify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "order",
+        data: {
+          order_number: order.order_number,
+          customer_name: customer.customer_name,
+          customer_phone: customer.customer_phone,
+          total_amount: order.total_amount,
+          delivery_address: customer.delivery_address,
+          city: customer.city,
+          items: items.map((i) => ({ name: i.name, quantity: i.quantity })),
+        },
+      }),
+    });
+  } catch {
+    // Fire-and-forget — must not affect the user experience
+  }
 }
 
 function validateCheckout(customer: CheckoutFields) {

@@ -46,7 +46,7 @@ export default function BookEyeCheckupPage() {
 
     setIsSubmitting(true);
     try {
-      await createBooking({
+      const booking = await createBooking({
         name,
         phone,
         branch: String(form.get("branch") || ""),
@@ -54,6 +54,7 @@ export default function BookEyeCheckupPage() {
         booking_time: bookingTime,
         message: String(form.get("message") || ""),
       });
+      notifyBooking(booking);
       currentForm.reset();
       setSelectedDate("");
       setSelectedTime("");
@@ -80,6 +81,35 @@ export default function BookEyeCheckupPage() {
       setSelectedTime={setSelectedTime}
     />
   );
+}
+
+function notifyBooking(booking: {
+  name: string;
+  phone: string;
+  booking_date: string | null;
+  booking_time: string | null;
+  branch: string | null;
+  message: string | null;
+}) {
+  try {
+    fetch("/api/notify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "booking",
+        data: {
+          name: booking.name,
+          phone: booking.phone,
+          booking_date: booking.booking_date ?? "",
+          booking_time: booking.booking_time ?? "",
+          branch: booking.branch || null,
+          message: booking.message || null,
+        },
+      }),
+    });
+  } catch {
+    // Fire-and-forget — must not affect the user experience
+  }
 }
 
 function FormPage({
