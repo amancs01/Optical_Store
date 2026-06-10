@@ -97,8 +97,8 @@ export default function AdminOrdersPage() {
                 />
               </div>
             </div>
-            <div className="mt-3 rounded-md border border-slate-200">
-              <div className="grid grid-cols-[1fr_auto_auto_auto] gap-10 border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold uppercase text-slate-500">
+            <div className="mt-3 overflow-hidden rounded-md border border-slate-200">
+              <div className="hidden grid-cols-[1fr_auto_auto_auto] gap-10 border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold uppercase text-slate-500 sm:grid">
                 <span>Item</span>
                 <span>Qty</span>
                 <span>Unit</span>
@@ -107,10 +107,10 @@ export default function AdminOrdersPage() {
               {(order.order_items || []).length ? (
                 <div className="divide-y divide-slate-200">
                   {(order.order_items || []).map((item) => (
-                    <div key={item.id} className="grid grid-cols-[1fr_auto_auto_auto] gap-3 px-3 py-2 text-sm">
+                    <div key={item.id} className="grid gap-1 px-3 py-2 text-sm sm:grid-cols-[1fr_auto_auto_auto] sm:gap-3">
                       <span className="font-semibold text-slate-800">{item.product_name}</span>
-                      <span>{item.quantity}</span>
-                      <span>{formatCurrency(item.unit_price)}</span>
+                      <span className="text-slate-600 sm:text-slate-950">Qty {item.quantity}</span>
+                      <span className="text-slate-600 sm:text-slate-950">{formatCurrency(item.unit_price)}</span>
                       <span className="font-bold">{formatCurrency(item.total_price)}</span>
                     </div>
                   ))}
