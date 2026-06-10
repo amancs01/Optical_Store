@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Phone, ShieldCheck, Truck } from "lucide-react";
 import { Button, LinkButton } from "@/components/ui/Button";
+import { Spinner } from "@/components/ui/Spinner";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { useCart } from "@/components/cart/CartProvider";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -89,7 +90,7 @@ export default function CheckoutPage() {
 
   if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-7"><StateMessage title="Supabase is not configured" message="Add Supabase variables before checkout." /></div>;
   if (confirmation) return <OrderConfirmation confirmation={confirmation} />;
-  if (!hydrated) return <div className="mx-auto max-w-4xl px-4 py-7"><StateMessage title="Loading cart" message="Checking your saved cart before checkout." /></div>;
+  if (!hydrated) return <div className="flex min-h-[50vh] items-center justify-center"><Spinner size="lg" /></div>;
   if (!items.length) return <div className="mx-auto max-w-4xl px-4 py-7"><StateMessage title="Your cart is empty" message="Add eyewear to your cart before checkout." /><LinkButton href="/products" className="mt-5">Shop products</LinkButton></div>;
 
   return (
