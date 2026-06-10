@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import { Spinner } from "@/components/ui/Spinner";
+import { ListSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { Pagination } from "@/components/ui/Pagination";
 import { BOOKING_STATUSES } from "@/lib/constants";
@@ -38,7 +38,7 @@ export default function AdminBookingsPage() {
   return (
     <AdminLayout>
       <h1 className="text-3xl font-black">Bookings</h1>
-      {loading ? <div className="flex min-h-[40vh] items-center justify-center"><Spinner size="lg" /></div> : null}
+      {loading ? <div className="mt-5"><ListSkeleton rows={5} /></div> : null}
       {error ? <div className="mt-5"><StateMessage title="Bookings could not load" message={error} /></div> : null}
       {!loading && !error && !bookings.length ? <div className="mt-5"><StateMessage title="No bookings found" message="Eye checkup requests will appear here." /></div> : null}
       {!loading && !error && bookings.length > 0 ? <div className="mt-5 grid gap-4">
