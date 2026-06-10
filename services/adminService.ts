@@ -16,7 +16,6 @@ export type CurrentUserRole = {
 
 export type AdminDashboardStats = {
   products: number;
-  active: number;
   pending: number;
   bookings: number;
   messages: number;
@@ -63,24 +62,21 @@ export async function getAdminDashboardStats(): Promise<AdminDashboardStats> {
 
   const [
     products,
-    activeProducts,
     pendingOrders,
     pendingBookings,
     newMessages,
   ] = await Promise.all([
     client.from("products").select("id", { count: "exact", head: true }),
-    client.from("products").select("id", { count: "exact", head: true }).eq("is_active", true),
     client.from("orders").select("id", { count: "exact", head: true }).eq("order_status", "pending"),
     client.from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
     client.from("contact_messages").select("id", { count: "exact", head: true }).eq("status", "new"),
   ]);
 
-  const error = products.error || activeProducts.error || pendingOrders.error || pendingBookings.error || newMessages.error;
+  const error = products.error || pendingOrders.error || pendingBookings.error || newMessages.error;
   if (error) throw error;
 
   return {
     products: products.count || 0,
-    active: activeProducts.count || 0,
     pending: pendingOrders.count || 0,
     bookings: pendingBookings.count || 0,
     messages: newMessages.count || 0,
