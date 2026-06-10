@@ -1,6 +1,7 @@
 import { requireSupabase } from "@/lib/supabase/client";
 import { slugify } from "@/lib/utils";
 import type { Product } from "@/types/product";
+import { getProductImages } from "@/services/productImageService";
 
 const productSelect = "*";
 
@@ -40,7 +41,9 @@ export async function getProductBySlug(slug: string) {
     .single();
 
   if (error) throw error;
-  return data as Product;
+  const product = data as Product;
+  const images = await getProductImages(product.id);
+  return { ...product, images };
 }
 
 export async function getSimilarProducts(category: string | null, currentId: string) {
@@ -74,7 +77,9 @@ export async function getProductById(id: string) {
   const { data, error } = await supabase.from("products").select(productSelect).eq("id", id).single();
 
   if (error) throw error;
-  return data as Product;
+  const product = data as Product;
+  const images = await getProductImages(product.id);
+  return { ...product, images };
 }
 
 export async function saveProduct(input: Partial<Product>) {
