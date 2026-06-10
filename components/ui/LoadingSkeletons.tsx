@@ -36,6 +36,33 @@ export function ListSkeleton({ rows = 4 }: { rows?: number }) {
   );
 }
 
+export function DashboardSkeleton() {
+  return (
+    <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Loading dashboard">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div key={index} className="rounded-md border border-slate-200 bg-white p-5">
+          <div className="h-4 w-28 animate-pulse rounded bg-slate-100" />
+          <div className="mt-2 h-9 w-16 animate-pulse rounded bg-slate-100" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function FormSkeleton() {
+  return (
+    <div className="grid gap-6" aria-label="Loading form">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div key={index} className="grid gap-2">
+          <div className="h-4 w-20 animate-pulse rounded bg-slate-100" />
+          <div className="h-11 w-full animate-pulse rounded-md bg-slate-100" />
+        </div>
+      ))}
+      <div className="h-11 w-32 animate-pulse rounded-md bg-slate-100" />
+    </div>
+  );
+}
+
 export function ProductDetailSkeleton() {
   return (
     <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">

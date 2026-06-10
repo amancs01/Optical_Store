@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import { Spinner } from "@/components/ui/Spinner";
+import { DashboardSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { getAdminDashboardStats, type AdminDashboardStats } from "@/services/adminService";
 import { useCurrentUser } from "@/lib/auth/admin";
@@ -25,7 +25,7 @@ export default function AdminPage() {
     <AdminLayout>
       <h1 className="text-3xl font-black">Dashboard</h1>
       {loading ? (
-        <div className="flex min-h-[40vh] items-center justify-center"><Spinner size="lg" /></div>
+        <DashboardSkeleton />
       ) : error ? (
         <div className="mt-5"><StateMessage title="Dashboard could not load" message={error} /></div>
       ) : (
