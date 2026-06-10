@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { cache } from "react";
 import { CalendarCheck, MessageCircle, Truck } from "lucide-react";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
-import { ProductCard, ProductImageFallback } from "@/components/product/ProductCard";
+import { ProductCard } from "@/components/product/ProductCard";
+import { ProductGallery } from "@/components/product/ProductGallery";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { formatCurrency, getAvailabilityDetailStatus, getSalePrice } from "@/lib/utils";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -88,22 +88,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <span className="text-slate-900">{product.name}</span>
       </nav>
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="overflow-hidden rounded-md border border-emerald-100 bg-emerald-50 p-2 shadow-sm sm:p-3">
-          <div className="group relative aspect-square overflow-hidden rounded-md bg-white">
-            {product.image_url ? (
-              <Image
-                src={product.image_url}
-                alt={product.name}
-                fill
-                className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-              />
-            ) : (
-              <ProductImageFallback name={product.name} />
-            )}
-          </div>
-        </div>
+        <ProductGallery product={product} />
         <div>
           <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">{product.brand || product.category}</p>
           <h1 className="mt-2 text-3xl font-black leading-tight sm:text-4xl">{product.name}</h1>
