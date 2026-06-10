@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Glasses, Minus, Plus, Trash2 } from "lucide-react";
 import { Button, LinkButton } from "@/components/ui/Button";
+import { Spinner } from "@/components/ui/Spinner";
 import { useCart } from "@/components/cart/CartProvider";
 import { formatCurrency } from "@/lib/utils";
 
@@ -17,8 +18,8 @@ export default function CartPage() {
         <h1 className="mt-1 text-3xl font-black sm:text-4xl">Your cart</h1>
       </div>
       {!hydrated ? (
-        <div className="mt-8 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-8 text-center text-slate-600">
-          Loading cart...
+        <div className="flex min-h-[40vh] items-center justify-center">
+          <Spinner size="lg" />
         </div>
       ) : !items.length ? (
         <div className="mt-8 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-8 text-center">
