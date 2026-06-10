@@ -13,7 +13,7 @@ import type { Product } from "@/types/product";
 import { formatCurrency } from "@/lib/utils";
 import { useAdminStatus } from "@/lib/auth/admin";
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 7;
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
