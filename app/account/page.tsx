@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { LayoutDashboard, LogOut, Package, ShoppingBag } from "lucide-react";
 import { useEffect } from "react";
 import { Button, LinkButton } from "@/components/ui/Button";
+import { Spinner } from "@/components/ui/Spinner";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { useCurrentUser } from "@/lib/auth/admin";
@@ -22,7 +23,7 @@ export default function AccountPage() {
   }
 
   if (!isSupabaseConfigured) return <div className="mx-auto max-w-3xl px-4 py-7"><StateMessage title="Supabase is not configured" message="Add Supabase variables to use customer accounts." /></div>;
-  if (loading) return <p className="mx-auto max-w-3xl px-4 py-7 text-sm text-slate-600">Loading account...</p>;
+  if (loading) return <div className="flex min-h-[50vh] items-center justify-center"><Spinner size="lg" /></div>;
   if (!user) return <p className="mx-auto max-w-3xl px-4 py-7 text-sm text-slate-600">Redirecting to login...</p>;
 
   return (
