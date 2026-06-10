@@ -21,7 +21,7 @@ export function AddToCartButton({ product, compact = false }: { product: Product
       }}
       className={cn(
         "w-full px-3",
-        compact ? "min-h-9 text-xs sm:min-h-9 sm:text-xs" : "min-h-10 text-xs sm:min-h-11 sm:text-sm",
+        compact ? "min-h-8 px-2 text-xs sm:min-h-9 sm:px-3 sm:text-xs" : "min-h-10 text-xs sm:min-h-11 sm:text-sm",
       )}
     >
       <ShoppingBag className="h-4 w-4" />
