@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/product/ProductCard";
+import { Spinner } from "@/components/ui/Spinner";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { ProductGridSkeleton } from "@/components/ui/LoadingSkeletons";
 import { CATEGORIES, FRAME_SHAPES, FRAME_TYPES, GENDERS } from "@/lib/constants";
@@ -302,7 +303,7 @@ export default function ProductsPage() {
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm text-slate-600">
         <div className="flex flex-wrap items-center gap-2">
-          <p>{loading ? "Loading collection..." : `${visible.length} ${visible.length === 1 ? "frame" : "frames"} found`}</p>
+          {loading ? <Spinner size="sm" /> : <p>{`${visible.length} ${visible.length === 1 ? "frame" : "frames"} found`}</p>}
           {hasFilters ? (
             <div className="hidden flex-wrap gap-1.5 md:flex">
               {activeFilterLabels(filters).map((label) => (
