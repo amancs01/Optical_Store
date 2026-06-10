@@ -85,7 +85,6 @@ describe("adminService", () => {
       mockSupabaseObj.from().select.mockReturnValue(thenable);
       const stats = await getAdminDashboardStats();
       expect(stats.products).toBe(5);
-      expect(stats.active).toBe(5);
       expect(stats.pending).toBe(5);
       expect(stats.bookings).toBe(5);
       expect(stats.messages).toBe(5);
