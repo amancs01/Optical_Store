@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Glasses } from "lucide-react";
-import type { Product } from "@/types/product";
+import type { Product, ProductImage } from "@/types/product";
 import { cn } from "@/lib/utils";
 
 type ProductWithGalleryFields = Product & {
-  images?: unknown;
+  images?: ProductImage[];
   gallery_images?: unknown;
   image_urls?: unknown;
   additional_images?: unknown;
@@ -58,7 +58,7 @@ export function ProductGallery({ product }: { product: Product }) {
 function getProductImages(product: ProductWithGalleryFields) {
   const candidates = [
     product.image_url,
-    ...readGalleryField(product.images),
+    ...(product.images || []).map((image) => image.image_url),
     ...readGalleryField(product.gallery_images),
     ...readGalleryField(product.image_urls),
     ...readGalleryField(product.additional_images),
