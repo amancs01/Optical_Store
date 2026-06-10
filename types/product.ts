@@ -18,6 +18,17 @@ export type Product = {
   is_featured: boolean;
   created_at: string;
   updated_at: string | null;
+  images?: ProductImage[];
+};
+
+export type ProductImage = {
+  id: string;
+  product_id: string;
+  image_url: string;
+  alt_text: string | null;
+  sort_order: number;
+  is_primary: boolean;
+  created_at: string;
 };
 
 export type CartItem = {
