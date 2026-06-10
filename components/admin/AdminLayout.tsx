@@ -128,10 +128,9 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           </aside>
           <main className="min-w-0">{children}</main>
         </div>
-        <footer className="border-t border-slate-200 px-4 py-4 text-sm text-slate-500 sm:px-6 lg:px-8">
-          <div className="mx-auto flex max-w-7xl flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-            <p>&copy; 2026 Titan Optical Admin</p>
-            <p>Internal management panel</p>
+        <footer className="border-t border-slate-200 px-4 py-4 text-center text-sm text-slate-500 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <p>&copy; 2026 Titan Optical</p>
           </div>
         </footer>
       </div>
