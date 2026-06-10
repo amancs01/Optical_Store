@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { useAdminStatus } from "@/lib/auth/admin";
+import { Spinner } from "@/components/ui/Spinner";
 import { StateMessage } from "@/components/ui/StateMessage";
 
 export function AdminGuard({ children }: { children: React.ReactNode }) {
@@ -26,7 +27,7 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (loading) return <p className="p-6 text-sm text-slate-600">Loading admin session...</p>;
+  if (loading) return <div className="flex min-h-[50vh] items-center justify-center"><Spinner size="lg" /></div>;
 
   if (!user) {
     return (
