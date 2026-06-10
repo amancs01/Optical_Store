@@ -31,14 +31,14 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
       </Link>
-      <div className="flex flex-1 flex-col gap-2 p-2.5 sm:p-3">
+      <div className="flex flex-1 flex-col gap-1.5 p-2 sm:gap-2 sm:p-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-wide text-slate-500">{product.brand || product.category}</p>
-          <Link href={`/products/${product.slug}`} className="mt-1 line-clamp-2 min-h-10 text-sm font-semibold leading-5 text-slate-950 hover:underline">
+          <p className="line-clamp-1 text-[10px] font-bold uppercase tracking-wide text-slate-500 sm:text-[11px]">{product.brand || product.category}</p>
+          <Link href={`/products/${product.slug}`} className="mt-1 line-clamp-2 min-h-9 text-xs font-semibold leading-[1.15rem] text-slate-950 hover:underline sm:min-h-10 sm:text-sm sm:leading-5">
             {product.name}
           </Link>
         </div>
-        <div className="grid min-h-[3.5rem] content-start gap-1">
+        <div className="grid min-h-[3.15rem] content-start gap-1 sm:min-h-[3.5rem]">
           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
             <p className="text-sm font-black text-slate-950 sm:text-base">{formatCurrency(getSalePrice(product))}</p>
             {product.discount_price ? (
