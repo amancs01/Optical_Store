@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { ProductForm } from "@/components/admin/ProductForm";
+import { Spinner } from "@/components/ui/Spinner";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { getProductById } from "@/services/productService";
 import type { Product } from "@/types/product";
@@ -23,7 +24,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   return (
     <AdminLayout>
       <h1 className="mb-5 text-3xl font-black">Edit product</h1>
-      {error ? <StateMessage title="Product could not load" message={error} /> : product ? <ProductForm product={product} /> : <p>Loading product...</p>}
+      {error ? <StateMessage title="Product could not load" message={error} /> : product ? <ProductForm product={product} /> : <div className="flex min-h-[40vh] items-center justify-center"><Spinner size="lg" /></div>}
     </AdminLayout>
   );
 }
