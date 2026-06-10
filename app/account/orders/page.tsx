@@ -82,7 +82,7 @@ export default function MyOrdersPage() {
                   <td>{new Date(order.created_at).toLocaleDateString("en-NP", { year: "numeric", month: "short", day: "numeric" })}</td>
                   <td><span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">{formatOrderStatus(order.order_status)}</span></td>
                   <td className="font-bold">{formatCurrency(order.total_amount)}</td>
-                  <td><Link className="font-bold text-emerald-700" href={`/account/orders/${order.order_number}`}>View</Link></td>
+                  <td><Link className="font-bold text-emerald-700" href={`/account/orders/${order.order_number}`}>Track</Link></td>
                 </tr>
               ))}
             </tbody>
