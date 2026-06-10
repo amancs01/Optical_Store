@@ -41,7 +41,7 @@ export function ProductGallery({ product }: { product: Product }) {
               type="button"
               onClick={() => setSelectedImage(image)}
               className={cn(
-                "relative h-16 w-16 shrink-0 overflow-hidden rounded-md border bg-white transition hover:border-emerald-300 sm:h-18 sm:w-18",
+                "relative h-16 w-16 shrink-0 overflow-hidden rounded-md border bg-white transition hover:border-emerald-300 sm:h-[4.5rem] sm:w-[4.5rem]",
                 selectedImage === image ? "border-emerald-600 ring-2 ring-emerald-100" : "border-slate-200",
               )}
               aria-label={`View ${product.name} image ${index + 1}`}
