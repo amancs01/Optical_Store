@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { ListSkeleton } from "@/components/ui/LoadingSkeletons";
+import { Pagination } from "@/components/ui/Pagination";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { ORDER_STATUSES } from "@/lib/constants";
 import { formatCurrency } from "@/lib/utils";
@@ -11,12 +12,15 @@ import { getOrders, updateOrderStatus } from "@/services/orderService";
 import type { Order, OrderItem } from "@/types/order";
 import { useAdminStatus } from "@/lib/auth/admin";
 
+const PAGE_SIZE = 5;
+
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<(Order & { order_items?: OrderItem[] })[]>([]);
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [updating, setUpdating] = useState<Record<string, boolean>>({});
+  const [page, setPage] = useState(1);
   const { isAdmin } = useAdminStatus();
 
   function load() {
@@ -36,12 +40,14 @@ export default function AdminOrdersPage() {
     window.queueMicrotask(load);
   }, [isAdmin]);
   const visible = filter ? orders.filter((order) => order.order_status === filter) : orders;
+  const totalPages = Math.ceil(visible.length / PAGE_SIZE);
+  const paginated = visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <AdminLayout>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-3xl font-black">Orders</h1>
-        <select value={filter} onChange={(e) => setFilter(e.target.value)} className="rounded-md border border-slate-200 px-3 py-2">
+        <select value={filter} onChange={(e) => { setFilter(e.target.value); setPage(1); }} className="rounded-md border border-slate-200 px-3 py-2">
           <option value="">All statuses</option>
           {ORDER_STATUSES.map((status) => <option key={status} value={status}>{status}</option>)}
         </select>
@@ -65,7 +71,7 @@ export default function AdminOrdersPage() {
       {error ? <div className="mt-5"><StateMessage title="Orders could not load" message={error} /></div> : null}
       {!loading && !error && !visible.length ? <div className="mt-5"><StateMessage title="No orders found" message="New checkout orders will appear here." /></div> : null}
       <div className="mt-5 grid gap-4">
-        {visible.map((order) => (
+        {paginated.map((order) => (
           <div key={order.id} className="rounded-md border border-slate-200 bg-white p-4">
             <div className="flex flex-wrap justify-between gap-3">
               <div>
@@ -98,7 +104,7 @@ export default function AdminOrdersPage() {
               </div>
             </div>
             <div className="mt-3 rounded-md border border-slate-200">
-              <div className="grid grid-cols-[1fr_auto_auto_auto] gap-3 border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold uppercase text-slate-500">
+              <div className="grid grid-cols-[1fr_auto_auto_auto] gap-10 border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold uppercase text-slate-500">
                 <span>Item</span>
                 <span>Qty</span>
                 <span>Unit</span>
@@ -122,6 +128,7 @@ export default function AdminOrdersPage() {
           </div>
         ))}
       </div>
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
     </AdminLayout>
   );
 }
