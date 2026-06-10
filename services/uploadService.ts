@@ -16,3 +16,20 @@ export async function uploadProductImage(file: File, productName: string) {
   const { data } = supabase.storage.from("product-images").getPublicUrl(path);
   return data.publicUrl;
 }
+
+export async function uploadProductGalleryImage(file: File, productId: string) {
+  const supabase = requireSupabase();
+  const extension = file.name.split(".").pop() || "jpg";
+  const safeName = slugify(file.name.replace(/\.[^/.]+$/, "") || "gallery-image");
+  const path = `products/${productId}/gallery/${Date.now()}-${safeName}.${extension}`;
+
+  const { error } = await supabase.storage.from("product-images").upload(path, file, {
+    cacheControl: "3600",
+    upsert: false,
+  });
+
+  if (error) throw error;
+
+  const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+  return data.publicUrl;
+}
