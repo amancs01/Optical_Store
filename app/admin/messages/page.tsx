@@ -2,17 +2,23 @@
 
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { Spinner } from "@/components/ui/Spinner";
 import { StateMessage } from "@/components/ui/StateMessage";
+import { Pagination } from "@/components/ui/Pagination";
 import { getAdminMessages, updateMessageStatus } from "@/services/contactService";
 import type { ContactMessage } from "@/types/order";
-import { useCurrentUser } from "@/lib/auth/admin";
+import { useAdminStatus } from "@/lib/auth/admin";
+
+const PAGE_SIZE = 7;
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { isAdmin } = useCurrentUser();
+  const [page, setPage] = useState(1);
+  const { isAdmin } = useAdminStatus();
   function load() {
+    setPage(1);
     setLoading(true);
     setError("");
     getAdminMessages()
@@ -25,17 +31,17 @@ export default function AdminMessagesPage() {
   }
   useEffect(() => {
     if (!isAdmin) return;
-    load();
+    window.queueMicrotask(load);
   }, [isAdmin]);
 
   return (
     <AdminLayout>
       <h1 className="text-3xl font-black">Messages</h1>
-      {loading ? <p className="mt-5 text-sm text-slate-600">Loading messages...</p> : null}
+      {loading ? <div className="flex min-h-[40vh] items-center justify-center"><Spinner size="lg" /></div> : null}
       {error ? <div className="mt-5"><StateMessage title="Messages could not load" message={error} /></div> : null}
       {!loading && !error && !messages.length ? <div className="mt-5"><StateMessage title="No messages found" message="Customer contact messages will appear here." /></div> : null}
-      <div className="mt-5 grid gap-4">
-        {messages.map((message) => (
+      {!loading && !error && messages.length > 0 ? <div className="mt-5 grid gap-4">
+        {messages.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map((message) => (
           <div key={message.id} className="rounded-md border border-slate-200 bg-white p-4">
             <div className="flex flex-wrap justify-between gap-3">
               <div><h2 className="font-black">{message.name}</h2><p className="text-sm text-slate-600">{message.phone} - {message.email}</p><p className="mt-2 text-sm text-slate-700">{message.message}</p></div>
@@ -43,7 +49,8 @@ export default function AdminMessagesPage() {
             </div>
           </div>
         ))}
-      </div>
+      </div> : null}
+      {!loading && !error && messages.length > 0 ? <Pagination currentPage={page} totalPages={Math.ceil(messages.length / PAGE_SIZE)} onPageChange={setPage} /> : null}
     </AdminLayout>
   );
 }
