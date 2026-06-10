@@ -7,7 +7,7 @@ export function MainContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <main className={cn("flex-1", !pathname?.startsWith("/admin") && "pb-20 md:pb-0")}>
+    <main className={cn("flex-1", !pathname?.startsWith("/admin") && "pb-24 md:pb-0")}>
       {children}
     </main>
   );
