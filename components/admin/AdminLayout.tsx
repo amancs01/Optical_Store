@@ -10,14 +10,11 @@ import {
   Home,
   LayoutDashboard,
   LogOut,
-  Menu,
   MessageSquareText,
   Package,
   ShoppingBag,
-  X,
 } from "lucide-react";
 import type { ReactNode } from "react";
-import { useState } from "react";
 import { AdminGuard } from "@/components/admin/AdminGuard";
 import { useCurrentUser } from "@/lib/auth/admin";
 import { cn } from "@/lib/utils";
@@ -31,14 +28,12 @@ const links = [
 ];
 
 export function AdminLayout({ children }: { children: ReactNode }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { signOut } = useCurrentUser();
 
   async function logout() {
     await signOut();
-    setMobileOpen(false);
     router.push("/admin/login");
   }
 
@@ -48,17 +43,9 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
           <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
             <div className="flex min-w-0 items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setMobileOpen((value) => !value)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 hover:bg-slate-50 lg:hidden"
-                aria-label="Admin menu"
-                aria-expanded={mobileOpen}
-              >
-                {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
               <Link href="/admin" className="truncate text-base font-black text-slate-950 sm:text-lg">
-                Titan Optical Admin
+                <span className="sm:hidden">Titan Optical</span>
+                <span className="hidden sm:inline">Titan Optical Admin</span>
               </Link>
             </div>
             <div className="flex items-center gap-2">
@@ -100,22 +87,9 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               </DropdownMenu.Root>
             </div>
           </div>
-          {mobileOpen ? (
-            <div className="border-t border-slate-200 bg-white px-4 py-3 lg:hidden">
-              <AdminNav pathname={pathname} onNavigate={() => setMobileOpen(false)} />
-              <button
-                type="button"
-                onClick={() => void logout()}
-                className="mt-1 flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-semibold text-slate-700 hover:bg-slate-50"
-              >
-                <LogOut className="h-4 w-4" />
-                Logout
-              </button>
-            </div>
-          ) : null}
         </header>
         <div className="mx-auto grid w-full max-w-7xl flex-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[240px_1fr] lg:px-8">
-          <aside className="hidden h-fit rounded-md border border-slate-200 bg-white p-3 shadow-sm lg:block">
+          <aside className="hidden h-fit rounded-xl border border-slate-200 bg-white p-3 shadow-sm lg:block">
             <AdminNav pathname={pathname} />
             <button
               type="button"
@@ -126,13 +100,31 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               Logout
             </button>
           </aside>
-          <main className="min-h-[40vh] min-w-0">{children}</main>
+          <main className="min-h-[40vh] min-w-0 pb-20 lg:pb-0">{children}</main>
         </div>
         <footer className="border-t border-slate-200 px-4 py-4 text-center text-sm text-slate-500 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <p>&copy; 2026 Titan Optical</p>
           </div>
         </footer>
+        {/* Admin mobile bottom nav */}
+        <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 pb-safe backdrop-blur lg:hidden">
+          <div className="mx-auto grid max-w-lg grid-cols-5 gap-0">
+            {links.map(({ label, href, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-bold text-slate-400 transition",
+                  isActiveAdminPath(pathname, href) && "text-emerald-700",
+                )}
+              >
+                <Icon className={cn("h-5 w-5", isActiveAdminPath(pathname, href) && "text-emerald-700")} aria-hidden="true" />
+                <span>{label}</span>
+              </Link>
+            ))}
+          </div>
+        </nav>
       </div>
     </AdminGuard>
   );
