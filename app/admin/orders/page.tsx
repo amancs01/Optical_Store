@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { ListSkeleton } from "@/components/ui/LoadingSkeletons";
@@ -16,10 +17,19 @@ import { useAdminStatus } from "@/lib/auth/admin";
 const PAGE_SIZE = 5;
 
 type AdminOrder = Order & { order_items?: OrderItem[] };
+type OrderItemProduct = {
+  id?: string | null;
+  name?: string | null;
+  image_url?: string | null;
+};
 type OrderItemWithImage = OrderItem & {
   image_url?: string | null;
+  image?: string | null;
+  imageUrl?: string | null;
   product_image_url?: string | null;
   thumbnail_url?: string | null;
+  product?: OrderItemProduct | null;
+  products?: OrderItemProduct | OrderItemProduct[] | null;
 };
 
 function getStatusStyle(status: string) {
@@ -47,7 +57,17 @@ function formatAddress(order: Order) {
 
 function getOrderItemImage(item: OrderItem): string | null {
   const imageItem = item as OrderItemWithImage;
-  return imageItem.image_url || imageItem.product_image_url || imageItem.thumbnail_url || null;
+  const products = Array.isArray(imageItem.products) ? imageItem.products[0] : imageItem.products;
+  return (
+    imageItem.image_url ||
+    imageItem.image ||
+    imageItem.imageUrl ||
+    imageItem.product_image_url ||
+    imageItem.thumbnail_url ||
+    imageItem.product?.image_url ||
+    products?.image_url ||
+    null
+  );
 }
 
 export default function AdminOrdersPage() {
@@ -313,7 +333,8 @@ function DesktopOrderCard({
         </div>
       </div>
       <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-        <div className="hidden grid-cols-[1fr_auto_auto_auto] gap-10 border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold uppercase text-slate-500 sm:grid">
+        <div className="hidden grid-cols-[56px_1fr_auto_auto_auto] gap-4 border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold uppercase text-slate-500 sm:grid">
+          <span>Image</span>
           <span>Item</span>
           <span>Qty</span>
           <span>Unit</span>
@@ -322,7 +343,8 @@ function DesktopOrderCard({
         {(order.order_items || []).length ? (
           <div className="divide-y divide-slate-200">
             {(order.order_items || []).map((item) => (
-              <div key={item.id} className="grid gap-1 px-3 py-2 text-sm sm:grid-cols-[1fr_auto_auto_auto] sm:gap-3">
+              <div key={item.id} className="grid gap-1 px-3 py-2 text-sm sm:grid-cols-[56px_1fr_auto_auto_auto] sm:items-center sm:gap-4">
+                <OrderItemThumbnail item={item} size="desktop" />
                 <span className="font-semibold text-slate-800">{item.product_name}</span>
                 <span className="text-slate-600 sm:text-slate-950">Qty {item.quantity}</span>
                 <span className="text-slate-600 sm:text-slate-950">Unit {formatCurrency(item.unit_price)}</span>
@@ -347,18 +369,9 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function MobileOrderItem({ item }: { item: OrderItem }) {
-  const imageUrl = getOrderItemImage(item);
-
   return (
     <div className="flex gap-3 p-3">
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white text-[10px] font-bold uppercase text-slate-400">
-        {imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={imageUrl} alt="" className="h-full w-full object-cover" />
-        ) : (
-          "No img"
-        )}
-      </div>
+      <OrderItemThumbnail item={item} size="mobile" />
       <div className="min-w-0 flex-1">
         <p className="break-words text-sm font-bold text-slate-900">{item.product_name}</p>
         {item.selected_color ? <p className="mt-0.5 text-xs text-slate-500">Color: {item.selected_color}</p> : null}
@@ -368,5 +381,29 @@ function MobileOrderItem({ item }: { item: OrderItem }) {
         <p className="mt-0.5 text-sm font-black text-slate-950">Subtotal {formatCurrency(item.total_price)}</p>
       </div>
     </div>
+  );
+}
+
+function OrderItemThumbnail({ item, size }: { item: OrderItem; size: "mobile" | "desktop" }) {
+  const imageUrl = getOrderItemImage(item);
+  const sizeClass = size === "mobile" ? "h-12 w-12" : "h-14 w-14";
+
+  if (!imageUrl) {
+    return (
+      <div className={`flex ${sizeClass} shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 px-1 text-center text-[9px] font-semibold leading-tight text-slate-400`}>
+        No image
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={imageUrl}
+      alt={item.product_name}
+      width={size === "mobile" ? 48 : 56}
+      height={size === "mobile" ? 48 : 56}
+      className={`${sizeClass} shrink-0 rounded-lg border border-slate-200 bg-slate-50 object-cover`}
+      sizes={size === "mobile" ? "48px" : "56px"}
+    />
   );
 }
