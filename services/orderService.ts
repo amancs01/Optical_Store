@@ -65,7 +65,7 @@ export async function getOrders() {
   const supabase = requireSupabase();
   const { data, error } = await supabase
     .from("orders")
-    .select("*, order_items(*)")
+    .select("*, order_items(*, products(id, name, image_url))")
     .order("created_at", { ascending: false });
 
   if (error) throw error;
