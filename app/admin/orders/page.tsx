@@ -9,7 +9,6 @@ import { Select } from "@/components/ui/Select";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { ORDER_STATUSES } from "@/lib/constants";
 import { formatCurrency } from "@/lib/utils";
-import { formatOrderStatus } from "@/lib/orderStatus";
 import { getOrders, updateOrderStatus } from "@/services/orderService";
 import type { Order, OrderItem } from "@/types/order";
 import { useAdminStatus } from "@/lib/auth/admin";
@@ -42,6 +41,10 @@ function getStatusStyle(status: string) {
     cancelled: "border-rose-200 bg-rose-50 text-rose-800",
   };
   return map[status] || "border-slate-200 bg-slate-50 text-slate-700";
+}
+
+function getStatusSelectClass(status: string, className = "") {
+  return `h-9 rounded-full px-3 text-xs font-black uppercase tracking-wide shadow-none ${getStatusStyle(status)} ${className}`;
 }
 
 function formatStatus(status: string) {
@@ -188,7 +191,7 @@ function MobileOrderCard({
   const hasMoreItems = items.length > 2;
 
   return (
-    <article className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:hidden">
+    <article className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:hidden">
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h2 className="break-words text-lg font-black leading-tight text-slate-950">{order.order_number}</h2>
@@ -196,7 +199,14 @@ function MobileOrderCard({
             {new Date(order.created_at).toLocaleString("en-NP", { dateStyle: "medium", timeStyle: "short" })}
           </p>
         </div>
-        <StatusBadge status={order.order_status} />
+        <Select
+          ariaLabel={`Update status for ${order.order_number}`}
+          value={order.order_status}
+          disabled={isUpdating}
+          onValueChange={onUpdateStatus}
+          items={ORDER_STATUSES.map((s) => ({ label: formatStatus(s), value: s }))}
+          className={getStatusSelectClass(order.order_status, `w-32 shrink-0 ${isUpdating ? "opacity-60" : ""}`)}
+        />
       </header>
 
       <section className="rounded-xl bg-slate-50 p-3">
@@ -205,6 +215,13 @@ function MobileOrderCard({
           <a href={`tel:${order.customer_phone}`} className="font-semibold text-teal-700">{order.customer_phone}</a>
           {order.customer_email ? <a href={`mailto:${order.customer_email}`} className="break-words">{order.customer_email}</a> : null}
           <p className="break-words">{formatAddress(order)}</p>
+        </div>
+        <div className="mt-3 flex items-end justify-between gap-3 border-t border-slate-200 pt-3">
+          <div>
+            <p className="text-xs font-bold uppercase text-slate-400">Total</p>
+            <p className="text-xl font-black text-slate-950">{formatCurrency(order.total_amount)}</p>
+          </div>
+          <p className="text-right text-xs font-semibold text-slate-500">{order.payment_method}</p>
         </div>
       </section>
 
@@ -224,37 +241,6 @@ function MobileOrderCard({
           WhatsApp
         </a>
       </div>
-
-      <section className="grid gap-3 rounded-xl border border-slate-200 p-3">
-        <div className="flex items-end justify-between gap-3">
-          <div>
-            <p className="text-xs font-bold uppercase text-slate-400">Total</p>
-            <p className="text-2xl font-black text-slate-950">{formatCurrency(order.total_amount)}</p>
-          </div>
-          <div className="text-right text-xs font-semibold text-slate-500">
-            <p>{order.payment_method}</p>
-            <p>{formatOrderStatus(order.payment_status)}</p>
-          </div>
-        </div>
-        <div className="flex items-center justify-between gap-3 border-t border-slate-200 pt-3">
-          <span className="text-xs font-bold uppercase text-slate-400">Current status</span>
-          <StatusBadge status={order.order_status} />
-        </div>
-      </section>
-
-      <section className="grid gap-2">
-        <label className="grid gap-2 text-xs font-bold uppercase text-slate-500">
-          Update status
-          <Select
-            ariaLabel={`Update status for ${order.order_number}`}
-            value={order.order_status}
-            disabled={isUpdating}
-            onValueChange={onUpdateStatus}
-            items={ORDER_STATUSES.map((s) => ({ label: formatStatus(s), value: s }))}
-            className={`h-11 w-full rounded-xl text-base normal-case ${isUpdating ? "opacity-60" : ""}`}
-          />
-        </label>
-      </section>
 
       <section className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
         <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-3 py-2">
@@ -293,16 +279,29 @@ function DesktopOrderCard({
 }) {
   return (
     <div className="hidden rounded-md border border-slate-200 bg-white p-4 sm:block">
-      <div className="flex flex-wrap justify-between gap-3">
-        <div>
+      <header className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
           <h2 className="font-black">{order.order_number}</h2>
-          <p className="text-sm text-slate-600">{order.customer_name} - {order.customer_phone}</p>
-          {order.customer_email ? <p className="text-sm text-slate-600">{order.customer_email}</p> : null}
-          <p className="text-sm text-slate-600">{formatAddress(order)}</p>
           <p className="mt-1 text-xs font-semibold uppercase text-slate-500">
             {new Date(order.created_at).toLocaleString("en-NP", { dateStyle: "medium", timeStyle: "short" })}
           </p>
-          <div className="mt-2 flex flex-wrap gap-2">
+        </div>
+        <Select
+          ariaLabel={`Update status for ${order.order_number}`}
+          value={order.order_status}
+          disabled={isUpdating}
+          onValueChange={onUpdateStatus}
+          items={ORDER_STATUSES.map((s) => ({ label: formatStatus(s), value: s }))}
+          className={getStatusSelectClass(order.order_status, `w-36 ${isUpdating ? "opacity-60" : ""}`)}
+        />
+      </header>
+      <div className="mt-3 flex flex-wrap justify-between gap-3">
+        <div>
+          <p className="font-bold text-slate-950">{order.customer_name}</p>
+          <p className="text-sm text-slate-600">{order.customer_phone}</p>
+          {order.customer_email ? <p className="text-sm text-slate-600">{order.customer_email}</p> : null}
+          <p className="text-sm text-slate-600">{formatAddress(order)}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
             <a
               href={`tel:${order.customer_phone}`}
               className="inline-flex h-8 items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 active:scale-95"
@@ -321,15 +320,7 @@ function DesktopOrderCard({
         </div>
         <div className="w-full space-y-2 sm:w-auto sm:text-right">
           <p className="font-black">{formatCurrency(order.total_amount)}</p>
-          <p className="text-xs font-semibold text-slate-500">{order.payment_method} - {formatOrderStatus(order.payment_status)}</p>
-          <Select
-            ariaLabel={`Update status for ${order.order_number}`}
-            value={order.order_status}
-            disabled={isUpdating}
-            onValueChange={onUpdateStatus}
-            items={ORDER_STATUSES.map((s) => ({ label: formatStatus(s), value: s }))}
-            className={`w-full sm:w-auto ${isUpdating ? "opacity-60" : ""}`}
-          />
+          <p className="text-xs font-semibold text-slate-500">{order.payment_method}</p>
         </div>
       </div>
       <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
@@ -360,14 +351,6 @@ function DesktopOrderCard({
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-wide ${getStatusStyle(status)}`}>
-      {status}
-    </span>
-  );
-}
-
 function MobileOrderItem({ item }: { item: OrderItem }) {
   return (
     <div className="flex gap-3 p-3">
@@ -376,7 +359,7 @@ function MobileOrderItem({ item }: { item: OrderItem }) {
         <p className="break-words text-sm font-bold text-slate-900">{item.product_name}</p>
         {item.selected_color ? <p className="mt-0.5 text-xs text-slate-500">Color: {item.selected_color}</p> : null}
         <p className="mt-1 text-xs font-semibold text-slate-600">
-          Qty {item.quantity} x {formatCurrency(item.unit_price)}
+          Qty {item.quantity} × {formatCurrency(item.unit_price)}
         </p>
         <p className="mt-0.5 text-sm font-black text-slate-950">Subtotal {formatCurrency(item.total_price)}</p>
       </div>
