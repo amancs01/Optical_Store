@@ -209,19 +209,18 @@ function MobileOrderCard({
         />
       </header>
 
-      <section className="rounded-xl bg-slate-50 p-3">
-        <p className="font-bold text-slate-950">{order.customer_name}</p>
-        <div className="mt-1 grid gap-0.5 text-sm text-slate-600">
-          <a href={`tel:${order.customer_phone}`} className="font-semibold text-teal-700">{order.customer_phone}</a>
-          {order.customer_email ? <a href={`mailto:${order.customer_email}`} className="break-words">{order.customer_email}</a> : null}
-          <p className="break-words">{formatAddress(order)}</p>
-        </div>
-        <div className="mt-3 flex items-end justify-between gap-3 border-t border-slate-200 pt-3">
-          <div>
-            <p className="text-xs font-bold uppercase text-slate-400">Total</p>
-            <p className="text-xl font-black text-slate-950">{formatCurrency(order.total_amount)}</p>
+      <section className="flex flex-wrap justify-between gap-3 rounded-xl bg-slate-50 p-3">
+        <div className="min-w-0 flex-1">
+          <p className="font-bold text-slate-950">{order.customer_name}</p>
+          <div className="mt-1 grid gap-0.5 text-sm text-slate-600">
+            <a href={`tel:${order.customer_phone}`} className="font-semibold text-teal-700">{order.customer_phone}</a>
+            {order.customer_email ? <a href={`mailto:${order.customer_email}`} className="break-words">{order.customer_email}</a> : null}
+            <p className="break-words">{formatAddress(order)}</p>
           </div>
-          <p className="text-right text-xs font-semibold text-slate-500">{order.payment_method}</p>
+        </div>
+        <div className="shrink-0 text-right">
+          <p className="text-lg font-black text-slate-950">{formatCurrency(order.total_amount)}</p>
+          <p className="mt-0.5 max-w-28 text-xs font-semibold leading-tight text-slate-500">{order.payment_method}</p>
         </div>
       </section>
 
