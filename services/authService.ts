@@ -23,3 +23,28 @@ export async function signOut() {
   if (!supabase) return;
   await supabase.auth.signOut();
 }
+
+export async function sendSignupOtp(email: string, name: string) {
+  if (!supabase) throw new Error("Supabase is not configured.");
+  return supabase.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: true,
+      data: { full_name: name },
+    },
+  });
+}
+
+export async function verifySignupOtp(email: string, token: string) {
+  if (!supabase) throw new Error("Supabase is not configured.");
+  return supabase.auth.verifyOtp({
+    email,
+    token,
+    type: "email",
+  });
+}
+
+export async function setPassword(password: string) {
+  if (!supabase) throw new Error("Supabase is not configured.");
+  return supabase.auth.updateUser({ password });
+}
