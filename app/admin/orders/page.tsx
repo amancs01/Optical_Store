@@ -48,7 +48,12 @@ export default function AdminOrdersPage() {
     <AdminLayout>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-3xl font-black">Orders</h1>
-        <Select value={filter} onValueChange={(v) => { setFilter(v); setPage(1); }} placeholder="All statuses" items={ORDER_STATUSES.map((s) => ({ label: s.charAt(0).toUpperCase() + s.slice(1), value: s }))} className="w-44" />
+        <div className="flex flex-wrap items-center gap-2">
+          <Select value={filter} onValueChange={(v) => { setFilter(v); setPage(1); }} placeholder="All statuses" items={ORDER_STATUSES.map((s) => ({ label: s.charAt(0).toUpperCase() + s.slice(1), value: s }))} className="w-44" />
+          <button onClick={load}
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+          >↻ Refresh</button>
+        </div>
       </div>
       {!loading && !error && orders.length > 0 && (
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -76,10 +81,26 @@ export default function AdminOrdersPage() {
                 <h2 className="font-black">{order.order_number}</h2>
                 <p className="text-sm text-slate-600">{order.customer_name} - {order.customer_phone}</p>
                 {order.customer_email ? <p className="text-sm text-slate-600">{order.customer_email}</p> : null}
-                <p className="text-sm text-slate-600">{order.delivery_address}{order.city ? `, ${order.city}` : ""}</p>
+                <p className="text-sm text-slate-600">
+                  {(() => {
+                    const addr = order.delivery_address || "";
+                    const city = order.city || "";
+                    const showCity = city && !addr.toLowerCase().includes(city.toLowerCase());
+                    return showCity ? `${addr}, ${city}` : addr;
+                  })()}
+                </p>
                 <p className="mt-1 text-xs font-semibold uppercase text-slate-500">
                   {new Date(order.created_at).toLocaleString("en-NP", { dateStyle: "medium", timeStyle: "short" })}
                 </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <a href={`tel:${order.customer_phone}`}
+                    className="inline-flex h-8 items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 active:scale-95"
+                  >📞 Call</a>
+                  <a href={`https://wa.me/977${order.customer_phone}?text=${encodeURIComponent(`Hello ${order.customer_name}, your Titan Optical order ${order.order_number} is being processed.`)}`}
+                    target="_blank" rel="noreferrer"
+                    className="inline-flex h-8 items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-3 text-xs font-semibold text-emerald-800 transition hover:bg-emerald-100 active:scale-95"
+                  >💬 WhatsApp</a>
+                </div>
               </div>
               <div className="w-full space-y-2 sm:w-auto sm:text-right">
                 <p className="font-black">{formatCurrency(order.total_amount)}</p>
@@ -93,11 +114,11 @@ export default function AdminOrdersPage() {
                     updateOrderStatus(order.id, newStatus).catch(() => null).then(() => load()).finally(() => setUpdating((prev) => ({ ...prev, [order.id]: false })));
                   }}
                   items={ORDER_STATUSES.map((s) => ({ label: s.charAt(0).toUpperCase() + s.slice(1), value: s }))}
-                  className={updating[order.id] ? "opacity-60" : ""}
+                  className={`w-full sm:w-auto ${updating[order.id] ? "opacity-60" : ""}`}
                 />
               </div>
             </div>
-            <div className="mt-3 overflow-hidden rounded-md border border-slate-200">
+            <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
               <div className="hidden grid-cols-[1fr_auto_auto_auto] gap-10 border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold uppercase text-slate-500 sm:grid">
                 <span>Item</span>
                 <span>Qty</span>
