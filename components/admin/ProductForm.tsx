@@ -108,9 +108,9 @@ export function ProductForm({ product }: { product?: Product }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5">
-      {status ? <p className="rounded-md bg-rose-50 p-3 text-sm text-rose-700">{status}</p> : null}
-      <div className="grid gap-4 md:grid-cols-2">
+    <form onSubmit={onSubmit} className="grid w-full max-w-full gap-4 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:gap-6 md:p-8">
+      {status ? <p className="w-full max-w-full rounded-lg bg-rose-50 p-3 text-sm text-rose-700">{status}</p> : null}
+      <div className="grid w-full max-w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
         <Field
           name="name"
           label="Product name"
@@ -143,24 +143,24 @@ export function ProductForm({ product }: { product?: Product }) {
         <Field name="discount_price" label="Discount price" type="number" defaultValue={product?.discount_price || ""} />
         <Field name="stock_quantity" label="Stock quantity" type="number" min={0} defaultValue={product?.stock_quantity || 0} error={fieldErrors.stock_quantity} />
       </div>
-      <label className="grid gap-2 text-sm font-semibold text-slate-700">
+      <label className="grid w-full max-w-full gap-2 text-sm font-semibold text-slate-700">
         Description
-        <textarea name="description" defaultValue={product?.description || ""} rows={4} className="rounded-md border border-slate-200 px-3 py-2 font-normal" />
+        <textarea name="description" defaultValue={product?.description || ""} rows={4} className="box-border min-h-[120px] w-full max-w-full rounded-lg border border-slate-200 px-3 py-2 text-base font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100 md:rounded-md md:text-sm" />
       </label>
       <Field name="image_url" label="Image URL" value={mainImageUrl} onChange={(event) => setMainImageUrl(event.target.value)} />
-      <label className="grid gap-2 text-sm font-semibold text-slate-700">
+      <label className="grid w-full max-w-full gap-2 text-sm font-semibold text-slate-700">
         Upload image
-        <input name="image" type="file" accept="image/*" className="rounded-md border border-slate-200 px-3 py-2 font-normal" />
+        <input name="image" type="file" accept="image/*" className="box-border w-full max-w-full rounded-lg border border-slate-200 px-3 py-2 text-base font-normal file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-slate-700 md:rounded-md md:text-sm" />
       </label>
-      <section className="grid gap-3 rounded-md border border-slate-200 bg-slate-50 p-3">
+      <section className="grid w-full max-w-full gap-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 p-3 md:rounded-md">
         <div>
           <h2 className="text-sm font-semibold text-slate-700">Gallery images</h2>
           <p className="mt-1 text-xs text-slate-500">Upload side angle, close-up, and lifestyle images.</p>
         </div>
         {galleryImages.length ? (
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:flex md:flex-wrap md:gap-3">
             {galleryImages.map((image, index) => (
-              <div key={image.id} className="w-28 rounded-md border border-slate-200 bg-white p-2">
+              <div key={image.id} className="min-w-0 rounded-lg border border-slate-200 bg-white p-2 md:w-28 md:rounded-md">
                 <img src={image.image_url} alt={image.alt_text || nameValue || "Product gallery image"} className="h-20 w-full rounded-md object-cover" />
                 <div className="mt-2 grid gap-1">
                   <button type="button" onClick={() => void makePrimary(image)} className="rounded-md border border-slate-200 px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-50">
@@ -184,13 +184,13 @@ export function ProductForm({ product }: { product?: Product }) {
         ) : product ? (
           <p className="text-xs text-slate-500">No gallery images yet.</p>
         ) : null}
-        <label className="grid gap-2 text-sm font-semibold text-slate-700">
+        <label className="grid w-full max-w-full gap-2 text-sm font-semibold text-slate-700">
           Add gallery images
           <input
             type="file"
             multiple
             accept="image/*"
-            className="rounded-md border border-slate-200 bg-white px-3 py-2 font-normal"
+            className="box-border w-full max-w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-base font-normal file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-slate-700 md:rounded-md md:text-sm"
             onChange={(event) => {
               const files = Array.from(event.target.files || []);
               setGalleryFiles((current) => [...current, ...files]);
@@ -199,9 +199,9 @@ export function ProductForm({ product }: { product?: Product }) {
           />
         </label>
         {galleryPreviews.length ? (
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:flex md:flex-wrap md:gap-3">
             {galleryPreviews.map((preview, index) => (
-              <div key={`${preview.file.name}-${index}`} className="w-24 rounded-md border border-slate-200 bg-white p-2">
+              <div key={`${preview.file.name}-${index}`} className="min-w-0 rounded-lg border border-slate-200 bg-white p-2 md:w-24 md:rounded-md">
                 <img src={preview.url} alt="" className="h-16 w-full rounded-md object-cover" />
                 <button type="button" onClick={() => removeSelectedGalleryFile(index)} className="mt-2 w-full rounded-md bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-200">
                   Remove
@@ -211,15 +211,15 @@ export function ProductForm({ product }: { product?: Product }) {
           </div>
         ) : null}
       </section>
-      <div className="flex flex-wrap gap-4 text-sm font-semibold text-slate-700">
-        <label className="flex items-center gap-2">
-          <input name="is_active" type="checkbox" defaultChecked={product?.is_active ?? true} /> Active
+      <div className="flex flex-wrap gap-3 text-sm font-semibold text-slate-700">
+        <label className="flex min-h-11 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
+          <input name="is_active" type="checkbox" defaultChecked={product?.is_active ?? true} className="h-4 w-4" /> Active
         </label>
-        <label className="flex items-center gap-2">
-          <input name="is_featured" type="checkbox" defaultChecked={product?.is_featured ?? false} /> Featured
+        <label className="flex min-h-11 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
+          <input name="is_featured" type="checkbox" defaultChecked={product?.is_featured ?? false} className="h-4 w-4" /> Featured
         </label>
       </div>
-      <Button disabled={saving}>{saving ? "Saving..." : "Save Product"}</Button>
+      <Button disabled={saving} className="min-h-12 w-full md:w-fit">{saving ? "Saving..." : "Save Product"}</Button>
     </form>
   );
 
@@ -272,9 +272,9 @@ export function ProductForm({ product }: { product?: Product }) {
 function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string; name: string; error?: string; helper?: string }) {
   const { label, error, helper, ...inputProps } = props;
   return (
-    <label className="grid gap-2 text-sm font-semibold text-slate-700">
+    <label className="grid w-full max-w-full gap-2 text-sm font-semibold text-slate-700">
       {label}
-      <input className="rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100" aria-invalid={Boolean(error)} {...inputProps} />
+      <input className="box-border h-11 w-full max-w-full rounded-lg border border-slate-200 px-3 text-base font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100 md:rounded-md md:text-sm" aria-invalid={Boolean(error)} {...inputProps} />
       {helper ? <span className="text-xs font-medium text-slate-500">{helper}</span> : null}
       {error ? <span className="text-xs font-semibold text-rose-700">{error}</span> : null}
     </label>
@@ -295,9 +295,9 @@ function Select({
   error?: string;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-semibold text-slate-700">
+    <label className="grid w-full max-w-full gap-2 text-sm font-semibold text-slate-700">
       {label}
-      <select name={name} defaultValue={defaultValue} aria-invalid={Boolean(error)} className="rounded-md border border-slate-200 px-3 py-2 font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+      <select name={name} defaultValue={defaultValue} aria-invalid={Boolean(error)} className="box-border h-11 w-full max-w-full rounded-lg border border-slate-200 px-3 text-base font-normal focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100 md:rounded-md md:text-sm">
         <option value="">Select</option>
         {options.map((option) => (
           <option key={option} value={option}>
