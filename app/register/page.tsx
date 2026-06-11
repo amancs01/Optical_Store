@@ -148,7 +148,7 @@ export default function RegisterPage() {
         {step === "otp" ? (
           <>
             <label className="mt-5 grid gap-2 text-sm font-semibold text-slate-700">
-              Enter the 6-digit code
+              Enter the verification code
               <input
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
@@ -159,7 +159,7 @@ export default function RegisterPage() {
                 className="min-h-11 rounded-md border border-slate-200 px-3 py-2 text-center text-lg font-bold tracking-[0.3em] focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"
               />
             </label>
-            <Button disabled={loading || otp.length !== 6} className="mt-5 w-full">
+            <Button disabled={loading || otp.length < 6} className="mt-5 w-full">
               {loading ? "Verifying..." : "Verify code"}
             </Button>
             <button
