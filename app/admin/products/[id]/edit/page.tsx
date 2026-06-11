@@ -23,8 +23,10 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
   return (
     <AdminLayout>
-      <h1 className="mb-5 text-3xl font-black">Edit product</h1>
-      {error ? <StateMessage title="Product could not load" message={error} /> : product ? <ProductForm product={product} /> : <FormSkeleton />}
+      <div className="w-full max-w-full overflow-hidden">
+        <h1 className="mb-4 text-3xl font-black tracking-tight md:mb-5 md:text-5xl">Edit product</h1>
+        {error ? <StateMessage title="Product could not load" message={error} /> : product ? <ProductForm product={product} /> : <FormSkeleton />}
+      </div>
     </AdminLayout>
   );
 }
