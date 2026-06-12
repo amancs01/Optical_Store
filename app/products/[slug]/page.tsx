@@ -15,6 +15,33 @@ import { absoluteUrl } from "@/lib/seo";
 const getProductBySlugCached = cache(getProductBySlug);
 const getSimilarProductsCached = cache(getSimilarProducts);
 
+const productInfoCards = [
+  {
+    Icon: Truck,
+    title: "Free Valley delivery",
+    mobileTitle: "Delivery",
+    text: SITE_CONFIG.deliveryNote,
+    mobileText: "Inside KTM",
+    href: "/shipping-policy",
+  },
+  {
+    Icon: MessageCircle,
+    title: "Need help choosing?",
+    mobileTitle: "WhatsApp help",
+    text: "Message us on WhatsApp for frame guidance.",
+    mobileText: "Frame advice",
+    href: `https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Optical, I need help choosing eyewear.")}`,
+  },
+  {
+    Icon: CalendarCheck,
+    title: "Free eye checkup available",
+    mobileTitle: "Free checkup",
+    text: "Reserve a visit before choosing lenses.",
+    mobileText: "Book free",
+    href: "/book-eye-checkup",
+  },
+];
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
 
@@ -116,16 +143,18 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {availability.label}
           </p>
           <ProductPurchaseControls product={product} />
-          <div className="mt-4 grid gap-2 sm:grid-cols-3 sm:gap-3">
-            {[
-              [Truck, "Free Valley delivery", SITE_CONFIG.deliveryNote, "/shipping-policy"],
-              [MessageCircle, "Need help choosing?", "Message us on WhatsApp for frame guidance.", `https://wa.me/977${SITE_CONFIG.whatsapp}?text=${encodeURIComponent("Hello Titan Optical, I need help choosing eyewear.")}`],
-              [CalendarCheck, "Free eye checkup available", "Reserve a visit before choosing lenses.", "/book-eye-checkup"],
-            ].map(([Icon, title, text, href]) => (
-              <a key={String(title)} href={String(href)} className="rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3 text-sm shadow-sm hover:border-emerald-200 sm:p-4">
-                <Icon className="h-5 w-5 text-emerald-700" aria-hidden="true" />
-                <p className="mt-3 font-semibold text-slate-950">{String(title)}</p>
-                <p className="mt-1 text-slate-600">{String(text)}</p>
+          <div className="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
+            {productInfoCards.map(({ Icon, title, mobileTitle, text, mobileText, href }) => (
+              <a key={title} href={href} className="min-w-0 rounded-xl border border-slate-200 bg-[#fffaf2]/60 p-2 text-center text-xs shadow-sm hover:border-emerald-200 sm:rounded-md sm:p-4 sm:text-left sm:text-sm">
+                <Icon className="mx-auto h-4 w-4 text-emerald-700 sm:mx-0 sm:h-5 sm:w-5" aria-hidden="true" />
+                <p className="mt-2 text-[11px] font-bold leading-tight text-slate-950 sm:mt-3 sm:text-sm sm:font-semibold">
+                  <span className="sm:hidden">{mobileTitle}</span>
+                  <span className="hidden sm:inline">{title}</span>
+                </p>
+                <p className="mt-1 text-[10px] font-medium leading-tight text-slate-600 sm:text-sm sm:font-normal sm:leading-normal">
+                  <span className="sm:hidden">{mobileText}</span>
+                  <span className="hidden sm:inline">{text}</span>
+                </p>
               </a>
             ))}
           </div>
