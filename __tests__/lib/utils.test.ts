@@ -191,6 +191,7 @@ describe("delivery summary", () => {
   });
 
   it("detects Kathmandu Valley cities", () => {
+    expect(isInsideKathmanduValley("Kathmandu")).toBe(true);
     expect(isInsideKathmanduValley("Lalitpur")).toBe(true);
     expect(isInsideKathmanduValley("Bhaktapur")).toBe(true);
     expect(isInsideKathmanduValley("Pokhara")).toBe(false);
