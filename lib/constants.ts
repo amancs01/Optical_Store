@@ -13,8 +13,8 @@ export const SITE_CONFIG = {
   address: "Kichapokhari, New Road, opposite NMB Bank",
   location: "New Road, Kathmandu",
   googleMapsUrl: GOOGLE_MAPS_URL,
-  openingHours: "Sun–Fri, 10:00 AM – 7:00 PM",
-  deliveryNote: "Free delivery inside Kathmandu Valley.",
+  openingHours: "Sun-Fri, 10:00 AM - 7:00 PM",
+  deliveryNote: "Free delivery inside Kathmandu Valley. Outside valley delivery is NPR 120, free on orders above NPR 2,500.",
   defaultCity: "Kathmandu",
   logoPath: "/logo.png",
   socialLinks: {
@@ -24,6 +24,9 @@ export const SITE_CONFIG = {
   },
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://titanopticals.com",
 };
+
+export const FREE_DELIVERY_THRESHOLD = 2500;
+export const OUTSIDE_VALLEY_DELIVERY_CHARGE = 120;
 
 export const CATEGORIES = ["Eyeglasses", "Sunglasses", "Contact Lenses", "Kids Frames"];
 export const GENDERS = ["Men", "Women", "Unisex", "Kids"];
