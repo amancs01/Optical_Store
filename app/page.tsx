@@ -69,12 +69,6 @@ const categoryDropdowns: Record<string, CategoryDropdownItem[]> = {
     { label: "Women", href: "/products?category=Sunglasses&gender=Women", image: "/images/dropdowns/sunglasses-women.png" },
     { label: "Unisex", href: "/products?category=Sunglasses&gender=Unisex", image: "/images/dropdowns/sunglasses-unisex.png" },
   ],
-  "Kids Frames": [
-    { label: "1-5 years", href: "/products?category=Kids%20Frames&age=1-5", image: "/images/dropdowns/kids-1-5.png" },
-    { label: "6-8 years", href: "/products?category=Kids%20Frames&age=6-8", image: "/images/dropdowns/kids-6-8.png" },
-    { label: "8-12 years", href: "/products?category=Kids%20Frames&age=8-12", image: "/images/dropdowns/kids-8-12.png" },
-    { label: "12-17 years", href: "/products?category=Kids%20Frames&age=12-17", image: "/images/dropdowns/kids-12-17.png" },
-  ],
 };
 
 const shapeImages: Record<string, string> = {
