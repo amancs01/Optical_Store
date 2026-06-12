@@ -19,6 +19,7 @@ export function Footer() {
             <h2 className="text-base font-bold">{SITE_CONFIG.name}</h2>
           </div>
           <p className="mt-2 text-sm text-slate-300">Premium eyewear in New Road, Kathmandu.</p>
+          <p className="mt-1 text-xs font-semibold text-emerald-200">Free delivery inside Kathmandu Valley.</p>
           <div className="mt-3 grid gap-1.5 text-sm text-slate-300">
             <a href={`tel:${SITE_CONFIG.phone}`} className="font-semibold text-white transition hover:text-emerald-200">
               {SITE_CONFIG.phone}
