@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { cache } from "react";
 import { CalendarCheck, MessageCircle, Truck } from "lucide-react";
-import { AddToCartButton } from "@/components/product/AddToCartButton";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProductGallery } from "@/components/product/ProductGallery";
+import { ProductPurchaseControls } from "@/components/product/ProductPurchaseControls";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { formatCurrency, getAvailabilityDetailStatus, getSalePrice } from "@/lib/utils";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -79,7 +79,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const availability = getAvailabilityDetailStatus(product.stock_quantity);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 pb-36 pt-6 sm:px-6 md:pb-6 lg:px-8">
       <nav className="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500 sm:text-sm" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-emerald-800">Home</Link>
         <span>/</span>
@@ -115,7 +115,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <p className={`mt-5 inline-flex rounded-full px-3 py-1 text-sm font-bold ${availability.className}`}>
             {availability.label}
           </p>
-          <div className="mt-5"><AddToCartButton product={product} /></div>
+          <ProductPurchaseControls product={product} />
           <div className="mt-4 grid gap-2 sm:grid-cols-3 sm:gap-3">
             {[
               [Truck, "Free Valley delivery", SITE_CONFIG.deliveryNote, "/shipping-policy"],
