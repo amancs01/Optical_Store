@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { AddToCartToast, type AddToCartToastItem } from "@/components/ui/AddToCartToast";
 import type { CartItem, Product } from "@/types/product";
 import { getSalePrice } from "@/lib/utils";
 
@@ -22,6 +23,7 @@ const storageKey = "optical-store-cart";
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [ready, setReady] = useState(false);
+  const [toast, setToast] = useState<AddToCartToastItem | null>(null);
 
   useEffect(() => {
     window.queueMicrotask(() => {
@@ -39,6 +41,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (ready) window.localStorage.setItem(storageKey, JSON.stringify(items));
   }, [items, ready]);
 
+  const closeToast = useCallback(() => setToast(null), []);
+
   const value = useMemo<CartContextValue>(() => {
     const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const count = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -49,6 +53,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       subtotal,
       count,
       addProduct(product) {
+        const price = getSalePrice(product);
+
         setItems((current) => {
           const existing = current.find((item) => item.productId === product.id);
           if (existing) {
@@ -64,11 +70,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               name: product.name,
               slug: product.slug,
               imageUrl: product.image_url,
-              price: getSalePrice(product),
+              price,
               quantity: 1,
               selectedColor: product.color,
             },
           ];
+        });
+
+        setToast({
+          id: Date.now(),
+          name: product.name,
+          imageUrl: product.image_url,
+          price,
         });
       },
       increment(productId) {
@@ -96,7 +109,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     };
   }, [items, ready]);
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+      <AddToCartToast toast={toast} onClose={closeToast} />
+    </CartContext.Provider>
+  );
 }
 
 export function useCart() {
