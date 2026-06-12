@@ -60,9 +60,45 @@ describe("orderService", () => {
       mockGetUser.mockResolvedValue({ data: { user: { id: "u1" } } });
       mockChain.single.mockResolvedValue({ data: fakeOrder, error: null });
       const items = [{ productId: "p1", name: "Frame", slug: "f", imageUrl: null, price: 5000, quantity: 1 }];
-      const input = { customer_name: "John", customer_phone: "9800000000", delivery_address: "Street" };
+      const input = { customer_name: "John", customer_phone: "9800000000", city: "Pokhara", delivery_address: "Street" };
       const result = await createOrder(input, items);
       expect(result.order_number).toMatch(/^OS-\d{8}-\d{4}$/);
+    });
+
+    it("keeps delivery free inside Kathmandu Valley below the threshold", async () => {
+      mockGetUser.mockResolvedValue({ data: { user: { id: "u1" } } });
+      mockChain.single.mockResolvedValue({ data: fakeOrder, error: null });
+      const items = [{ productId: "p1", name: "Frame", slug: "f", imageUrl: null, price: 1000, quantity: 1 }];
+      const input = { customer_name: "John", customer_phone: "9800000000", city: "Kathmandu", delivery_address: "Street" };
+      await createOrder(input, items);
+      const payload = mockChain.insert.mock.calls[0][0];
+      expect(payload.subtotal).toBe(1000);
+      expect(payload.delivery_fee).toBe(0);
+      expect(payload.total_amount).toBe(1000);
+    });
+
+    it("adds delivery charge outside Kathmandu Valley below the threshold", async () => {
+      mockGetUser.mockResolvedValue({ data: { user: { id: "u1" } } });
+      mockChain.single.mockResolvedValue({ data: fakeOrder, error: null });
+      const items = [{ productId: "p1", name: "Frame", slug: "f", imageUrl: null, price: 1000, quantity: 1 }];
+      const input = { customer_name: "John", customer_phone: "9800000000", city: "Pokhara", delivery_address: "Street" };
+      await createOrder(input, items);
+      const payload = mockChain.insert.mock.calls[0][0];
+      expect(payload.subtotal).toBe(1000);
+      expect(payload.delivery_fee).toBe(120);
+      expect(payload.total_amount).toBe(1120);
+    });
+
+    it("keeps delivery free when subtotal reaches threshold", async () => {
+      mockGetUser.mockResolvedValue({ data: { user: { id: "u1" } } });
+      mockChain.single.mockResolvedValue({ data: fakeOrder, error: null });
+      const items = [{ productId: "p1", name: "Frame", slug: "f", imageUrl: null, price: 2500, quantity: 1 }];
+      const input = { customer_name: "John", customer_phone: "9800000000", delivery_address: "Street" };
+      await createOrder(input, items);
+      const payload = mockChain.insert.mock.calls[0][0];
+      expect(payload.subtotal).toBe(2500);
+      expect(payload.delivery_fee).toBe(0);
+      expect(payload.total_amount).toBe(2500);
     });
   });
 
@@ -87,7 +123,7 @@ describe("orderService", () => {
       mockChain.order.mockResolvedValue({ data: [fakeOrder], error: null });
       const result = await getOrders();
       expect(result).toHaveLength(1);
-      expect(mockChain.select).toHaveBeenCalledWith("*, order_items(*)");
+      expect(mockChain.select).toHaveBeenCalledWith("*, order_items(*, products(id, name, image_url))");
     });
   });
 

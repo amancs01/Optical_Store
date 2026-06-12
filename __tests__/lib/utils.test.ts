@@ -1,5 +1,15 @@
 import { describe, it, expect } from "vitest";
-import { cn, formatCurrency, slugify, getSalePrice, getAvailabilityStatus, getAvailabilityDetailStatus, generateOrderNumber } from "@/lib/utils";
+import {
+  cn,
+  formatCurrency,
+  slugify,
+  getSalePrice,
+  getAvailabilityStatus,
+  getAvailabilityDetailStatus,
+  generateOrderNumber,
+  getDeliverySummary,
+  isInsideKathmanduValley,
+} from "@/lib/utils";
 
 describe("cn", () => {
   it("merges class names", () => {
@@ -148,5 +158,41 @@ describe("generateOrderNumber", () => {
     const a = generateOrderNumber();
     const b = generateOrderNumber();
     expect(a).not.toBe(b);
+  });
+});
+
+describe("delivery summary", () => {
+  it("keeps delivery free inside Kathmandu Valley below the threshold", () => {
+    const delivery = getDeliverySummary(1000, { city: "Kathmandu", delivery_address: "New Road" });
+    expect(delivery.deliveryFee).toBe(0);
+    expect(delivery.total).toBe(1000);
+    expect(delivery.insideValley).toBe(true);
+  });
+
+  it("charges outside valley delivery below the threshold", () => {
+    const delivery = getDeliverySummary(1000, { city: "Pokhara", delivery_address: "Lakeside" });
+    expect(delivery.deliveryFee).toBe(120);
+    expect(delivery.total).toBe(1120);
+    expect(delivery.qualifiesForFreeDelivery).toBe(false);
+  });
+
+  it("keeps outside valley delivery free at the threshold", () => {
+    const delivery = getDeliverySummary(2500, { city: "Pokhara", delivery_address: "Lakeside" });
+    expect(delivery.deliveryFee).toBe(0);
+    expect(delivery.total).toBe(2500);
+    expect(delivery.qualifiesForFreeDelivery).toBe(true);
+  });
+
+  it("does not choose a delivery fee when location is unknown", () => {
+    const delivery = getDeliverySummary(1000);
+    expect(delivery.deliveryFee).toBeNull();
+    expect(delivery.total).toBe(1000);
+    expect(delivery.locationKnown).toBe(false);
+  });
+
+  it("detects Kathmandu Valley cities", () => {
+    expect(isInsideKathmanduValley("Lalitpur")).toBe(true);
+    expect(isInsideKathmanduValley("Bhaktapur")).toBe(true);
+    expect(isInsideKathmanduValley("Pokhara")).toBe(false);
   });
 });
