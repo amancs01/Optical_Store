@@ -1,12 +1,18 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { SocialIconLinks } from "@/components/layout/SocialIconLinks";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export function Footer() {
+  const pathname = usePathname();
+  const hideMobileFooter = shouldHideMobileFooter(pathname);
+
   return (
     <footer className="mt-auto border-t border-slate-200 bg-slate-950 text-white">
-      <div className="md:hidden">
+      <div className={hideMobileFooter ? "hidden md:hidden" : "md:hidden"}>
         <div className="px-4 pb-24 pt-5">
           <div className="flex items-center gap-2.5">
             <Image src={SITE_CONFIG.logoPath} alt={SITE_CONFIG.name} width={36} height={36} loading="lazy" className="h-9 w-9 rounded-md object-contain" />
@@ -112,4 +118,16 @@ export function Footer() {
       </div>
     </footer>
   );
+}
+
+function shouldHideMobileFooter(pathname: string | null) {
+  if (!pathname) return false;
+
+  return [
+    "/products",
+    "/cart",
+    "/checkout",
+    "/account",
+    "/admin",
+  ].some((route) => pathname === route || pathname.startsWith(`${route}/`));
 }
