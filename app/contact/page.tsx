@@ -87,7 +87,6 @@ export default function ContactPage() {
                 <a href={`mailto:${SITE_CONFIG.email}`} className="font-semibold text-slate-900 hover:text-emerald-800">
                   {SITE_CONFIG.email}
                 </a>
-                <span className="block text-xs text-slate-500">{SITE_CONFIG.emailNote}</span>
               </ContactInfo>
               <ContactInfo icon={<Clock className="h-4 w-4" />} label="Opening hours">
                 <span>{SITE_CONFIG.openingHours}</span>
