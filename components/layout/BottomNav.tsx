@@ -18,9 +18,21 @@ export function BottomNav() {
   const pathname = usePathname();
   const { count } = useCart();
   const [hydrated, setHydrated] = useState(false);
+  const [cartShaking, setCartShaking] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    function shakeCart() {
+      setCartShaking(false);
+      window.setTimeout(() => setCartShaking(true), 10);
+      window.setTimeout(() => setCartShaking(false), 620);
+    }
+
+    window.addEventListener("cart-target-shake", shakeCart);
+    return () => window.removeEventListener("cart-target-shake", shakeCart);
   }, []);
 
   if (pathname?.startsWith("/admin")) return null;
@@ -35,9 +47,11 @@ export function BottomNav() {
             <Link
               key={href}
               href={href}
+              data-cart-icon-target={href === "/cart" ? "bottom" : undefined}
               className={cn(
                 "relative grid min-h-14 place-items-center rounded-md px-2 py-1 text-[11px] font-bold text-slate-500",
                 active && "bg-emerald-50 text-emerald-800",
+                href === "/cart" && cartShaking && "cart-target-shake",
               )}
             >
               <Icon className="h-5 w-5" aria-hidden="true" />
