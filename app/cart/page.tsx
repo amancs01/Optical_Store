@@ -29,15 +29,6 @@ export default function CartPage() {
         </div>
       ) : (
         <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_320px] lg:items-start">
-          <div className="rounded-md border border-emerald-100 bg-white p-4 shadow-sm lg:hidden">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-wide text-slate-500">Total</p>
-                <p className="text-xl font-black">{formatCurrency(subtotal)}</p>
-              </div>
-              <LinkButton href="/checkout">Checkout</LinkButton>
-            </div>
-          </div>
           <div className="grid h-fit gap-3 self-start">
             {items.map((item) => (
               <div key={item.productId} className="grid h-auto grid-cols-[76px_1fr] gap-3 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3 shadow-sm sm:grid-cols-[88px_1fr] sm:items-center sm:p-4">
