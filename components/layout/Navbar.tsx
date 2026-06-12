@@ -55,12 +55,24 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [cartShaking, setCartShaking] = useState(false);
   const { count } = useCart();
   const { user, isAdmin, signOut } = useCurrentUser();
   const pathname = usePathname();
 
   useEffect(() => {
     setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    function shakeCart() {
+      setCartShaking(false);
+      window.setTimeout(() => setCartShaking(true), 10);
+      window.setTimeout(() => setCartShaking(false), 620);
+    }
+
+    window.addEventListener("cart-target-shake", shakeCart);
+    return () => window.removeEventListener("cart-target-shake", shakeCart);
   }, []);
 
   async function logout() {
@@ -166,7 +178,11 @@ export function Navbar() {
           )}
           <Link
             href="/cart"
-            className="relative inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 hover:bg-slate-50"
+            data-cart-icon-target="top"
+            className={cn(
+              "relative inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 hover:bg-slate-50",
+              cartShaking && "cart-target-shake",
+            )}
             aria-label="Cart"
           >
             <ShoppingBag className="h-5 w-5" />
