@@ -28,7 +28,7 @@ export default function CartPage() {
           <LinkButton href="/products" className="mt-4">Continue shopping</LinkButton>
         </div>
       ) : (
-        <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_320px]">
+        <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_320px] lg:items-start">
           <div className="rounded-md border border-emerald-100 bg-white p-4 shadow-sm lg:hidden">
             <div className="flex items-center justify-between">
               <div>
@@ -38,9 +38,9 @@ export default function CartPage() {
               <LinkButton href="/checkout">Checkout</LinkButton>
             </div>
           </div>
-          <div className="grid gap-3">
+          <div className="grid h-fit gap-3 self-start">
             {items.map((item) => (
-              <div key={item.productId} className="grid grid-cols-[76px_1fr] gap-3 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3 shadow-sm sm:grid-cols-[88px_1fr] sm:p-4 sm:items-start">
+              <div key={item.productId} className="grid h-auto grid-cols-[76px_1fr] gap-3 rounded-md border border-slate-200 bg-[#fffaf2]/60 p-3 shadow-sm sm:grid-cols-[88px_1fr] sm:items-center sm:p-4">
                 <Link href={`/products/${item.slug}`} className="relative h-20 overflow-hidden rounded-md bg-emerald-50 sm:h-24">
                   {item.imageUrl ? (
                     <Image src={item.imageUrl} alt={item.name} fill loading="lazy" className="object-cover" sizes="88px" />
