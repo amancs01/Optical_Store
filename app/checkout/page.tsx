@@ -7,7 +7,7 @@ import { Spinner } from "@/components/ui/Spinner";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { useCart } from "@/components/cart/CartProvider";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, getDeliverySummary } from "@/lib/utils";
 import { createOrder } from "@/services/orderService";
 import type { CartItem } from "@/types/product";
 
@@ -34,6 +34,8 @@ type Confirmation = {
 
 export default function CheckoutPage() {
   const { items, subtotal, clear, hydrated } = useCart();
+  const [cityValue, setCityValue] = useState("Kathmandu");
+  const delivery = getDeliverySummary(subtotal, cityValue);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof CheckoutFields, string>>>({});
@@ -107,7 +109,14 @@ export default function CheckoutPage() {
           <Field name="customer_name" label="Full name" required error={fieldErrors.customer_name} />
           <Field name="customer_phone" label="Phone" required error={fieldErrors.customer_phone} />
           <Field name="customer_email" label="Email" type="email" />
-          <Field name="city" label="City" required defaultValue="Kathmandu" error={fieldErrors.city} />
+          <Field
+            name="city"
+            label="City"
+            required
+            value={cityValue}
+            onChange={(event) => setCityValue(event.target.value)}
+            error={fieldErrors.city}
+          />
         </div>
         <label className="grid gap-2 text-sm font-semibold text-slate-700">
           Delivery address
@@ -128,7 +137,7 @@ export default function CheckoutPage() {
           </div>
           <div className="flex items-center gap-2">
             <Truck className="h-4 w-4 text-emerald-700" aria-hidden="true" />
-            <span>Free Valley delivery</span>
+            <span>Free inside KTM</span>
           </div>
           <div className="flex items-center gap-2">
             <Phone className="h-4 w-4 text-emerald-700" aria-hidden="true" />
@@ -152,11 +161,20 @@ export default function CheckoutPage() {
           <div className="mt-3 flex justify-between gap-3 text-sm">
             <div>
               <span>Delivery</span>
-              <p className="text-xs text-slate-500">Inside Kathmandu Valley</p>
+              <p className="text-xs text-slate-500">Inside KTM free | Outside valley NPR 120</p>
             </div>
-            <strong className="text-emerald-700">Free</strong>
+            <strong className={delivery.qualifiesForFreeDelivery ? "text-emerald-700" : "text-slate-950"}>
+              {delivery.qualifiesForFreeDelivery
+                ? "Free"
+                : delivery.locationKnown
+                  ? formatCurrency(delivery.deliveryFee)
+                  : "Calculated"}
+            </strong>
           </div>
-          <div className="mt-4 flex justify-between text-lg"><span>Total</span><strong>{formatCurrency(subtotal)}</strong></div>
+          <p className="mt-3 rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-600">
+            Free delivery inside Kathmandu Valley. Outside valley delivery is NPR 120, free on orders above NPR 2,500.
+          </p>
+          <div className="mt-4 flex justify-between text-lg"><span>Total</span><strong>{formatCurrency(delivery.total)}</strong></div>
         </div>
       </aside>
     </div>
@@ -216,7 +234,7 @@ function OrderConfirmation({ confirmation }: { confirmation: Confirmation }) {
           <p className="text-sm font-bold text-emerald-800">What happens next</p>
           <ul className="mt-2 grid gap-1.5 text-sm text-emerald-900">
             <li>1. Titan Optical will call or WhatsApp you within a few hours to confirm your order and delivery details.</li>
-            <li>2. Your order will be prepared and dispatched. Delivery inside Kathmandu Valley is typically 1-3 days.</li>
+            <li>2. Your order will be prepared and dispatched. Delivery timing depends on your address and courier route.</li>
             <li>3. Pay cash to the delivery person when your order arrives.</li>
           </ul>
         </div>

@@ -1,4 +1,4 @@
-import { generateOrderNumber } from "@/lib/utils";
+import { generateOrderNumber, getDeliverySummary } from "@/lib/utils";
 import { requireSupabase } from "@/lib/supabase/client";
 import type { CartItem } from "@/types/product";
 import type { Order, OrderItem } from "@/types/order";
@@ -18,15 +18,18 @@ export async function createOrder(input: CheckoutInput, items: CartItem[]) {
     data: { user },
   } = await supabase.auth.getUser();
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const deliveryFee = 0;
+  const delivery = getDeliverySummary(subtotal, {
+    city: input.city,
+    delivery_address: input.delivery_address,
+  });
   const orderPayload = {
     ...input,
     user_id: user?.id || null,
     order_number: generateOrderNumber(),
     payment_method: "Cash on Delivery",
     subtotal,
-    delivery_fee: deliveryFee,
-    total_amount: subtotal + deliveryFee,
+    delivery_fee: delivery.deliveryFee || 0,
+    total_amount: delivery.total,
   };
 
   const { data: order, error: orderError } = await supabase

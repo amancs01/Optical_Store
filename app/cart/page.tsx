@@ -6,10 +6,12 @@ import { Glasses, Minus, Plus, Trash2 } from "lucide-react";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Spinner } from "@/components/ui/Spinner";
 import { useCart } from "@/components/cart/CartProvider";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, getDeliverySummary } from "@/lib/utils";
 
 export default function CartPage() {
   const { items, subtotal, increment, decrement, remove, hydrated } = useCart();
+  const delivery = getDeliverySummary(subtotal);
+  const cartTotal = subtotal;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8">
@@ -62,15 +64,26 @@ export default function CartPage() {
           <aside className="h-fit rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
             <h2 className="mb-4 text-xl font-bold">Order summary</h2>
             <div className="flex justify-between text-sm"><span>Subtotal</span><strong>{formatCurrency(subtotal)}</strong></div>
-            <div className="mt-3 flex justify-between gap-3 text-sm">
-              <div>
+            <div className="mt-3 flex items-start justify-between gap-4 text-sm">
+              <div className="min-w-0 flex-1">
                 <span>Delivery</span>
-                <p className="text-xs text-slate-500">Inside Kathmandu Valley</p>
+                <p className="text-xs text-slate-500">
+                  {delivery.qualifiesForFreeDelivery
+                    ? "Free inside KTM and outside valley"
+                    : "Inside KTM free | Outside valley NPR 120"}
+                </p>
               </div>
-              <strong className="text-emerald-700">Free</strong>
+              <strong className={`max-w-[140px] shrink-0 text-right text-xs leading-snug sm:text-sm ${delivery.qualifiesForFreeDelivery ? "text-emerald-700" : "text-slate-950"}`}>
+                {delivery.qualifiesForFreeDelivery ? "Free" : "Calculated at checkout"}
+              </strong>
             </div>
-            <div className="mt-4 border-t border-slate-200 pt-4 flex justify-between text-lg"><span>Total</span><strong>{formatCurrency(subtotal)}</strong></div>
+            <div className="mt-4 border-t border-slate-200 pt-4 flex justify-between text-lg"><span>Estimated total</span><strong>{formatCurrency(cartTotal)}</strong></div>
             <LinkButton href="/checkout" className="mt-5 w-full">Checkout</LinkButton>
+            {!delivery.qualifiesForFreeDelivery ? (
+              <p className="mt-3 rounded-md bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-900">
+                Add {formatCurrency(delivery.amountUntilFreeDelivery)} more for free delivery outside Kathmandu Valley.
+              </p>
+            ) : null}
             <LinkButton href="/products" variant="secondary" className="mt-3 w-full">Continue shopping</LinkButton>
           </aside>
         </div>

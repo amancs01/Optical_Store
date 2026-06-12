@@ -27,8 +27,8 @@ export default function TermsPage() {
           the customer cannot be reached.
         </p>
         <p>
-          Delivery is currently available within Nepal, with free delivery inside Kathmandu Valley and courier delivery
-          available for other locations where service is possible.
+          Delivery is currently available within Nepal. Delivery is free inside Kathmandu Valley. Outside Kathmandu
+          Valley, delivery is NPR 120 for orders below NPR 2,500 and free for orders of NPR 2,500 or more.
         </p>
         <p>
           Returns, exchanges, and refunds are handled according to our Return Policy. Prescription lens and hygiene-related

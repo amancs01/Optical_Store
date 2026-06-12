@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { FREE_DELIVERY_THRESHOLD, OUTSIDE_VALLEY_DELIVERY_CHARGE } from "@/lib/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -38,6 +39,37 @@ export function getAvailabilityDetailStatus(stock: number) {
   return {
     ...status,
     label: stock > 3 ? "Available in store" : status.label,
+  };
+}
+
+export function isInsideKathmanduValley(location?: { city?: string | null; delivery_address?: string | null } | string | null) {
+  const value = typeof location === "string"
+    ? location
+    : [location?.city, location?.delivery_address].filter(Boolean).join(" ");
+  const normalized = value.toLowerCase();
+
+  return ["kathmandu", "ktm", "lalitpur", "patan", "bhaktapur", "kirtipur"].some((place) =>
+    normalized.includes(place),
+  );
+}
+
+export function getDeliverySummary(
+  subtotal: number,
+  location?: { city?: string | null; delivery_address?: string | null } | string | null,
+) {
+  const locationKnown = Boolean(typeof location === "string" ? location.trim() : location?.city || location?.delivery_address);
+  const insideValley = locationKnown && isInsideKathmanduValley(location);
+  const qualifiesForFreeDelivery = insideValley || subtotal >= FREE_DELIVERY_THRESHOLD;
+  const deliveryFee = !locationKnown ? null : qualifiesForFreeDelivery ? 0 : OUTSIDE_VALLEY_DELIVERY_CHARGE;
+  const amountUntilFreeDelivery = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
+
+  return {
+    deliveryFee,
+    total: subtotal + (deliveryFee || 0),
+    qualifiesForFreeDelivery,
+    insideValley,
+    locationKnown,
+    amountUntilFreeDelivery,
   };
 }
 

@@ -97,7 +97,7 @@ export default function CustomerOrderDetailPage({ params }: { params: Promise<{ 
             {order.city ? <p className="mt-1 text-sm text-slate-600">{order.city}</p> : null}
             <div className="mt-4 border-t border-slate-200 pt-4 text-sm">
               <div className="flex justify-between"><span>Subtotal</span><strong>{formatCurrency(order.subtotal)}</strong></div>
-              <div className="mt-2 flex justify-between"><span>Delivery</span><strong>{formatCurrency(order.delivery_fee)}</strong></div>
+              <div className="mt-2 flex justify-between"><span>Delivery</span><strong>{order.delivery_fee > 0 ? formatCurrency(order.delivery_fee) : "Free"}</strong></div>
               <div className="mt-3 flex justify-between text-base"><span>Total</span><strong>{formatCurrency(order.total_amount)}</strong></div>
             </div>
           </aside>

@@ -18,10 +18,10 @@ const getSimilarProductsCached = cache(getSimilarProducts);
 const productInfoCards = [
   {
     Icon: Truck,
-    title: "Free Valley delivery",
+    title: "Free Delivery",
     mobileTitle: "Delivery",
-    text: SITE_CONFIG.deliveryNote,
-    mobileText: "Inside KTM",
+    text: "Inside KTM Valley. Outside NPR 120, free above NPR 2,500.",
+    mobileText: "Free inside KTM",
     href: "/shipping-policy",
   },
   {
@@ -96,7 +96,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <div className="mx-auto max-w-4xl px-4 py-10">
         <StateMessage
           title="Product not found"
-          message="This product is unavailable or has not been added in Supabase yet."
+          message="This product is currently unavailable or may have been removed."
         />
       </div>
     );

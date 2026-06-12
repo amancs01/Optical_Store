@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Shipping Policy",
   description:
-    "Read Titan Optical shipping details for Kathmandu Valley delivery, courier delivery across Nepal, and prescription lens order timing.",
+    "Read Titan Optical shipping details, Kathmandu Valley free delivery, outside valley charges, and prescription lens order timing.",
   path: "/shipping-policy",
 });
 
@@ -14,14 +14,14 @@ export default function ShippingPolicyPage() {
       <h1 className="text-4xl font-black">Shipping Policy</h1>
       <div className="mt-6 space-y-6 leading-8 text-slate-600">
         <p>
-          Titan Optical provides free delivery inside Kathmandu Valley, covering Kathmandu, Lalitpur, and Bhaktapur.
+          Titan Optical provides free delivery inside Kathmandu Valley. Outside Kathmandu Valley, delivery is NPR 120
+          for orders below NPR 2,500 and free for orders of NPR 2,500 or more.
           Orders received before 4:00 PM are prepared for same-day dispatch whenever stock and delivery timing allow.
           Orders placed later in the day may be dispatched on the following day.
         </p>
         <p>
-          For addresses outside Kathmandu Valley, we deliver across Nepal through courier partners. Delivery time is
-          usually 2 to 5 business days, depending on the destination and courier route. Any delivery charge may be shown
-          at checkout or confirmed by our team before dispatch.
+          We deliver across Nepal through courier partners. Delivery time is usually 2 to 5 business days, depending on
+          the destination and courier route.
         </p>
         <p>
           Prescription lens orders can take an additional 1 to 3 business days because lenses need to be prepared,
