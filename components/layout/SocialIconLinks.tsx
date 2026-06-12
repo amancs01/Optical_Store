@@ -7,10 +7,22 @@ const socialLinks = [
   ["TikTok", SITE_CONFIG.socialLinks.tiktok],
 ] as const;
 
-export function SocialIconLinks({ className, variant = "dark" }: { className?: string; variant?: "dark" | "light" }) {
+export function SocialIconLinks({
+  className,
+  variant = "dark",
+  includeWhatsApp = false,
+}: {
+  className?: string;
+  variant?: "dark" | "light";
+  includeWhatsApp?: boolean;
+}) {
+  const links = includeWhatsApp
+    ? [...socialLinks, ["WhatsApp", `https://wa.me/977${SITE_CONFIG.whatsapp}`] as const]
+    : socialLinks;
+
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
-      {socialLinks.map(([label, href]) => (
+      {links.map(([label, href]) => (
         <a
           key={label}
           href={href}
@@ -27,6 +39,7 @@ export function SocialIconLinks({ className, variant = "dark" }: { className?: s
           {label === "Facebook" ? <FacebookIcon className="h-4 w-4" /> : null}
           {label === "Instagram" ? <InstagramIcon className="h-4 w-4" /> : null}
           {label === "TikTok" ? <TikTokIcon className="h-4 w-4" /> : null}
+          {label === "WhatsApp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
         </a>
       ))}
     </div>
@@ -55,6 +68,14 @@ function TikTokIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M15.8 3c.4 2.3 1.7 3.8 4.2 4v3.1c-1.5.1-2.9-.4-4.1-1.2v5.9c0 3.1-2 5.2-5.1 5.2-2.9 0-5-1.8-5-4.5 0-2.9 2.4-4.8 5.6-4.5v3.1c-1.4-.2-2.3.3-2.3 1.3 0 .9.7 1.5 1.8 1.5 1.2 0 1.8-.7 1.8-2.1V3h3.1Z" />
+    </svg>
+  );
+}
+
+function WhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 3.2a8.6 8.6 0 0 0-7.4 13L3.5 21l4.9-1.1A8.6 8.6 0 1 0 12 3.2Zm0 1.7a6.9 6.9 0 0 1 5.8 10.7 6.9 6.9 0 0 1-8.7 2.6l-.3-.2-2.9.7.6-2.8-.2-.3A6.9 6.9 0 0 1 12 4.9Zm-3 3.8c-.2 0-.6.1-.9.5-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.2 4.9 4.3 2.4.9 2.9.6 3.4.6.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.1-1.2-.1-.2-.3-.2-.7-.4l-1.9-.9c-.3-.1-.5-.2-.8.2l-.7.9c-.2.3-.4.3-.7.1-.4-.2-1.4-.5-2.6-1.6-1-.9-1.6-2-1.8-2.3-.2-.4 0-.5.1-.7l.5-.6c.1-.2.2-.3.3-.5.1-.2.1-.4 0-.6l-.9-2.1c-.2-.4-.4-.4-.7-.4H9Z" />
     </svg>
   );
 }
