@@ -46,7 +46,7 @@ export default function MyOrdersPage() {
 
   if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-7"><StateMessage title="Supabase is not configured" message="Add Supabase variables to view orders." /></div>;
   if (authLoading || loading) return <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8"><ListSkeleton rows={4} /></div>;
-  if (!user) return <p className="mx-auto max-w-4xl px-4 py-7 text-sm text-slate-600">Redirecting to login...</p>;
+  if (!user) return <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8"><ListSkeleton rows={4} /></div>;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8">
