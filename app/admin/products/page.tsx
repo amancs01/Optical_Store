@@ -21,12 +21,15 @@ export default function AdminProductsPage() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const { isAdmin } = useAdminStatus();
 
   function load() {
     setLoading(true);
     setError("");
+    setSuccess("");
     getAllProductsForAdmin()
       .then(setProducts)
       .catch((err) => {
@@ -41,15 +44,41 @@ export default function AdminProductsPage() {
     window.queueMicrotask(load);
   }, [isAdmin]);
 
-  const visible = useMemo(() => products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())), [products, search]);
+  const visible = useMemo(
+    () => products.filter((p) => p.is_active !== false && p.name.toLowerCase().includes(search.toLowerCase())),
+    [products, search],
+  );
   const totalPages = Math.ceil(visible.length / PAGE_SIZE);
   const paginated = visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+  function handleDeleteClick(event: React.MouseEvent<HTMLButtonElement>, product: Product) {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log("Delete clicked:", product);
+    console.log("Product id:", product.id);
+    void confirmDelete(product);
+  }
+
   async function confirmDelete(product: Product) {
-    const confirmed = window.confirm(`Delete "${product.name}"? This cannot be undone.`);
+    const confirmed = window.confirm("Delete this product? This action cannot be undone.");
     if (!confirmed) return;
-    await deleteProduct(product.id);
-    load();
+    setDeletingId(product.id);
+    setError("");
+    setSuccess("");
+    try {
+      const result = await deleteProduct(product.id);
+      setProducts((current) => current.filter((item) => item.id !== product.id));
+      const message = result.archived ? "Product archived successfully." : "Product deleted.";
+      setSuccess(message);
+      window.alert(message);
+    } catch (err) {
+      console.error("Product delete failed", err);
+      const message = err instanceof Error ? err.message : "Product could not be deleted.";
+      setError(message);
+      window.alert(message);
+    } finally {
+      setDeletingId(null);
+    }
   }
 
   return (
@@ -61,13 +90,14 @@ export default function AdminProductsPage() {
             placeholder="Search products"
             className="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100 sm:w-56 sm:flex-none" />
           <LinkButton href="/admin/products/new">+ Add</LinkButton>
-          <button onClick={load}
+          <button type="button" onClick={load}
             className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
             title="Refresh">↻</button>
         </div>
       </div>
       {loading ? <div className="mt-5"><ListSkeleton rows={5} /></div> : null}
-      {error ? <div className="mt-5"><StateMessage title="Products could not load" message={error} /></div> : null}
+      {success ? <div className="mt-5"><StateMessage title="Product updated" message={success} /></div> : null}
+      {error ? <div className="mt-5"><StateMessage title="Product action failed" message={error} /></div> : null}
       {!loading && !error && !visible.length ? <div className="mt-5"><StateMessage title="No products found" message="Add a product or change the search term." /></div> : null}
       {!loading && !error && visible.length ? <>
         {/* Desktop table - hidden on mobile */}
@@ -102,8 +132,9 @@ export default function AdminProductsPage() {
                       <Link href={`/admin/products/${product.id}/edit`}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md text-teal-700 hover:bg-teal-50"
                         aria-label="Edit product"><Pencil className="h-4 w-4" /></Link>
-                      <button onClick={() => confirmDelete(product)}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-rose-600 hover:bg-rose-50"
+                      <button type="button" onClick={(event) => handleDeleteClick(event, product)}
+                        disabled={deletingId === product.id}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-rose-600 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50"
                         aria-label="Delete product"><Trash2 className="h-4 w-4" /></button>
                     </div>
                   </td>
@@ -134,8 +165,9 @@ export default function AdminProductsPage() {
                 <Link href={`/admin/products/${product.id}/edit`}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-teal-700 hover:bg-teal-50"
                   aria-label="Edit"><Pencil className="h-4 w-4" /></Link>
-                <button onClick={() => confirmDelete(product)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-rose-200 text-rose-600 hover:bg-rose-50"
+                <button type="button" onClick={(event) => handleDeleteClick(event, product)}
+                  disabled={deletingId === product.id}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-rose-200 text-rose-600 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50"
                   aria-label="Delete"><Trash2 className="h-4 w-4" /></button>
               </div>
             </div>

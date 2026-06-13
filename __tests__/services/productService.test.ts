@@ -26,6 +26,10 @@ vi.mock("@/lib/supabase/client", () => ({
   supabase: {},
 }));
 
+vi.mock("@/services/productImageService", () => ({
+  getProductImages: vi.fn().mockResolvedValue([]),
+}));
+
 const fakeProduct = {
   id: "1", name: "Test Frame", slug: "test-frame", description: null,
   brand: "Titan", category: "Eyeglasses", gender: "Men", frame_type: "Full Rim",
@@ -96,7 +100,7 @@ describe("productService", () => {
       mockChain.eq.mockReturnThis();
       mockChain.single.mockResolvedValue({ data: fakeProduct, error: null });
       const result = await getProductBySlug("test-frame");
-      expect(result).toEqual(fakeProduct);
+      expect(result).toEqual({ ...fakeProduct, images: [] });
     });
   });
 
@@ -132,7 +136,7 @@ describe("productService", () => {
       mockChain.eq.mockReturnThis();
       mockChain.single.mockResolvedValue({ data: fakeProduct, error: null });
       const result = await getProductById("1");
-      expect(result).toEqual(fakeProduct);
+      expect(result).toEqual({ ...fakeProduct, images: [] });
     });
   });
 
@@ -169,16 +173,26 @@ describe("productService", () => {
   });
 
   describe("deleteProduct", () => {
-    it("deletes a product by id", async () => {
-      mockChain.delete.mockReturnThis();
-      mockChain.eq.mockResolvedValue({ error: null });
-      await expect(deleteProduct("1")).resolves.toBeUndefined();
+    it("archives a product by id", async () => {
+      mockChain.update.mockReturnThis();
+      mockChain.eq.mockReturnThis();
+      mockChain.select.mockReturnThis();
+      mockChain.single.mockResolvedValue({ data: { ...fakeProduct, is_active: false }, error: null });
+
+      await expect(deleteProduct("1")).resolves.toEqual({ archived: true, data: { ...fakeProduct, is_active: false } });
+      expect(mockFrom).toHaveBeenCalledWith("products");
+      expect(mockChain.update).toHaveBeenCalledWith(expect.objectContaining({ is_active: false }));
+      expect(mockChain.eq).toHaveBeenCalledWith("id", "1");
+      expect(mockChain.delete).not.toHaveBeenCalled();
     });
 
-    it("throws on error", async () => {
-      mockChain.delete.mockReturnThis();
-      mockChain.eq.mockResolvedValue({ error: new Error("Delete failed") });
-      await expect(deleteProduct("1")).rejects.toThrow("Delete failed");
+    it("throws on archive errors", async () => {
+      mockChain.update.mockReturnThis();
+      mockChain.eq.mockReturnThis();
+      mockChain.select.mockReturnThis();
+      mockChain.single.mockResolvedValue({ data: null, error: new Error("Archive failed") });
+
+      await expect(deleteProduct("1")).rejects.toThrow("Archive failed");
     });
   });
 });

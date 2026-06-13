@@ -5,6 +5,11 @@ import { getProductImages } from "@/services/productImageService";
 
 const productSelect = "*";
 
+export type DeleteProductResult = {
+  archived: boolean;
+  data: Product | null;
+};
+
 export async function getActiveProducts() {
   const supabase = requireSupabase();
   const { data, error } = await supabase
@@ -110,6 +115,21 @@ export async function updateProduct(id: string, input: Partial<Product>) {
 
 export async function deleteProduct(id: string) {
   const supabase = requireSupabase();
-  const { error } = await supabase.from("products").delete().eq("id", id);
-  if (error) throw error;
+  console.log("Attempting delete/archive for product:", id);
+
+  const { data, error } = await supabase
+    .from("products")
+    .update({ is_active: false, updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .select()
+    .single();
+
+  console.log("Delete/archive result:", { data, error });
+
+  if (error) {
+    console.error("Product delete/archive failed:", error);
+    throw error;
+  }
+
+  return { archived: true, data: data as Product | null };
 }
