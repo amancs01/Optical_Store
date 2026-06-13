@@ -7,9 +7,12 @@ import { useEffect, useState } from "react";
 import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-const mobileMoreLinks = [
+const mobileProductLinks = [
   ["Contact Lenses", "/products?category=Contact%20Lenses"],
   ["Kids Frames", "/products?category=Kids%20Frames"],
+] as const;
+
+const mobileQuickLinks = [
   ["Free Eye Checkup", "/book-eye-checkup"],
   ["Track Order", "/track-order"],
   ["About Us", "/about"],
@@ -110,12 +113,12 @@ export function MobileSidebar({ open, onClose, onLogout, user, isAdmin, logoFail
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 py-0.5">
+        <div className="flex flex-col overflow-y-auto px-5 py-4">
           <div className="divide-y divide-slate-100 border-b border-slate-100">
-            <Link href="/" className="flex min-h-12 items-center px-1 text-base font-semibold text-slate-800 transition hover:text-emerald-900" onClick={close}>
+            <Link href="/" className="flex items-center px-1 py-4 text-base font-semibold text-slate-800 transition hover:text-emerald-900" onClick={close}>
               Home
             </Link>
-            <Link href="/products" className="flex min-h-12 items-center px-1 text-base font-semibold text-slate-800 transition hover:text-emerald-900" onClick={close}>
+            <Link href="/products" className="flex items-center px-1 py-4 text-base font-semibold text-slate-800 transition hover:text-emerald-900" onClick={close}>
               All Products
             </Link>
             <MobileExpandableCategory
@@ -132,12 +135,22 @@ export function MobileSidebar({ open, onClose, onLogout, user, isAdmin, logoFail
               options={mobileCategoryOptions.Eyeglasses}
               onNavigate={close}
             />
+            {mobileProductLinks.map(([label, href]) => (
+              <Link
+                key={href}
+                href={href}
+                className="flex items-center px-1 py-4 text-base font-normal text-slate-800 transition hover:text-emerald-900"
+                onClick={close}
+              >
+                {label}
+              </Link>
+            ))}
           </div>
 
-          <div className="mt-5">
-            <p className="text-xs font-black uppercase tracking-wide text-slate-500">More Categories</p>
+          <div className="mt-4">
+            <p className="text-xs font-black uppercase tracking-wide text-slate-500">Quick Links</p>
             <div className="mt-2 flex flex-wrap gap-2">
-              {mobileMoreLinks.map(([label, href]) => (
+              {mobileQuickLinks.map(([label, href]) => (
                 <Link
                   key={href}
                   href={href}
@@ -154,38 +167,38 @@ export function MobileSidebar({ open, onClose, onLogout, user, isAdmin, logoFail
               ))}
             </div>
           </div>
-        </div>
 
-        {user ? (
-          <div className="shrink-0 border-t border-slate-100 px-5 py-3">
-            <Link href="/account" className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50" onClick={close}>
-              My Account
-            </Link>
-            <Link href="/account/orders" className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50" onClick={close}>
-              My Orders
-            </Link>
-            {isAdmin ? (
-              <Link href="/admin" className="block rounded-xl bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-900 hover:bg-emerald-100" onClick={close}>
-                Admin Dashboard
+          {user ? (
+            <div className="mt-4 border-t border-slate-100 pt-3">
+              <Link href="/account" className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50" onClick={close}>
+                My Account
               </Link>
-            ) : null}
-            <button type="button" className="mt-2 block w-full rounded-xl bg-rose-50 px-3 py-3 text-left text-sm font-bold text-rose-700 hover:bg-rose-100" onClick={onLogout}>
-              <LogOut className="mr-2 inline h-4 w-4" />
-              Logout
-            </button>
-          </div>
-        ) : (
-          <div className="shrink-0 border-t border-slate-100 px-5 py-3">
-            <Link href="/login" className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50" onClick={close}>
-              <LogIn className="mr-2 inline h-4 w-4" />
-              Login
-            </Link>
-            <Link href="/register" className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50" onClick={close}>
-              <UserPlus className="mr-2 inline h-4 w-4" />
-              Register
-            </Link>
-          </div>
-        )}
+              <Link href="/account/orders" className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50" onClick={close}>
+                My Orders
+              </Link>
+              {isAdmin ? (
+                <Link href="/admin" className="block rounded-xl bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-900 hover:bg-emerald-100" onClick={close}>
+                  Admin Dashboard
+                </Link>
+              ) : null}
+              <button type="button" className="mt-2 block w-full rounded-xl bg-rose-50 px-3 py-3 text-left text-sm font-bold text-rose-700 hover:bg-rose-100" onClick={onLogout}>
+                <LogOut className="mr-2 inline h-4 w-4" />
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="mt-4 border-t border-slate-100 pt-3">
+              <Link href="/login" className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50" onClick={close}>
+                <LogIn className="mr-2 inline h-4 w-4" />
+                Login
+              </Link>
+              <Link href="/register" className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50" onClick={close}>
+                <UserPlus className="mr-2 inline h-4 w-4" />
+                Register
+              </Link>
+            </div>
+          )}
+        </div>
       </nav>
     </>
   );
@@ -209,7 +222,7 @@ function MobileExpandableCategory({
       <button
         type="button"
         onClick={onToggle}
-        className="flex min-h-12 w-full items-center justify-between px-1 text-left text-base font-semibold text-slate-800 transition hover:text-emerald-900"
+        className="flex w-full items-center justify-between px-1 py-4 text-left text-base font-semibold text-slate-800 transition hover:text-emerald-900"
       >
         {label}
         <ChevronDown className={cn("h-4 w-4 text-slate-400 transition", expanded && "rotate-180 text-emerald-700")} aria-hidden="true" />
