@@ -113,7 +113,7 @@ export function MobileSidebar({ open, onClose, onLogout, user, isAdmin, logoFail
           </button>
         </div>
 
-        <div className="flex flex-col overflow-y-auto px-5 py-4">
+        <div className="flex flex-col overflow-y-auto px-5 pb-4 pt-1">
           <div className="divide-y divide-slate-100 border-b border-slate-100">
             <Link href="/" className="flex items-center px-1 py-4 text-base font-semibold text-slate-800 transition hover:text-emerald-900" onClick={close}>
               Home
