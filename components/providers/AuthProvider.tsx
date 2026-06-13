@@ -44,12 +44,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let active = true;
 
     async function load() {
-      const role = await getCurrentUserRole();
-      if (!active) return;
-      setUser(role.user);
-      setIsAdmin(role.isAdmin);
-      setAdminProfile(role.adminProfile);
-      setLoading(false);
+      try {
+        const role = await getCurrentUserRole();
+        if (!active) return;
+        setUser(role.user);
+        setIsAdmin(role.isAdmin);
+        setAdminProfile(role.adminProfile);
+      } catch {
+        setUser(null);
+        setIsAdmin(false);
+        setAdminProfile(null);
+        if (supabase) await supabase.auth.signOut();
+      } finally {
+        if (active) setLoading(false);
+      }
     }
 
     void load();
