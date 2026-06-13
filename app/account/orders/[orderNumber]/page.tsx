@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { OrderStatusTimeline } from "@/components/order/OrderStatusTimeline";
 import { LinkButton } from "@/components/ui/Button";
-import { ProductDetailSkeleton } from "@/components/ui/LoadingSkeletons";
+import { ListSkeleton, ProductDetailSkeleton } from "@/components/ui/LoadingSkeletons";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { formatOrderStatus } from "@/lib/orderStatus";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -50,7 +50,7 @@ export default function CustomerOrderDetailPage({ params }: { params: Promise<{ 
 
   if (!isSupabaseConfigured) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Supabase is not configured" message="Add Supabase variables to view order details." /></div>;
   if (authLoading || loading) return <ProductDetailSkeleton />;
-  if (!user) return <p className="mx-auto max-w-4xl px-4 py-10 text-sm text-slate-600">Redirecting to login...</p>;
+  if (!user) return <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8"><ListSkeleton rows={4} /></div>;
   if (error || !order) return <div className="mx-auto max-w-4xl px-4 py-10"><StateMessage title="Order unavailable" message={error || "This order is not available."} /><LinkButton href="/account/orders" className="mt-5">Back to my orders</LinkButton></div>;
 
   return (
