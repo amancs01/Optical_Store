@@ -5,7 +5,7 @@ import { formatCurrency, getAvailabilityStatus, getSalePrice } from "@/lib/utils
 import type { Product } from "@/types/product";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, eager }: { product: Product; eager?: boolean }) {
   const availability = getAvailabilityStatus(product.stock_quantity);
 
   return (
@@ -22,7 +22,7 @@ export function ProductCard({ product }: { product: Product }) {
               src={product.image_url}
               alt={product.name}
               fill
-              loading="lazy"
+              loading={eager ? "eager" : "lazy"}
               className="object-cover transition duration-500 md:group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
             />
