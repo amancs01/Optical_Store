@@ -2,27 +2,25 @@ const TELEGRAM_API = "https://api.telegram.org/bot";
 
 function getConfig() {
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_ADMIN_CHAT_ID;
-  if (!token || !chatId) return null;
-  return { token, chatId };
+  const chatIds = process.env.TELEGRAM_ADMIN_CHAT_IDS || process.env.TELEGRAM_ADMIN_CHAT_ID;
+  if (!token || !chatIds) return null;
+  return { token, chatIds: chatIds.split(",").map((id) => id.trim()).filter(Boolean) };
 }
 
 async function sendTelegramMessage(text: string) {
   const config = getConfig();
   if (!config) return;
 
-  try {
-    await fetch(`${TELEGRAM_API}${config.token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: config.chatId,
-        text,
-        parse_mode: "HTML",
-      }),
-    });
-  } catch {
-    // Notification is fire-and-forget — failure must not affect the order/booking
+  for (const chatId of config.chatIds) {
+    try {
+      await fetch(`${TELEGRAM_API}${config.token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
+      });
+    } catch {
+      // Notification is fire-and-forget — failure must not affect the order/booking
+    }
   }
 }
 
