@@ -9,7 +9,7 @@ export const SITE_CONFIG = {
   phone: "9808547043",
   phoneDisplay: "+977-9808547043",
   whatsapp: "9808547043",
-  email: "titanoptical094@gmail.com",
+  email: "contact@titanoptical.com.np",
   address: "Kichapokhari, New Road, opposite NMB Bank",
   location: "New Road, Kathmandu",
   googleMapsUrl: GOOGLE_MAPS_URL,
