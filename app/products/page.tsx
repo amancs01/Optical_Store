@@ -3,7 +3,7 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Check, ChevronDown, RotateCcw, Search, SlidersHorizontal, X } from "lucide-react";
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/product/ProductCard";
 import { StateMessage } from "@/components/ui/StateMessage";
@@ -64,7 +64,27 @@ export default function ProductsPage() {
   const [error, setError] = useState("");
   const [sortSheetOpen, setSortSheetOpen] = useState(false);
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(6);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const filters = useMemo(() => filtersFromParams(searchParams), [searchParams]);
+
+  useEffect(() => {
+    setVisibleCount(6);
+  }, [filters]);
+
+  const sentinelCallback = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount((prev) => prev + 6);
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(node);
+    sentinelRef.current = node;
+  }, []);
 
   useEffect(() => {
     if (!isSupabaseConfigured) return;
@@ -327,9 +347,16 @@ export default function ProductsPage() {
       ) : error ? (
         <StateMessage title="Products could not load" message={error} />
       ) : visible.length ? (
+        <>
         <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {visible.map((product) => <ProductCard key={product.id} product={product} />)}
+          {visible.slice(0, visibleCount).map((product, index) => <ProductCard key={product.id} product={product} eager={index < 6} />)}
         </div>
+        {visibleCount < visible.length ? (
+          <div ref={sentinelCallback} className="mt-6 flex justify-center">
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-emerald-700 border-t-transparent" />
+          </div>
+        ) : null}
+        </>
       ) : (
         <div className="rounded-md border border-dashed border-emerald-200 bg-emerald-50/60 p-8 text-center">
           <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">No matches</p>
