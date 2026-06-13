@@ -63,6 +63,23 @@ export function FormSkeleton() {
   );
 }
 
+export function AccountSkeleton() {
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 lg:px-8" aria-label="Loading account">
+      <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <div className="h-3 w-28 animate-pulse rounded bg-slate-100" />
+        <div className="mt-1 h-9 w-56 animate-pulse rounded bg-slate-100" />
+        <div className="mt-2 h-4 w-72 animate-pulse rounded bg-slate-100" />
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="h-10 animate-pulse rounded-md bg-slate-100" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function ProductDetailSkeleton() {
   return (
     <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">
